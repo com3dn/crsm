@@ -390,7 +390,7 @@ function consultarPais() {
     const pais = mmsiToPais[mmsi].nome;
     const bandeira = mmsiToPais[mmsi].bandeira;
     document.getElementById("resultado2").innerText = "País: " + pais;
-    document.getElementById("bandeira").src = `gif/${bandeira}.gif`;
+    document.getElementById("bandeira").src = `gif/${pais}.gif`;
     document.getElementById("bandeira").style.display = 'inline';
   } else {
     document.getElementById("resultado2").innerText = "País não encontrado para o MMSI " + mmsi;
