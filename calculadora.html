@@ -3,496 +3,343 @@
 <head>
   <meta charset="UTF-8">
   <title>Calculadora de Tempo e Distância</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <!-- Leaflet Control Layers Tree CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet.control.layers.tree/L.Control.Layers.Tree.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="img/favicon.ico" type="image/x-icon">
+<link rel="icon" href="img/favicon.png" type="image/png">
+<link rel="stylesheet" href="style/sidebar_base.css"/>
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<!-- Leaflet Control Layers Tree CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet.control.layers.tree/L.Control.Layers.Tree.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-
-:root {
-  --primary-color: #4f46e5;
-  --sidebar-width: 80px;
-  --sidebar-expanded-width: 250px;
-  --header-height: 60px;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-}
-
-body {
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    background-color: #e3e9f7;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Container principal */
-#app-container {
-    display: flex;
-    flex: 1;
-    height: 100vh;
-}
-
-/* Sidebar */
-#sidebar {
-    width: var(--sidebar-width);
-    height: 100vh;
-    background-color: #ffffff;
-    border-radius: 0px 10px 0px 0px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: all 0.5s;
-    position: relative;
-    z-index: 10;
-    overflow: hidden;
-}
-
-#sidebar.open-sidebar {
-    width: var(--sidebar-expanded-width);
-}
-
-#sidebar_content {
-    padding: 12px;
-    flex: 1;
-    overflow-y: auto;
-}
-
-/* Conteúdo principal */
-#main-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: auto;
-    padding: 20px;
-    transition: margin-left 0.3s;
-    position: relative;
-    background-color: #f5f7fa;
-}
 
 /* Estilos para a calculadora */
 .calculator-container {
-    width: 550px;
-    margin: 20px 0px;
-    padding: 25px;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-.calculator-container h1 {
-    color: var(--primary-color);
-    margin-bottom: 20px;
-    text-align: center;
+ width: 400px;
+ margin: 2px 0px;
+ padding: 10px;
+ background: white;
+ border-radius: 0 10px 10px 0;
+ box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .calculator-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+ display: flex;
+ flex-direction: column;
+ gap: 15px;
 }
 
 .form-group {
-    display: flex;
-    flex-direction: column;
+ display: flex;
+ flex-direction: column;
 }
 
 .form-group label {
-    margin-bottom: 5px;
-    font-weight: 500;
-    color: #333;
+ margin-bottom: 5px;
+ font-weight: 500;
+ color: #333;
 }
 
-.form-group input {
-    padding: 10px 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
-}
+.form-group label {
+ margin-bottom: 5px;
+ font-weight: 500;
+ color: #333;
+} 
 
+.form-group button {background-color: var(--primary-color);
+color: white;
+padding: 10px;
+border: none;
+border-radius: 5px;
+cursor: pointer;"
+}
 .form-group input:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+ outline: solid;
+ border-color: var(--primary-color);
+ box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
 }
 
 #resultado {
-    margin-top: 20px;
-    padding: 15px;
-    background-color: #f8f9fa;
-    border-radius: 5px;
-    border-left: 4px solid var(--primary-color);
-    font-size: 16px;
-    white-space: pre-line;
+ margin-top: 2px;
+ padding: 5px;
+ background-color: #f8f9fa;
+ border-radius: 5px;
+ justify-content:left;
+ text-align:left;
+ border-left: 4px solid var(--primary-color);
+ font-size: 16px;
 }
-
-/* Estilos comuns da sidebar */
-#user {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 2px;
-}
-
-#user_avatar {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-    border-radius: 20px;
-}
-
-#user_infos {
-    display: flex;
-    flex-direction: column;
-}
-
-#user_infos span:last-child {
-    color: #6b6b6b;
-    font-size: 12px;
-}
-
-#side_items {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    list-style: none;
-    margin-top: 20px;
-}
-
-.side-item {
-    border-radius: 8px;
-    padding: 10px;
-    cursor: pointer;
-}
-
-.side-item.active {
-    background-color: var(--primary-color);
-}
-
-.side-item:hover:not(.active),
-#logout_btn:hover {
-    background-color: #e3e9f7;
-}
-
-.side-item a {
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    color: #0a0a0a;
-}
-
-.side-item.active a {
-    color: #e3e9f7;
-}
-
-.side-item a i {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 24px;
-}
-
-#logout {
-    border-top: 1px solid #e3e9f7;
-    padding: 12px;
-}
-
-#logout_btn {
+/* Adicione ao seu style existente */
+#copiarResultado {
+    background-color: #4a5568;
+    color: white;
+    padding: 10px 15px;
     border: none;
-    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
     font-size: 14px;
     display: flex;
-    gap: 20px;
-    align-items: center;
-    border-radius: 8px;
-    text-align: start;
-    cursor: pointer;
-    background-color: transparent;
-    width: 100%;
-}
-
-#open_btn {
-    position: absolute;
-    top: 2px;
-    right: 2px; /* Aumentei um pouco para ficar mais para fora */
-    background-color: #4f46e5;
-    color: #e3e9f7;
-    border-radius: 100%;
-    width: 24px; /* Aumentei o tamanho */
-    height: 24px;
-    border: 2px solid white; /* Borda para destacar */
-    cursor: pointer;
-    z-index: 9000; /* Garante que fique por cima */
-    display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Sombra para profundidade */
+    gap: 8px;
+    margin-top: 10px;
     transition: all 0.3s ease;
 }
 
-#open_btn:hover {
-    transform: scale(1.1);
-    background-color: #4338ca;
+#copiarResultado:hover {
+    background-color: #2d3748;
 }
 
-#open_btn_icon {
-    font-size: 12px;
-    transition: transform 0.3s ease;
+#copiarResultado:active {
+    transform: scale(0.98);
 }
 
-.open-sidebar #open_btn_icon {
-    transform: rotate(180deg);
+#copiarResultado.success {
+    background-color: #38a169;
 }
 
-.item-description {
-    width: 0;
-    overflow: hidden;
+#copiarResultado.success i::before {
+    content: "\f00c"; /* Ícone de check */
+}
+
+.result-item span {
     white-space: nowrap;
+    overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 14px;
-    transition: width .6s;
-}
-
-#sidebar.open-sidebar .item-description {
-    width: 150px;
-    margin-left: 10px;
-}
-
-/* Media queries para dispositivos móveis */
-@media (max-width: 720px) {
-    #app-container {
-        flex-direction: column;
-    }
-    
-    #sidebar {
-        width: 100%;
-        height: auto;
-        border-radius: 0;
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
-    
-    #sidebar.open-sidebar {
-        width: 100%;
-    }
-    
-    #sidebar_content {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 5px;
-        padding: 8px;
-    }
-    
-    #user {
-        display: none;
-    }
-    
-    #side_items {
-        flex-direction: row;
-        flex-wrap: wrap;
-        margin-top: 0;
-        margin-right: 28px;
-        width: 70%;
-        gap: 20px;
-    }
-    
-    .side-item {
-        padding: 20px 20px;
-    }
-    
-    #logout {
-        border-top: none;
-        padding: 0px;
-        margin-right: 50px;
-    }
-    
-    #open_btn {
-        display: flex;
-        top: 10px;
-        right: 10px;
-    }
-    
-    #sidebar .item-description {
-        width: auto !important;
-        display: none;
-    }
-    
-    #sidebar.open-sidebar .item-description {
-        display: inline;
-    }
-    
-    .calculator-container {
-        margin-top: 20px;
-        padding: 15px;
-    }
-}
-
-/* Ajustes para telas muito pequenas */
-@media (max-width: 480px) {
-    .calculator-form {
-        gap: 2px;
-    }
-    
-    .form-group input {
-        padding: 8px 12px;
-    }
-    
-    #side_items {
-        gap: 3px;
-    }
-    
-    .side-item {
-        padding: 6px 8px;
-    }
 }
 </style>
 </head>
 <body>
 <div id="app-container">
-    <nav id="sidebar">
-        <div id="sidebar_content">
-            <div id="user">
-                <img src="IMG/avatar.png" id="user_avatar" alt="Avatar">
-                <p id="user_infos">
-                    <span class="item-description">CRSM</span>
-                    <span class="item-description">COM3DN</span>
-                </p>
-            </div>
-            <ul id="side_items">
-                <li class="side-item"><a href="index.html"><i class="fa-solid fa-landmark"></i>
-                    <span class="item-description">Inicio</span></a>
-                </li>
-                <li class="side-item"><a href="Map.html"><i class="fa-solid fa-globe"></i>
-                    <span class="item-description">Mapa Interativo</span></a>
-                </li>
-                <li class="side-item active"><a href="calculadora.html"><i class="fa-solid fa-calculator"></i>
-                    <span class="item-description">Calculadora</span></a>
-                </li>  
-                <li class="side-item"><a href="consulta-mmsi.html"><i class="fa-solid fa-flag"></i>
-                    <span class="item-description">Consulta MMSI</span></a>
-                </li>  
-                <li class="side-item"><a href="conversor-gms.html"><i class="fa-solid fa-compass"></i>
-                    <span class="item-description">Conversor(GMS)</span></a>
-                </li>
-                <li class="side-item"><a href="conversor-decimal.html"><i class="fa-solid fa-gear"></i>
-                    <span class="item-description">Conversor(DEC)</span></a>
-                </li>
-                <li class="side-item"><a href="distancia-portos.html"><i class="fa-solid fa-house-flood-water-circle-arrow-right"></i>
-                    <span class="item-description">Distancia Portos</span></a>
-                </li>
-                <li class="side-item"><a href="Interceptação.html"><i class="fa-solid fa-arrows-to-circle"></i>
-                    <span class="item-description">Interceptação</span></a>
-                </li>
-            </ul>
-        </div>
-        
-        <div id="logout">
-            <button id="logout_btn">
-                <i class="fa-solid fa-right-from-bracket"></i>
-                <span class="item-description">Logout</span>
-            </button>
-        </div>
-        
-        <button id="open_btn">
-            <i id="open_btn_icon" class="fa-solid fa-chevron-right"></i>
-        </button>
-    </nav>
-    
-    <div id="main-content">
-      <h1>Calculadora de Tempo e Distância</h1>
-        <div style="text-align:center" class="calculator-container">
-               <form class="calculator-form" onsubmit="event.preventDefault(); calcularTempo();">
-                <div class="form-group">
-                    <label for="dataHoraPosicao">Data e Hora da Posição:</label>
-                    <input type="datetime-local" id="dataHoraPosicao" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="distancia">Distância a Navegar (MN):</label>
-                    <input type="number" id="distancia" placeholder="MN" min="0" step="0.1" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="velocidade">Velocidade Navegando (Nós):</label>
-                    <input type="number" id="velocidade" placeholder="Nós" min="0" step="0.1" required oninput="calcularTempo()">
-                </div>
-                
-                <button type="submit" style="background-color: var(--primary-color); color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer;">Calcular</button>
-                
-                <div id="resultado"></div>
-            </form>
-        </div>
-    </div>
+ <nav id="sidebar">
+ <div id="sidebar_content">
+ <div id="user">
+ <img src="img/avatar.png" id="user_avatar" alt="Avatar">
+ <p id="user_infos">
+ <span class="item-description">CRSM</span>
+ <span class="item-description">COM3DN</span>
+ </p>
+ </div>
+ <ul id="side_items">
+ <li class="side-item"><a href="index.html"><i class="fa-solid fa-landmark"></i>
+ <span class="item-description">Inicio</span></a>
+ </li>
+ <li class="side-item"><a href="Map.html"><i class="fa-solid fa-globe"></i>
+ <span class="item-description">Mapa Interativo</span></a>
+ </li>
+ <li class="side-item active"><a href="calculadora.html"><i class="fa-solid fa-calculator"></i>
+ <span class="item-description">Calculadora</span></a>
+ </li> 
+ <li class="side-item"><a href="consulta-mmsi.html"><i class="fa-solid fa-flag"></i>
+ <span class="item-description">Consulta MMSI</span></a>
+ </li> 
+ <li class="side-item"><a href="conversor-gms.html"><i class="fa-solid fa-compass"></i>
+ <span class="item-description">Conversor(GMS)</span></a>
+ </li>
+ <li class="side-item"><a href="conversor-decimal.html"><i class="fa-solid fa-gear"></i>
+ <span class="item-description">Conversor(DEC)</span></a>
+ </li>
+ <li class="side-item"><a href="distancia-portos.html"><i class="fa-solid fa-house-flood-water-circle-arrow-right"></i>
+ <span class="item-description">Distancia Portos</span></a>
+ </li>
+ <li class="side-item"><a href="Interceptação.html"><i class="fa-solid fa-arrows-to-circle"></i>
+ <span class="item-description">Interceptação</span></a>
+ </li>
+ </ul>
+ </div>
+ 
+ <div id="logout">
+ <button id="logout_btn">
+ <i class="fa-solid fa-right-from-bracket"></i>
+ <span class="item-description">Logout</span>
+ </button>
+ </div>
+ 
+ <button id="open_btn">
+ <i id="open_btn_icon" class="fa-solid fa-chevron-right"></i>
+ </button>
+ </nav>
+ 
+ <div id="main-content">
+ <h1>Calculadora de Tempo e Distância</h1>
+ <div style="text-align:center" class="calculator-container">
+ <form class="calculator-form" onsubmit="event.preventDefault(); calcularTempo();">
+ <div class="form-group">
+ <label for="dataHoraPosicao">Data e Hora da Posição:</label>
+ <input type="datetime-local" id="dataHoraPosicao" required title="Por favor, preencha a data e hora corretamente">
+ </div>
+ 
+ <div class="form-group">
+ <label for="distancia">Distância a Navegar (MN):</label>
+ <input type="number" id="distancia" placeholder="Distancia em MN" min="0" step="0.01" required title="Por favor,Precisa preencher a distancia em MN">
+ </div>
+ 
+ <div class="form-group">
+ <label for="velocidade">Velocidade Navegando (Nós):</label>
+ <input type="number" id="velocidade" placeholder="Velocidade em Nós" min="0" step="0.01" required title="Por favor,Coloque a Velocidade em Nós">
+ </div>
+  <div class="form-group">
+ <button type="submit" >Calcular</button>
+  </div>
+<div id="resultado"></div>
+<div class="form-group">
+    <button type="button" id="copiarResultado" style="display: none;">
+        <i class="fas fa-copy"></i> Copiar Resultados
+    </button>
+</div>
+ </form>
+ </div>
+ </div>
 </div>
 
+<script src="scr/script_base.js" defer></script>
 <script>
+// Substitua as validações individuais por esta função mais limpa
+function setupValidation() {
+    const campos = [
+        { id: 'dataHoraPosicao', msg: 'Por favor, informe a data e hora da Posição' },
+        { id: 'distancia', msg: 'A distância em MN é obrigatória' },
+        { id: 'velocidade', msg: 'A velocidade em nós é necessária' }
+    ];
+
+    campos.forEach(campo => {
+        const element = document.getElementById(campo.id);
+        
+        element.oninvalid = function(e) {
+            e.target.setCustomValidity("");
+            if (!e.target.validity.valid) {
+                e.target.setCustomValidity(campo.msg);
+            }
+        };
+        
+        element.oninput = function(e) {
+            e.target.setCustomValidity("");
+        };
+    });
+}
+
+// Chame no final do script
+setupValidation();
+
 function calcularTempo() {
-  const dataHoraPosicao = new Date(document.getElementById("dataHoraPosicao").value);
-  const distancia = parseFloat(document.getElementById("distancia").value);
-  const velocidade = parseFloat(document.getElementById("velocidade").value);
+    // Obter valores
+    const dataHoraPosicao = new Date(document.getElementById("dataHoraPosicao").value);
+    const distancia = parseFloat(document.getElementById("distancia").value);
+    const velocidade = parseFloat(document.getElementById("velocidade").value);
 
-  if (isNaN(distancia) || isNaN(velocidade) || distancia <= 0 || velocidade <= 0 || isNaN(dataHoraPosicao.getTime())) {
-    document.getElementById("resultado").innerHTML = "<strong style='color: red;'>Preencha todos os campos corretamente!</strong>";
-    return;
-  }
-
-  const tempoHoras = distancia / velocidade;
-  const horas = Math.floor(tempoHoras);
-  const minutos = Math.round((tempoHoras % 1) * 60);
-
-  dataHoraPosicao.setHours(dataHoraPosicao.getHours() + horas);
-  dataHoraPosicao.setMinutes(dataHoraPosicao.getMinutes() + minutos);
-
-  const resultadoHTML = `
-    <p><strong>Horas a Navegar:</strong> ${horas}h ${minutos}m</p>
-    <p><strong>Data de Chegada:</strong> ${dataHoraPosicao.toLocaleString("pt-BR", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric", 
-      hour: "2-digit", 
-      minute: "2-digit", 
-      hour12: false
-    })}</p>
-  `;
-  
-  document.getElementById("resultado").innerHTML = resultadoHTML;
-}
- 
-document.getElementById('open_btn').addEventListener('click', function() {
-    document.getElementById('sidebar').classList.toggle('open-sidebar');
-});
-
-// Detectar mudança de tamanho da tela
-function handleResize() {
-    const isMobile = window.innerWidth <= 720;
-    const sidebar = document.getElementById('sidebar');
-    
-       if (isMobile && sidebar.classList.contains('open-sidebar')) {
-        sidebar.classList.remove('open-sidebar');
+    // Validação reforçada
+    if (isNaN(distancia) || isNaN(velocidade) || distancia <= 0 || velocidade <= 0 || isNaN(dataHoraPosicao.getTime())) {
+        document.getElementById("resultado").innerHTML = `
+            <p style="color: red; font-weight: bold;">
+                <i class="fas fa-exclamation-circle"></i> Preencha todos os campos com valores válidos!
+            </p>`;
+        return;
     }
+
+    // Cálculos
+    const tempoHoras = distancia / velocidade;
+    const dias = Math.floor(tempoHoras / 24);
+    const horas = Math.floor(tempoHoras % 24);
+    const minutos = Math.round((tempoHoras % 1) * 60);
+
+    // Ajuste da data de chegada
+    const eta = new Date(dataHoraPosicao);
+    eta.setHours(eta.getHours() + Math.floor(tempoHoras));
+    eta.setMinutes(eta.getMinutes() + minutos);
+
+    // Formatação inteligente do tempo
+    let tempoFormatado = '';
+    if (dias > 0) {
+        tempoFormatado = `${dias} ${dias > 1 ? 'dias' : 'dia'}`;
+        if (horas > 0 || minutos > 0) {
+            tempoFormatado += ` ${horas}h${minutos.toString().padStart(2, '0')}min`;
+        }
+    } else if (horas > 0) {
+        tempoFormatado = `${horas}h${minutos.toString().padStart(2, '0')}min`;
+    } else {
+        tempoFormatado = `${minutos}min`;
+    }
+
+    // Exibição melhorada
+    const options = {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+    };
+
+document.getElementById("resultado").innerHTML = `
+    <div class="result-item" id="result-origem">
+        <span><strong>Data/Hora Partida:</strong> ${dataHoraPosicao.toLocaleString("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric", 
+    hour: "2-digit", 
+    minute: "2-digit", 
+    hour12: false
+})}</span>
+    </div>
+    <div class="result-item" id="result-distancia">
+        <span><strong>Distância:</strong> ${distancia} MN</span>
+    </div>
+    <div class="result-item" id="result-tempo">
+        <span><strong>Tempo:</strong> ${tempoFormatado}</span>
+    </div>
+    <div class="result-item" id="result-eta">
+        <span><strong>ETA:</strong> ${eta.toLocaleString("pt-BR", options)}</span>
+    </div>
+    <div class="result-item" id="result-velocidade">
+        <span><strong>Velocidade média:</strong> ${velocidade.toFixed(2)} nós</span>
+    </div>
+`;
+// Adicione este evento no final da sua função calcularTempo():
+document.getElementById('copiarResultado').style.display = 'block';
+document.getElementById('copiarResultado').addEventListener('click', copiarResultados);
+}
+// Função para copiar os resultados
+function copiarResultados() {
+    // Adicione estas linhas para pegar os novos dados
+    const origemElement = document.querySelector('#result-origem span');
+    const distanciaElement = document.querySelector('#result-distancia span');
     
-    map.invalidateSize();
+    // Atualize o textoParaCopiar incluindo os novos dados
+    const textoParaCopiar = 
+        `🗓️ *DH da posição:* ${origemElement?.textContent.replace('Data/Hora Partida:', '').trim()}\n` +
+        `↔️ *Distância:* ${distanciaElement?.textContent.replace('Distância:', '').trim()}\n` +
+        `⏱ *Duração:* ${document.querySelector('#result-tempo span')?.textContent.replace('Tempo:', '').trim()}\n` +
+        `⏰ *ETA:* ${document.querySelector('#result-eta span')?.textContent.replace('ETA:', '').trim()}\n` +
+        `🚢 *Velocidade:* ${document.querySelector('#result-velocidade span')?.textContent.replace('Velocidade média:', '').trim()}`;
+    // Copiar para área de transferência
+    navigator.clipboard.writeText(textoParaCopiar).then(() => {
+        const btn = document.getElementById('copiarResultado');
+        btn.classList.add('success');
+        btn.innerHTML = '<i class="fas fa-check"></i> Copiado!';
+        
+        setTimeout(() => {
+            btn.classList.remove('success');
+            btn.innerHTML = '<i class="fas fa-copy"></i> Copiar para WhatsApp';
+        }, 2000);
+    }).catch(err => {
+        console.error('Falha ao copiar: ', err);
+        // Fallback para seleção manual
+        const range = document.createRange();
+        range.selectNode(document.getElementById('resultado'));
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+        document.execCommand('copy');
+        window.getSelection().removeAllRanges();
+        
+        alert('Resultados copiados! Agora cole no WhatsApp.');
+    });
 }
 
-// Inicializar
-window.addEventListener('load', function() {
-    handleResize();
-    map.invalidateSize();
-});
-
-// Monitorar redimensionamento
-window.addEventListener('resize', function() {
-    handleResize();
+document.getElementById('open_btn').addEventListener('click', function() {
+ document.getElementById('sidebar').classList.toggle('open-sidebar');
 });
 </script>
 </body>
