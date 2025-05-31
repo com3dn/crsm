@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Consulta de País pelo MMSI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Leaflet Control Layers Tree CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.control.layers.tree/L.Control.Layers.Tree.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+:root {
+  --primary-color: #4f46e5;
+  --sidebar-width: 80px;
+  --sidebar-expanded-width: 250px;
+  --header-height: 60px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background-color: #e3e9f7;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Container principal */
+#app-container {
+    display: flex;
+    flex: 1;
+    height: 100vh;
+}
+
+/* Sidebar */
+#sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+    background-color: #ffffff;
+    border-radius: 0px 10px 0px 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.5s;
+    position: relative;
+    z-index: 10;
+    overflow: hidden;
+}
+
+#sidebar.open-sidebar {
+    width: var(--sidebar-expanded-width);
+}
+
+#sidebar_content {
+    padding: 12px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* Conteúdo principal */
+#main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    padding: 20px;
+    transition: margin-left 0.3s;
+    position: relative;
+    background-color: #f5f7fa;
+}
+
+/* Estilos para a calculadora */
+.calculator-container {
+    width: 550px;
+    margin: 20px 0px;
+    padding: 25px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.calculator-container h1 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.calculator-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #333;
+}
+
+.form-group input {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.form-group input:focus {
+    outline: none;
+    
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+}
+
+#resultado {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    border-left: 4px solid var(--primary-color);
+    font-size: 16px;
+    white-space: pre-line;
+}
+
+/* Estilos comuns da sidebar */
+#user {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 2px;
+}
+
+#user_avatar {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 20px;
+}
+
+#user_infos {
+    display: flex;
+    flex-direction: column;
+}
+
+#user_infos span:last-child {
+    color: #6b6b6b;
+    font-size: 12px;
+}
+
+#side_items {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    list-style: none;
+    margin-top: 20px;
+}
+
+.side-item {
+    border-radius: 8px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.side-item.active {
+    background-color: var(--primary-color);
+}
+
+.side-item:hover:not(.active),
+#logout_btn:hover {
+    background-color: #e3e9f7;
+}
+
+.side-item a {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    color: #0a0a0a;
+}
+
+.side-item.active a {
+    color: #e3e9f7;
+}
+
+.side-item a i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+}
+
+#logout {
+    border-top: 1px solid #e3e9f7;
+    padding: 12px;
+}
+
+#logout_btn {
+    border: none;
+    padding: 12px;
+    font-size: 14px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    border-radius: 8px;
+    text-align: start;
+    cursor: pointer;
+    background-color: transparent;
+    width: 100%;
+}
+
+#open_btn {
+    position: absolute;
+    top: 2px;
+    right: 2px; /* Aumentei um pouco para ficar mais para fora */
+    background-color: #4f46e5;
+    color: #e3e9f7;
+    border-radius: 100%;
+    width: 24px; /* Aumentei o tamanho */
+    height: 24px;
+    border: 2px solid white; /* Borda para destacar */
+    cursor: pointer;
+    z-index: 9000; /* Garante que fique por cima */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Sombra para profundidade */
+    transition: all 0.3s ease;
+}
+
+#open_btn:hover {
+    transform: scale(1.1);
+    background-color: #4338ca;
+}
+
+#open_btn_icon {
+    font-size: 12px;
+    transition: transform 0.3s ease;
+}
+
+.open-sidebar #open_btn_icon {
+    transform: rotate(180deg);
+}
+
+.item-description {
+    width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    transition: width .6s;
+}
+
+#sidebar.open-sidebar .item-description {
+    width: 150px;
+    margin-left: 10px;
+}
+
+/* Media queries para dispositivos móveis */
+@media (max-width: 720px) {
+    #app-container {
+        flex-direction: column;
+    }
+    
+    #sidebar {
+        width: 100%;
+        height: auto;
+        border-radius: 0;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    #sidebar.open-sidebar {
+        width: 100%;
+    }
+    
+    #sidebar_content {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        padding: 8px;
+    }
+    
+    #user {
+        display: none;
+    }
+    
+    #side_items {
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-top: 0;
+        margin-right: 28px;
+        width: 70%;
+        gap: 20px;
+    }
+    
+    .side-item {
+        padding: 20px 20px;
+    }
+    
+    #logout {
+        border-top: none;
+        padding: 0px;
+        margin-right: 50px;
+    }
+    
+    #open_btn {
+        display: flex;
+        top: 10px;
+        right: 10px;
+    }
+    
+    #sidebar .item-description {
+        width: auto !important;
+        display: none;
+    }
+    
+    #sidebar.open-sidebar .item-description {
+        display: inline;
+    }
+    
+    .calculator-container {
+        margin-top: 20px;
+        padding: 15px;
+    }
+}
+
+/* Ajustes para telas muito pequenas */
+@media (max-width: 480px) {
+    .calculator-form {
+        gap: 2px;
+    }
+    
+    .form-group input {
+        padding: 8px 12px;
+    }
+    
+    #side_items {
+        gap: 3px;
+    }
+    
+    .side-item {
+        padding: 6px 8px;
+    }
+}
+</style>
+</head>
+<body>
+<div id="app-container">
+    <nav id="sidebar">
+        <div id="sidebar_content">
+            <div id="user">
+                <img src="IMG/avatar.png" id="user_avatar" alt="Avatar">
+                <p id="user_infos">
+                    <span class="item-description">CRSM</span>
+                    <span class="item-description">COM3DN</span>
+                </p>
+            </div>
+            <ul id="side_items">
+                <li class="side-item"><a href="index.html"><i class="fa-solid fa-landmark"></i>
+                    <span class="item-description">Inicio</span></a>
+                </li>
+                <li class="side-item"><a href="Map.html"><i class="fa-solid fa-globe"></i>
+                    <span class="item-description">Mapa Interativo</span></a>
+                </li>
+                <li class="side-item "><a href="calculadora.html"><i class="fa-solid fa-calculator"></i>
+                    <span class="item-description">Calculadora</span></a>
+                </li>  
+                <li class="side-item active"><a href="consulta-mmsi.html"><i class="fa-solid fa-flag"></i>
+                    <span class="item-description">Consulta MMSI</span></a>
+                </li>  
+                <li class="side-item"><a href="conversor-gms.html"><i class="fa-solid fa-compass"></i>
+                    <span class="item-description">Conversor(GMS)</span></a>
+                </li>
+                <li class="side-item"><a href="conversor-decimal.html"><i class="fa-solid fa-gear"></i>
+                    <span class="item-description">Conversor(DEC)</span></a>
+                </li>
+                <li class="side-item"><a href="distancia-portos.html"><i class="fa-solid fa-house-flood-water-circle-arrow-right"></i>
+                    <span class="item-description">Distancia Portos</span></a>
+                </li>
+                <li class="side-item"><a href="Interceptação.html"><i class="fa-solid fa-arrows-to-circle"></i>
+                    <span class="item-description">Interceptação</span></a>
+                </li>
+            </ul>
+        </div>
+        
+        <div id="logout">
+            <button id="logout_btn">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span class="item-description">Logout</span>
+            </button>
+        </div>
+        
+        <button id="open_btn">
+            <i id="open_btn_icon" class="fa-solid fa-chevron-right"></i>
+        </button>
+    </nav>
+    
+    <div id="main-content">
+      <h1>Consulta de País pelo MMSI</h1>
+        <div style="text-align:center" class="calculator-container">
+	<h3>Digite os 3 primeiros dígitos do MMSI</h3>
+  <input type="number" id="mmsiInput" placeholder="" oninput="consultarPais()" maxlength="3"style="width: 80%; height: 30px;">
+  <h3><div id="resultado2"></div></h3>
+  <img id="bandeira" src="" alt="Bandeira" style="display: none; margin-top: 10px; width: 100px; height: 60px;">
+
+        </div>
+    </div>
+</div>
+
+<script>
+const mmsiToPais = {
+"201": { nome: "Albânia", bandeira: "al" },
+"202": { nome: "Andorra", bandeira: "ad" },
+"203": { nome: "Áustria", bandeira: "at" },
+"204": { nome: "Portugal", bandeira: "pt" },
+"206": { nome: "Bielorrússia", bandeira: "by" },
+"207": { nome: "Bulgária", bandeira: "bg" },
+"208": { nome: "Estado da Cidade do Vaticano", bandeira: "va" },
+"209": { nome: "Chipre", bandeira: "cy" },
+"210": { nome: "Chipre", bandeira: "cy" },
+"211": { nome: "Alemanha", bandeira: "de" },
+"212": { nome: "Chipre", bandeira: "cy" },
+"213": { nome: "Geórgia", bandeira: "ge" },
+"214": { nome: "Moldávia", bandeira: "md" },
+"215": { nome: "Malta", bandeira: "mt" },
+"216": { nome: "Armênia", bandeira: "am" },
+"218": { nome: "Alemanha", bandeira: "de" },
+"219": { nome: "Dinamarca", bandeira: "dk" },
+"220": { nome: "Dinamarca", bandeira: "dk" },
+"224": { nome: "Espanha", bandeira: "es" },
+"225": { nome: "Espanha", bandeira: "es" },
+"226": { nome: "França", bandeira: "fr" },
+"227": { nome: "França", bandeira: "fr" },
+"228": { nome: "França", bandeira: "fr" },
+"229": { nome: "Malta", bandeira: "mt" },
+"230": { nome: "Finlândia", bandeira: "fi" },
+"231": { nome: "Dinamarca", bandeira: "dk" },
+"232": { nome: "Reino Unido", bandeira: "gb" },
+"233": { nome: "Reino Unido", bandeira: "gb" },
+"234": { nome: "Reino Unido", bandeira: "gb" },
+"235": { nome: "Reino Unido", bandeira: "gb" },
+"236": { nome: "Reino Unido", bandeira: "gb" },
+"237": { nome: "Grécia", bandeira: "gr" },
+"238": { nome: "Croácia", bandeira: "hr" },
+"239": { nome: "Grécia", bandeira: "gr" },
+"240": { nome: "Grécia", bandeira: "gr" },
+"241": { nome: "Grécia", bandeira: "gr" },
+"242": { nome: "Marrocos", bandeira: "ma" },
+"243": { nome: "Hungria", bandeira: "hu" },
+"244": { nome: "Holanda", bandeira: "nl" },
+"245": { nome: "Holanda", bandeira: "nl" },
+"246": { nome: "Holanda", bandeira: "nl" },
+"247": { nome: "Itália", bandeira: "it" },
+"248": { nome: "Malta", bandeira: "mt" },
+"249": { nome: "Malta", bandeira: "mt" },
+"250": { nome: "Irlanda", bandeira: "ie" },
+"251": { nome: "Islândia", bandeira: "is" },
+"252": { nome: "Liechtenstein", bandeira: "li" },
+"253": { nome: "Luxemburgo", bandeira: "lu" },
+"254": { nome: "Mônaco", bandeira: "mc" },
+"255": { nome: "Portugal", bandeira: "pt" },
+"256": { nome: "Malta", bandeira: "mt" },
+"257": { nome: "Noruega", bandeira: "no" },
+"258": { nome: "Noruega", bandeira: "no" },
+"259": { nome: "Noruega", bandeira: "no" },
+"261": { nome: "Polônia", bandeira: "pl" },
+"262": { nome: "Montenegro", bandeira: "me" },
+"263": { nome: "Portugal", bandeira: "pt" },
+"264": { nome: "Romênia", bandeira: "ro" },
+"265": { nome: "Suécia", bandeira: "se" },
+"266": { nome: "Suécia", bandeira: "se" },
+"267": { nome: "Eslovaquia", bandeira: "sk" },
+"268": { nome: "São Marino", bandeira: "sm" },
+"269": { nome: "Suíça", bandeira: "ch" },
+"270": { nome: "República Tcheca", bandeira: "" },
+"271": { nome: "República da Turquia", bandeira: "tr" },
+"272": { nome: "Ucrânia", bandeira: "ua" },
+"273": { nome: "Russia", bandeira: "ru" },
+"274": { nome: "Macedônia do Norte", bandeira: "mk" },
+"275": { nome: "Letónia", bandeira: "lv" },
+"276": { nome: "Estônia", bandeira: "ee" },
+"277": { nome: "Lituânia", bandeira: "lt" },
+"278": { nome: "Eslovênia", bandeira: "si" },
+"279": { nome: "Sérvia", bandeira: "rs" },
+"301": { nome: "Reino Unido", bandeira: "gb" },
+"303": { nome: "Estados Unidos da América", bandeira: "us" },
+"304": { nome: "Antígua e Barbuda", bandeira: "ag" },
+"305": { nome: "Antígua e Barbuda", bandeira: "ag" },
+"306": { nome: "Holanda", bandeira: "nl" },
+"306": { nome: "Holanda", bandeira: "nl" },
+"306": { nome: "Holanda", bandeira: "nl" },
+"307": { nome: "Holanda", bandeira: "nl" },
+"308": { nome: "Bahamas", bandeira: "bs" },
+"309": { nome: "Bahamas", bandeira: "bs" },
+"310": { nome: "Reino Unido", bandeira: "gb" },
+"311": { nome: "Bahamas", bandeira: "bs" },
+"312": { nome: "Belize", bandeira: "bz" },
+"314": { nome: "Barbados", bandeira: "bb" },
+"316": { nome: "Canadá", bandeira: "ca" },
+"319": { nome: "Reino Unido", bandeira: "gb" },
+"321": { nome: "Costa Rica", bandeira: "cr" },
+"323": { nome: "Cuba", bandeira: "cu" },
+"325": { nome: "Dominica", bandeira: "dm" },
+"327": { nome: "República Dominicana", bandeira: "do" },
+"329": { nome: "França", bandeira: "fr" },
+"330": { nome: "Granada", bandeira: "gd" },
+"331": { nome: "Dinamarca", bandeira: "dk" },
+"332": { nome: "Guatemala", bandeira: "gt" },
+"334": { nome: "Honduras", bandeira: "hn" },
+"336": { nome: "Haiti", bandeira: "ht" },
+"338": { nome: "Estados Unidos da América", bandeira: "us" },
+"339": { nome: "Jamaica", bandeira: "jm" },
+"341": { nome: "São Cristóvão e Neves", bandeira: "kn" },
+"343": { nome: "Santa Lúcia", bandeira: "lc" },
+"345": { nome: "México", bandeira: "mx" },
+"347": { nome: "França", bandeira: "fr" },
+"348": { nome: "Reino Unido", bandeira: "gb" },
+"350": { nome: "Nicarágua", bandeira: "ni" },
+"351": { nome: "Panamá", bandeira: "pa" },
+"352": { nome: "Panamá", bandeira: "pa" },
+"353": { nome: "Panamá", bandeira: "pa" },
+"354": { nome: "Panamá", bandeira: "pa" },
+"355": { nome: "Panamá", bandeira: "pa" },
+"356": { nome: "Panamá", bandeira: "pa" },
+"357": { nome: "Panamá", bandeira: "pa" },
+"358": { nome: "Estados Unidos da América", bandeira: "us" },
+"359": { nome: "El Salvador", bandeira: "sv" },
+"361": { nome: "França", bandeira: "fr" },
+"362": { nome: "Trinidade e Tobago", bandeira: "tt" },
+"364": { nome: "Reino Unido", bandeira: "gb" },
+"366": { nome: "Estados Unidos da América", bandeira: "us" },
+"367": { nome: "Estados Unidos da América", bandeira: "us" },
+"368": { nome: "Estados Unidos da América", bandeira: "us" },
+"369": { nome: "Estados Unidos da América", bandeira: "us" },
+"370": { nome: "Panamá", bandeira: "pa" },
+"371": { nome: "Panamá", bandeira: "pa" },
+"372": { nome: "Panamá", bandeira: "pa" },
+"373": { nome: "Panamá", bandeira: "pa" },
+"374": { nome: "Panamá", bandeira: "pa" },
+"375": { nome: "São Vicente e Granadinas", bandeira: "vc" },
+"376": { nome: "São Vicente e Granadinas", bandeira: "vc" },
+"377": { nome: "São Vicente e Granadinas", bandeira: "vc" },
+"378": { nome: "Reino Unido", bandeira: "gb" },
+"379": { nome: "Estados Unidos da América", bandeira: "us" },
+"401": { nome: "Afeganistão", bandeira: "af" },
+"403": { nome: "Arábia Saudita", bandeira: "sa" },
+"405": { nome: "Bangladesh", bandeira: "bd" },
+"408": { nome: "Bahrein", bandeira: "bh" },
+"410": { nome: "Butão", bandeira: "bt" },
+"412": { nome: "China", bandeira: "cn" },
+"413": { nome: "China", bandeira: "cn" },
+"414": { nome: "China", bandeira: "cn" },
+"416": { nome: "China", bandeira: "cn" },
+"417": { nome: "Sri Lanka", bandeira: "lk" },
+"419": { nome: "Índia", bandeira: "in" },
+"422": { nome: "Irã", bandeira: "ir" },
+"423": { nome: "Azerbaijão", bandeira: "az" },
+"425": { nome: "Iraque", bandeira: "iq" },
+"428": { nome: "Israel", bandeira: "il" },
+"431": { nome: "Japão", bandeira: "jp" },
+"432": { nome: "Japão", bandeira: "jp" },
+"434": { nome: "Turcomenistão", bandeira: "tm" },
+"436": { nome: "Cazaquistão", bandeira: "kz" },
+"437": { nome: "Uzbequistão", bandeira: "uz" },
+"438": { nome: "Jordânia", bandeira: "jo" },
+"440": { nome: "Coreia", bandeira: "kr" },
+"441": { nome: "Coreia", bandeira: "kr" },
+"443": { nome: "Palestina", bandeira: "ps" },
+"445": { nome: "Coreia", bandeira: "kp" },
+"447": { nome: "Kuwait", bandeira: "kw" },
+"450": { nome: "Líbano", bandeira: "lb" },
+"451": { nome: "Quirguistão", bandeira: "kg" },
+"453": { nome: "China", bandeira: "cn" },
+"455": { nome: "Maldivas", bandeira: "mv" },
+"457": { nome: "Mongólia", bandeira: "mn" },
+"459": { nome: "Nepal", bandeira: "np" },
+"461": { nome: "Omã", bandeira: "om" },
+"463": { nome: "Paquistão", bandeira: "pk" },
+"466": { nome: "Catar", bandeira: "qa" },
+"468": { nome: "Síria", bandeira: "sy" },
+"470": { nome: "Emirados Árabes Unidos", bandeira: "ae" },
+"471": { nome: "Emirados Árabes Unidos", bandeira: "ae" },
+"472": { nome: "Tajiquistão", bandeira: "tj" },
+"473": { nome: "Iémen", bandeira: "ye" },
+"475": { nome: "Iémen", bandeira: "ye" },
+"477": { nome: "China", bandeira: "cn" },
+"478": { nome: "Bósnia e Herzegovina", bandeira: "ba" },
+"501": { nome: "França", bandeira: "fr" },
+"503": { nome: "Austrália", bandeira: "au" },
+"506": { nome: "Mianmar", bandeira: "mm" },
+"508": { nome: "Brunei Darussalã", bandeira: "bn" },
+"510": { nome: "Micronésia", bandeira: "fm" },
+"511": { nome: "Palau", bandeira: "pw" },
+"512": { nome: "Nova Zelândia", bandeira: "nz" },
+"514": { nome: "Camboja", bandeira: "kh" },
+"515": { nome: "Camboja", bandeira: "kh" },
+"516": { nome: "Austrália", bandeira: "au" },
+"518": { nome: "Nova Zelândia", bandeira: "nz" },
+"520": { nome: "Fiji", bandeira: "fj" },
+"523": { nome: "Austrália", bandeira: "au" },
+"525": { nome: "Indonésia", bandeira: "id" },
+"529": { nome: "Quiribáti", bandeira: "" },
+"531": { nome: "Laos", bandeira: "la" },
+"533": { nome: "Malásia", bandeira: "my" },
+"536": { nome: "Estados Unidos da América", bandeira: "us" },
+"538": { nome: "Ilhas Marshall", bandeira: "mh" },
+"540": { nome: "França", bandeira: "fr" },
+"542": { nome: "Nova Zelândia", bandeira: "nz" },
+"544": { nome: "Nauru", bandeira: "nr" },
+"546": { nome: "França", bandeira: "fr" },
+"548": { nome: "Filipinas", bandeira: "ph" },
+"550": { nome: "Timor-Leste", bandeira: "tl" },
+"553": { nome: "Papua Nova Guiné", bandeira: "pg" },
+"555": { nome: "Reino Unido", bandeira: "gb" },
+"557": { nome: "Ilhas Salomão", bandeira: "sb" },
+"559": { nome: "Estados Unidos da América", bandeira: "us" },
+"561": { nome: "Samoa", bandeira: "ws" },
+"563": { nome: "Singapura", bandeira: "sg" },
+"564": { nome: "Singapura", bandeira: "sg" },
+"565": { nome: "Singapura", bandeira: "sg" },
+"566": { nome: "Singapura", bandeira: "sg" },
+"567": { nome: "Tailândia", bandeira: "th" },
+"570": { nome: "Tonga", bandeira: "to" },
+"572": { nome: "Tuvalu", bandeira: "tv" },
+"574": { nome: "Vietnã", bandeira: "vn" },
+"576": { nome: "Vanuatu", bandeira: "vu" },
+"577": { nome: "Vanuatu", bandeira: "vu" },
+"578": { nome: "França", bandeira: "fr" },
+"601": { nome: "África do Sul", bandeira: "za" },
+"603": { nome: "Angola", bandeira: "ao" },
+"605": { nome: "Argélia", bandeira: "dz" },
+"607": { nome: "França", bandeira: "fr" },
+"608": { nome: "Reino Unido", bandeira: "gb" },
+"609": { nome: "Burundi", bandeira: "bi" },
+"610": { nome: "Benim", bandeira: "bj" },
+"611": { nome: "Botsuana", bandeira: "bw" },
+"612": { nome: "República Centro-Africana", bandeira: "cf" },
+"613": { nome: "Camarões", bandeira: "cm" },
+"615": { nome: "Congo", bandeira: "cg" },
+"616": { nome: "Comores", bandeira: "km" },
+"617": { nome: "Cabo Verde", bandeira: "cv" },
+"618": { nome: "França", bandeira: "fr" },
+"619": { nome: "Costa do Marfim", bandeira: "ci" },
+"620": { nome: "Comores", bandeira: "km" },
+"621": { nome: "Djibuti", bandeira: "dj" },
+"622": { nome: "Egito", bandeira: "eg" },
+"624": { nome: "Etiópia", bandeira: "et" },
+"625": { nome: "Eritreia", bandeira: "er" },
+"626": { nome: "Gabão", bandeira: "ga" },
+"627": { nome: "Gana", bandeira: "gh" },
+"629": { nome: "Gâmbia", bandeira: "gm" },
+"630": { nome: "Guiné-Bissau", bandeira: "da" },
+"631": { nome: "Guiné Equatorial", bandeira: "gq" },
+"632": { nome: "Guiné", bandeira: "gn" },
+"633": { nome: "Burquina Faso", bandeira: "bf" },
+"634": { nome: "Quénia", bandeira: "ke" },
+"635": { nome: "França", bandeira: "fr" },
+"636": { nome: "Libéria", bandeira: "lr" },
+"637": { nome: "Libéria", bandeira: "lr" },
+"638": { nome: "Sudão do Sul", bandeira: "ss" },
+"642": { nome: "Líbia", bandeira: "ly" },
+"644": { nome: "Lesoto", bandeira: "ls" },
+"645": { nome: "Maurício", bandeira: "mu" },
+"647": { nome: "Madagáscar", bandeira: "mg" },
+"649": { nome: "Mali", bandeira: "ml" },
+"650": { nome: "Moçambique", bandeira: "mz" },
+"654": { nome: "Mauritânia", bandeira: "mr" },
+"655": { nome: "Maláui", bandeira: "mw" },
+"656": { nome: "Níger", bandeira: "ne" },
+"657": { nome: "Nigéria", bandeira: "ng" },
+"659": { nome: "Namíbia", bandeira: "na" },
+"660": { nome: "França", bandeira: "fr" },
+"661": { nome: "Ruanda", bandeira: "rw" },
+"662": { nome: "Sudão", bandeira: "sd" },
+"663": { nome: "Senegal", bandeira: "sn" },
+"664": { nome: "Seicheles", bandeira: "sc" },
+"665": { nome: "Reino Unido", bandeira: "gb" },
+"666": { nome: "Somália", bandeira: "so" },
+"667": { nome: "Serra Leoa", bandeira: "sl" },
+"668": { nome: "São Tomé e Príncipe", bandeira: "st" },
+"669": { nome: "Essuatíni", bandeira: "sz" },
+"670": { nome: "Chade", bandeira: "td" },
+"671": { nome: "Togo", bandeira: "tg" },
+"672": { nome: "Tunísia", bandeira: "tn" },
+"674": { nome: "Tanzânia", bandeira: "tz" },
+"675": { nome: "Uganda", bandeira: "ug" },
+"676": { nome: "República Democrática do Congo", bandeira: "cd" },
+"677": { nome: "Tanzânia", bandeira: "tz" },
+"678": { nome: "Zâmbia", bandeira: "zm" },
+"679": { nome: "Zimbábue", bandeira: "zw" },
+"701": { nome: "Argentina", bandeira: "ar" },
+"710": { nome: "Brasil", bandeira: "br" },
+"720": { nome: "Bolívia", bandeira: "bo" },
+"725": { nome: "Chile", bandeira: "cl" },
+"730": { nome: "Colômbia", bandeira: "co" },
+"735": { nome: "Equador", bandeira: "ec" },
+"740": { nome: "Reino Unido", bandeira: "gb" },
+"745": { nome: "França", bandeira: "fr" },
+"750": { nome: "Guiana", bandeira: "gy" },
+"755": { nome: "Paraguai", bandeira: "py" },
+"760": { nome: "Peru", bandeira: "pe" },
+"765": { nome: "Suriname", bandeira: "sr" },
+"770": { nome: "Uruguai", bandeira: "uy" },
+"775": { nome: "Venezuela", bandeira: "ve" }
+};
+
+function consultarPais() {
+  const mmsi = document.getElementById("mmsiInput").value;
+  if (mmsiToPais[mmsi]) {
+    const pais = mmsiToPais[mmsi].nome;
+    const bandeira = mmsiToPais[mmsi].bandeira;
+
+    document.getElementById("resultado2").innerText = "País: " + pais;
+    document.getElementById("bandeira").src = `https://www.bandeirasnacionais.com/data/flags/h80/${bandeira}.png`;
+    document.getElementById("bandeira").style.display = 'inline';
+  } else {
+    document.getElementById("resultado2").innerText = "País não encontrado para o MMSI " + mmsi;
+    document.getElementById("bandeira").style.display = 'none';
+  }
+}
+ 
+document.getElementById('open_btn').addEventListener('click', function() {
+    document.getElementById('sidebar').classList.toggle('open-sidebar');
+});
+
+// Detectar mudança de tamanho da tela
+function handleResize() {
+    const isMobile = window.innerWidth <= 720;
+    const sidebar = document.getElementById('sidebar');
+    
+       if (isMobile && sidebar.classList.contains('open-sidebar')) {
+        sidebar.classList.remove('open-sidebar');
+    }
+    
+    map.invalidateSize();
+}
+
+// Inicializar
+window.addEventListener('load', function() {
+    handleResize();
+    map.invalidateSize();
+});
+
+// Monitorar redimensionamento
+window.addEventListener('resize', function() {
+    handleResize();
+});
+</script>
+</body>
+</html>

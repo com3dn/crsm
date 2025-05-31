@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculadora de Tempo e Distância</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Leaflet Control Layers Tree CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.control.layers.tree/L.Control.Layers.Tree.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+:root {
+  --primary-color: #4f46e5;
+  --sidebar-width: 80px;
+  --sidebar-expanded-width: 250px;
+  --header-height: 60px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background-color: #e3e9f7;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Container principal */
+#app-container {
+    display: flex;
+    flex: 1;
+    height: 100vh;
+}
+
+/* Sidebar */
+#sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+    background-color: #ffffff;
+    border-radius: 0px 10px 0px 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.5s;
+    position: relative;
+    z-index: 10;
+    overflow: hidden;
+}
+
+#sidebar.open-sidebar {
+    width: var(--sidebar-expanded-width);
+}
+
+#sidebar_content {
+    padding: 12px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* Conteúdo principal */
+#main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    padding: 20px;
+    transition: margin-left 0.3s;
+    position: relative;
+    background-color: #f5f7fa;
+}
+
+/* Estilos para a calculadora */
+.calculator-container {
+    width: 70%;
+    margin: 20px 0px;
+    padding: 25px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.calculator-container h1 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.calculator-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #333;
+}
+
+.form-group input {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.form-group input:focus {
+    outline: none;
+    
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+}
+
+#resultado {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    border-left: 4px solid var(--primary-color);
+    font-size: 16px;
+    white-space: pre-line;
+}
+
+/* Estilos comuns da sidebar */
+#user {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 2px;
+}
+
+#user_avatar {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 20px;
+}
+
+#user_infos {
+    display: flex;
+    flex-direction: column;
+}
+
+#user_infos span:last-child {
+    color: #6b6b6b;
+    font-size: 12px;
+}
+
+#side_items {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    list-style: none;
+    margin-top: 20px;
+}
+
+.side-item {
+    border-radius: 8px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.side-item.active {
+    background-color: var(--primary-color);
+}
+
+.side-item:hover:not(.active),
+#logout_btn:hover {
+    background-color: #e3e9f7;
+}
+
+.side-item a {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    color: #0a0a0a;
+}
+
+.side-item.active a {
+    color: #e3e9f7;
+}
+
+.side-item a i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+}
+
+#logout {
+    border-top: 1px solid #e3e9f7;
+    padding: 12px;
+}
+
+#logout_btn {
+    border: none;
+    padding: 12px;
+    font-size: 14px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    border-radius: 8px;
+    text-align: start;
+    cursor: pointer;
+    background-color: transparent;
+    width: 100%;
+}
+
+#open_btn {
+    position: absolute;
+    top: 2px;
+    right: 2px; /* Aumentei um pouco para ficar mais para fora */
+    background-color: #4f46e5;
+    color: #e3e9f7;
+    border-radius: 100%;
+    width: 24px; /* Aumentei o tamanho */
+    height: 24px;
+    border: 2px solid white; /* Borda para destacar */
+    cursor: pointer;
+    z-index: 9000; /* Garante que fique por cima */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Sombra para profundidade */
+    transition: all 0.3s ease;
+}
+
+#open_btn:hover {
+    transform: scale(1.1);
+    background-color: #4338ca;
+}
+
+#open_btn_icon {
+    font-size: 12px;
+    transition: transform 0.3s ease;
+}
+
+.open-sidebar #open_btn_icon {
+    transform: rotate(180deg);
+}
+
+.item-description {
+    width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    transition: width .6s;
+}
+
+#sidebar.open-sidebar .item-description {
+    width: 150px;
+    margin-left: 10px;
+}#map {
+      width: 65vw;
+      height: 70vh;
+      margin-top: 20px;
+      border: 1px solid #ccc;
+    }
+
+    #distancia2, #tempo {
+      font-size: 18px;
+      margin-top: 10px;
+    }
+
+/* Media queries para dispositivos móveis */
+@media (max-width: 720px) {
+    #app-container {
+        flex-direction: column;
+    }
+    
+    #sidebar {
+        width: 100%;
+        height: auto;
+        border-radius: 0;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    #sidebar.open-sidebar {
+        width: 100%;
+    }
+    
+    #sidebar_content {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        padding: 8px;
+    }
+    
+    #user {
+        display: none;
+    }
+    
+    #side_items {
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-top: 0;
+        margin-right: 28px;
+        width: 70%;
+        gap: 20px;
+    }
+    
+    .side-item {
+        padding: 20px 20px;
+    }
+    
+    #logout {
+        border-top: none;
+        padding: 0px;
+        margin-right: 50px;
+    }
+    
+    #open_btn {
+        display: flex;
+        top: 10px;
+        right: 10px;
+    }
+    
+    #sidebar .item-description {
+        width: auto !important;
+        display: none;
+    }
+    
+    #sidebar.open-sidebar .item-description {
+        display: inline;
+    }
+    
+    .calculator-container {
+        margin-top: 20px;
+        padding: 15px;
+    }
+}
+
+/* Ajustes para telas muito pequenas */
+@media (max-width: 480px) {
+    .calculator-form {
+        gap: 2px;
+    }
+    
+    .form-group input {
+        padding: 8px 12px;
+    }
+    
+    #side_items {
+        gap: 3px;
+    }
+    
+    .side-item {
+        padding: 6px 8px;
+    }
+}
+</style>
+</head>
+<body>
+<div id="app-container">
+    <nav id="sidebar">
+        <div id="sidebar_content">
+            <div id="user">
+                <img src="IMG/avatar.png" id="user_avatar" alt="Avatar">
+                <p id="user_infos">
+                    <span class="item-description">CRSM</span>
+                    <span class="item-description">COM3DN</span>
+                </p>
+            </div>
+            <ul id="side_items">
+                <li class="side-item"><a href="index.html"><i class="fa-solid fa-landmark"></i>
+                    <span class="item-description">Inicio</span></a>
+                </li>
+                <li class="side-item"><a href="Map.html"><i class="fa-solid fa-globe"></i>
+                    <span class="item-description">Mapa Interativo</span></a>
+                </li>
+                <li class="side-item"><a href="calculadora.html"><i class="fa-solid fa-calculator"></i>
+                    <span class="item-description">Calculadora</span></a>
+                </li>  
+                <li class="side-item"><a href="consulta-mmsi.html"><i class="fa-solid fa-flag"></i>
+                    <span class="item-description">Consulta MMSI</span></a>
+                </li>  
+                <li class="side-item "><a href="conversor-gms.html"><i class="fa-solid fa-compass"></i>
+                    <span class="item-description">Conversor(GMS)</span></a>
+                </li>
+                <li class="side-item "><a href="conversor-decimal.html"><i class="fa-solid fa-gear"></i>
+                    <span class="item-description">Conversor(DEC)</span></a>
+                </li>
+                <li class="side-item active"><a href="distancia-portos.html"><i class="fa-solid fa-house-flood-water-circle-arrow-right"></i>
+                    <span class="item-description">Distancia Portos</span></a>
+                </li>
+                <li class="side-item"><a href="Interceptação.html"><i class="fa-solid fa-arrows-to-circle"></i>
+                    <span class="item-description">Interceptação</span></a>
+                </li>
+            </ul>
+        </div>
+        
+        <div id="logout">
+            <button id="logout_btn">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span class="item-description">Logout</span>
+            </button>
+        </div>
+        
+        <button id="open_btn">
+            <i id="open_btn_icon" class="fa-solid fa-chevron-right"></i>
+        </button>
+    </nav>
+    <div id="main-content">
+  <h1>Calculadora de Distância entre Portos</h1>
+    <div style="text-align:center" class="calculator-container">
+  <div class="input-group">
+    <label for="porto1">Porto de Origem:</label>
+    <input list="portos" id="porto1" class="port-input" placeholder="Selecione ou digite">
+  </div>
+  
+  <div class="input-group">
+    <label for="porto2">Porto de Destino:</label>
+    <input list="portos" id="porto2" class="port-input" placeholder="Selecione ou digite">
+  </div>
+
+  <datalist id="portos">
+<option value="aracati"></option>
+<option value="areia branca"></option>
+<option value="atol das rocas"></option>
+<option value="cabedelo"></option>
+<option value="camocim"></option>
+<option value="fernando de noronha"></option>
+<option value="fortaleza"></option>
+<option value="guamare"></option>
+<option value="maceio"></option>
+<option value="natal"></option>
+<option value="pecem"></option>
+<option value="recife"></option>
+<option value="suape"></option>
+<option value="sao pedro e sao paulo"></option>
+  </datalist>
+
+  <div class="input-group">
+    <label for="velocidade">Velocidade (nós):</label>
+    <input type="number" id="velocidade" min="1" step="0.1" placeholder="Ex: 12.5">
+  </div>
+
+  <button id="calcular-btn" class="calculate-btn">Calcular Distância</button>
+
+  <div class="results">
+    <p id="distancia" class="result-item"></p>
+    <p id="tempo" class="result-item"></p>
+	<a href="calculadora.html"><p id="eta" class="result-item"></p></a>
+    
+  </div>
+
+  <div id="map" class="map-container"></div>
+</div>
+	      </div>
+	
+	
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+// Módulo principal da aplicação
+const PortDistanceCalculator = (() => {
+  // Configurações
+  const config = {
+    mapOptions: {
+      center: [-5.5, -36],
+      zoom: 6,
+      tileLayer: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      attribution: '© OpenStreetMap'
+    },
+    polylineStyle: {
+      color: 'blue',
+      weight: 3,
+      opacity: 0.7
+    },
+    markerOptions: {
+      icon: L.icon({
+        iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41]
+      })
+    }
+  };
+
+  // Elementos DOM
+  const elements = {
+    porto1: document.getElementById('porto1'),
+    porto2: document.getElementById('porto2'),
+    velocidade: document.getElementById('velocidade'),
+    calcularBtn: document.getElementById('calcular-btn'),
+    distanciaEl: document.getElementById('distancia'),
+    tempoEl: document.getElementById('tempo'),
+    etaEl: document.getElementById('eta'),
+    mapEl: document.getElementById('map')
+  };
+
+  // Estado da aplicação
+  let state = {
+    map: null,
+    markers: [],
+    polylines: [],
+	portos: {
+  "aracati": { lat: -4.423261, lon: -37.764558 },
+  "areia branca": { lat: -4.928146, lon: -37.144775 },
+  "atol das rocas": { lat: -3.858260, lon: -33.816604 },
+  "cabedelo": { lat: -6.952839, lon: -34.846572 },
+  "camocim": { lat: -2.910124, lon: -40.825195 },
+  "fernando de noronha": { lat: -3.859116, lon: -32.451381 },
+  "fortaleza": { lat: -3.703330, lon: -38.487854 },
+  "guamare": { lat: -5.083420, lon: -36.305007 },
+  "maceio": { lat: -9.694166, lon: -35.741615 },
+  "natal": { lat: -5.750000, lon: -35.200000 },
+  "pecem": { lat: -3.528927, lon: -38.811864 },
+  "recife": { lat: -8.050000, lon: -34.866667 },
+  "suape": { lat: -8.388487, lon: -34.940471 },
+  "sao pedro e sao paulo": { lat: 0.914241, lon: -29.345786 }
+},
+    distancias: {
+"aracati - atol das rocas": 232, 
+"aracati - camocim": 222, 
+"aracati - fernando de noronha": 318, 
+"aracati - fortaleza": 63, 
+"aracati - pecem": 86, 
+"aracati - sao pedro e sao paulo": 597, 
+"areia branca - aracati": 49, 
+"areia branca - atol das rocas": 204, 
+"areia branca - camocim": 272, 
+"areia branca - fernando de noronha": 287, 
+"areia branca - fortaleza": 114, 
+"areia branca - pecem": 134, 
+"areia branca - sao pedro e sao paulo": 584, 
+"cabedelo - aracati": 264, 
+"cabedelo - areia branca": 226, 
+"cabedelo - atol das rocas": 193, 
+"cabedelo - camocim": 492, 
+"cabedelo - fernando de noronha": 237, 
+"cabedelo - fortaleza": 353, 
+"cabedelo - guamare": 193, 
+"cabedelo - natal": 89, 
+"cabedelo - pecem": 349, 
+"cabedelo - sao pedro e sao paulo": 575, 
+"camocim - atol das rocas": 430, 
+"camocim - fernando de noronha": 510, 
+"camocim - sao pedro e sao paulo": 730, 
+"fortaleza - atol das rocas": 278, 
+"fortaleza - camocim": 160, 
+"fortaleza - fernando de noronha": 370, 
+"fortaleza - pecem": 24, 
+"fortaleza - sao pedro e sao paulo": 620, 
+"guamare - aracati": 95, 
+"guamare - areia branca": 53, 
+"guamare - atol das rocas": 166, 
+"guamare - camocim": 315, 
+"guamare - fernando de noronha": 244, 
+"guamare - fortaleza": 156, 
+"guamare - pecem": 180, 
+"guamare - sao pedro e sao paulo": 548, 
+"maceio - aracati": 448, 
+"maceio - areia branca": 411, 
+"maceio - atol das rocas": 386, 
+"maceio - cabedelo": 198, 
+"maceio - camocim": 671, 
+"maceio - fernando de noronha": 421, 
+"maceio - fortaleza": 537, 
+"maceio - guamare": 380, 
+"maceio - natal": 275, 
+"maceio - pecem": 532, 
+"maceio - recife": 126, 
+"maceio - suape": 95, 
+"maceio - sao pedro e sao paulo": 756, 
+"natal - aracati": 201, 
+"natal - areia branca": 153, 
+"natal - atol das rocas": 144, 
+"natal - camocim": 416, 
+"natal - fernando de noronha": 200, 
+"natal - fortaleza": 268, 
+"natal - guamare": 120, 
+"natal - pecem": 273, 
+"natal - sao pedro e sao paulo": 534, 
+"pecem - atol das rocas": 301, 
+"pecem - camocim": 137, 
+"pecem - fernando de noronha": 383, 
+"pecem - sao pedro e sao paulo": 629, 
+"recife - aracati": 333, 
+"recife - areia branca": 294, 
+"recife - atol das rocas": 260, 
+"recife - cabedelo": 84, 
+"recife - camocim": 558, 
+"recife - fernando de noronha": 295, 
+"recife - fortaleza": 423, 
+"recife - guamare": 262, 
+"recife - natal": 159, 
+"recife - pecem": 417, 
+"recife - sao pedro e sao paulo": 630, 
+"suape - aracati": 354, 
+"suape - areia branca": 311, 
+"suape - atol das rocas": 280, 
+"suape - cabedelo": 94, 
+"suape - camocim": 574, 
+"suape - fernando de noronha": 310, 
+"suape - fortaleza": 415, 
+"suape - guamare": 284, 
+"suape - natal": 169, 
+"suape - pecem": 440, 
+"suape - recife": 21, 
+"suape - sao pedro e sao paulo": 647,
+"atol das rocas - fernando de noronha": 93,
+"atol das rocas - sao pedro e sao paulo": 394,
+"sao pedro e sao paulo - fernando de noronha": 340 },
+    pontos: {
+"atol das rocas - fernando de noronha": 			[[-3.859116,-32.451381], [-3.858260,-33.816604]],
+"sao pedro e sao paulo - fernando de noronha": 		[[-3.859116,-32.451381], [ 0.914241,-29.345786]],
+"atol das rocas - sao pedro e sao paulo": 			[[-3.858260,-33.816604], [ 0.914241,-29.345786]],
+"aracati - atol das rocas": 			[[-4.423261,-37.764558], [-3.858260,-33.816604]],
+"aracati - camocim": 					[[-4.423261,-37.764558], [-4.390448,-37.757971],[-3.667231,-38.458358],[-3.266885,-39.104324],[-2.947540,-39.654120],[-2.839272,-39.865568],[-2.754127,-40.099043],[-2.740346,-40.670737], [-2.865356,-40.837644], [-2.910124,-40.825195]],
+"aracati - fernando de noronha": 		[[-4.423261,-37.764558], [-3.859116,-32.451381]],
+"aracati - fortaleza": 					[[-4.423261,-37.764558], [-4.428695,-37.752986],[-4.390448,-37.757971],[-3.689049,-38.473568], [-3.693967,-38.485968], [-3.702982,-38.488578],[-3.703330,-38.487854]],
+"aracati - pecem": 						[[-4.423261,-37.764558], [-4.428695,-37.752986],[-4.390448,-37.757971],[-3.686263,-38.462800],[-3.506272,-38.803140],[-3.529223,-38.820761],[-3.528927,-38.811864]],
+"aracati - sao pedro e sao paulo": 		[[-4.423261,-37.764558], [ 0.914241,-29.345786]],
+"areia branca - aracati": 				[[-4.928146,-37.144775], [-4.674526,-37.313374], [-4.423261,-37.764558]],
+"areia branca - atol das rocas": 		[[-4.928146,-37.144775], [-3.858260,-33.816604]],
+"areia branca - camocim": 				[[-2.910124,-40.825195], [-2.865356,-40.837644],[-2.740346,-40.670737],[-2.754127,-40.099043],[-2.839272,-39.865568],[-2.947540,-39.654120],[-3.266885,-39.104324],[-3.667231,-38.458358],[-4.501800,-37.407514],[-4.924269,-37.144962],[-4.928146,-37.144775]],
+"areia branca - fernando de noronha": 	[[-4.928146,-37.144775], [-3.859116,-32.451381]],
+"areia branca - fortaleza": 			[[-3.703330,-38.487854], [-3.693967,-38.485968],[-3.689049,-38.473568],[-4.501800,-37.407514],[-4.924269,-37.144962],[-4.928146,-37.144775]],
+"areia branca - pecem": 				[[-3.528927,-38.811864], [-3.506272,-38.803140],[-3.686263,-38.462800],[-4.501800,-37.407514],[-4.924269,-37.144962],[-4.928146,-37.144775]],
+"areia branca - sao pedro e sao paulo": [[-4.928146,-37.144775], [ 0.914241,-29.345786]],
+"cabedelo - aracati": 					[[-4.423261,-37.764558], [-4.424161,-37.749124],[-4.731511,-37.117593],[-5.133321,-35.347170],[-6.350611,-34.910017],[-6.857071,-34.818946],[-6.938261,-34.842440],[-6.952839,-34.846572]],
+"cabedelo - areia branca": 				[[-4.928146,-37.144775], [-4.921651,-37.142678],[-4.876481,-37.107436],[-5.019821,-35.971879],[-5.133321,-35.347170],[-6.350611,-34.910017],[-6.857071,-34.818946],[-6.938261,-34.842440],[-6.952839,-34.846572]],
+"cabedelo - atol das rocas": 			[[-6.952839,-34.846572], [-3.858260,-33.816604]],
+"cabedelo - camocim": 					[[-2.910124,-40.825195], [-2.865351,-40.837644],[-2.740341,-40.670737],[-2.754121,-40.099043],[-2.839271,-39.865568],[-2.947541,-39.654120],[-3.202911,-39.207239],[-3.667231,-38.458358],[-4.731511,-37.117593],[-5.133321,-35.347170],[-6.350611,-34.910017],[-6.857071,-34.818946],[-6.938261,-34.842440],[-6.952839,-34.846572]],
+"cabedelo - fernando de noronha": 		[[-6.952839,-34.846572], [-3.859116,-32.451381]],
+"cabedelo - fortaleza": 				[[-3.703330,-38.487854], [-3.701280,-38.487848],[-3.68186,-38.484177],[-4.73151,-37.117593],[-5.13332,-35.347170],[-6.35061,-34.910017],[-6.85707,-34.818946],[-6.93826,-34.842440],[-6.952839,-34.846572]],
+"cabedelo - guamare": 					[[-5.083420,-36.305007], [-4.995890,-36.010883],[-5.13332,-35.347170],[-6.35061,-34.910017],[-6.93826,-34.842440],[-6.952839,-34.846572]],
+"cabedelo - natal": 					[[-5.750000,-35.200000], [-5.751000,-35.180000],[-6.35061,-34.910017],[-6.93826,-34.842440],[-6.952839,-34.846572]],
+"cabedelo - pecem": 					[[-3.528927,-38.811864], [-3.524490,-38.811629],[-3.50088,-38.804777],[-3.66723,-38.458358],[-4.73151,-37.117593],[-5.13332,-35.347170],[-6.35061,-34.910017],[-6.85707,-34.818946],[-6.93826,-34.842440],[-6.952839,-34.846572]],
+"cabedelo - sao pedro e sao paulo": 	[[-6.952839,-34.846572], [ 0.914241,-29.345786]],
+"camocim - atol das rocas": 			[[-3.858260,-33.816604], [-3.853900,-33.810078],[-2.771680,-39.976187],[-2.729680,-40.553102],[-2.868140,-40.845476],[-2.910124,-40.825195]],
+"camocim - fernando de noronha": 		[[-3.859116,-32.451381], [-3.861880,-32.428266],[-2.771680,-39.976187],[-2.729680,-40.553102],[-2.868140,-40.845476],[-2.910124,-40.825195]],
+"camocim - sao pedro e sao paulo": 		[[ 0.914241,-29.345786], [ 0.868853,-29.273577],[-2.729680,-40.553102],[-2.868140,-40.845476],[-2.910124,-40.825195]],
+"fortaleza - atol das rocas": 			[[-3.858260,-33.816604], [-3.693830,-38.483701],[-3.703330,-38.487854]],
+"fortaleza - camocim": 					[[-3.705200,-38.487182], [-3.266880,-39.104324],[-3.202910,-39.207239],[-2.947540,-39.654120],[-2.839270,-39.865568],[-2.754120,-40.099043],[-2.740340,-40.670737],[-2.865350,-40.837644]],
+"fortaleza - fernando de noronha": 		[[-3.859116,-32.451381], [-3.693830,-38.483701],[-3.703330,-38.487854]],
+"fortaleza - pecem": 					[[-3.703330,-38.487854], [-3.506270,-38.803140],[-3.528927,-38.811864]],
+"fortaleza - sao pedro e sao paulo": 	[[-3.703330,-38.487854], [-3.693830,-38.483701],[ 0.914241,-29.345786]],
+"guamare - aracati": 					[[-4.423261,-37.764558], [-5.083420,-36.305007]],
+"guamare - areia branca": 				[[-4.928146,-37.144775], [-4.921651,-37.142678],[-4.876484,-37.107436],[-4.902013,-36.899904],[-5.083420,-36.305007]],
+"guamare - atol das rocas": 			[[-3.858260,-33.816604], [-5.083420,-36.305007]],
+"guamare - camocim": 					[[-2.910124,-40.825195], [-2.865356,-40.837644],[-2.740346,-40.670737],[-2.754127,-40.099043],[-2.839272,-39.865568],[-2.947540,-39.654120],[-3.202911,-39.207239],[-3.667231,-38.458358],[-4.731514,-37.117593],[-5.083420,-36.305007]],
+"guamare - fernando de noronha": 		[[-3.859116,-32.451381], [-5.083420,-36.305007]],
+"guamare - fortaleza": 					[[-3.703330,-38.487854], [-3.701283,-38.487848],[-3.681860,-38.484177],[-4.731514,-37.117593],[-5.083420,-36.305007]],
+"guamare - pecem": 						[[-3.528927,-38.811864], [-3.524492,-38.811629],[-3.500884,-38.804777],[-3.667231,-38.458358],[-4.731514,-37.117593],[-5.083420,-36.305007]],
+"guamare - sao pedro e sao paulo": 		[[ 0.914241,-29.345786], [-5.083420,-36.305007]],
+"maceio - aracati": 					[[-4.423261,-37.764558], [-4.428647,-37.749247],[-5.133326,-35.347170],[-6.350613,-34.910017],[-7.025933,-34.741641],[-7.717837,-34.741641],[-8.110317,-34.805883],[-8.604235,-34.980928],[-8.974766,-35.137556],[-9.350261,-35.350963],[-9.704100,-35.693098],[-9.694166,-35.741615]],
+"maceio - areia branca": 				[[-4.928146,-37.144775], [-4.872434,-37.024201],[-4.995898,-36.010883],[-5.133326,-35.347170],[-6.350613,-34.910017],[-7.025933,-34.741641],[-7.717837,-34.741641],[-8.110317,-34.805883],[-8.604235,-34.980928],[-8.974766,-35.137556],[-9.350261,-35.350963],[-9.704100,-35.693098],[-9.694166,-35.741615]],
+"maceio - atol das rocas": 				[[-3.858260,-33.816604], [-3.856653,-33.803827],[-8.110317,-34.805883],[-8.604235,-34.980928],[-8.974766,-35.137556],[-9.300261,-35.350963],[-9.684100,-35.693098],[-9.694166,-35.741615]],
+"maceio - cabedelo": 					[[-6.952839,-34.846572], [-6.956610,-34.770642],[-7.402438,-34.733442],[-7.801440,-34.760852],[-8.110317,-34.805883],[-8.604235,-34.980928],[-8.974766,-35.137556],[-9.350261,-35.350963],[-9.704100,-35.693098],[-9.694166,-35.741615]],
+"maceio - camocim": 					[[-2.910124,-40.825195], [-2.865356,-40.837644],[-2.740346,-40.670737],[-2.754127,-40.099043],[-2.839272,-39.865568],[-2.947540, -39.654120],[-3.202911, -39.207239],[-3.667231, -38.458358],[-4.731514, -37.117593],[-5.133326, -35.347170],[-6.350613, -34.910017],[-7.025933, -34.741641],[-7.717837, -34.741641],[-8.110317, -34.805883],[-8.604235, -34.980928],[-8.974766, -35.137556],[-9.350261, -35.350963],[-9.704100, -35.693098],[-9.694166, -35.741615]],
+"maceio - fernando de noronha": 		[[-3.859116,-32.451381], [-3.862553,-32.437243],[-8.110317,-34.805883],[-8.604235,-34.980928],[-8.974766,-35.137556],[-9.350261,-35.350963],[-9.704100,-35.693098],[-9.694166,-35.741615]],
+"maceio - fortaleza": 					[[-3.703330,-38.487854], [-3.688888,-38.480000],[-4.694253,-37.015417],[-5.133326,-35.347170],[-6.350613,-34.910017],[-7.025933,-34.741641],[-7.717837,-34.741641],[-8.110317,-34.805883],[-8.604235,-34.980928],[-8.974766,-35.137556],[-9.350261,-35.350963],[-9.704100,-35.693098],[-9.694166,-35.741615]],
+"maceio - guamare": 					[[-5.083420,-36.305007], [-4.995898,-36.010883],[-5.133326,-35.347170],[-6.350613,-34.910017],[-7.025933,-34.741641],[-7.717837,-34.741641],[-8.110317,-34.805883],[-8.604235,-34.980928],[-8.974766,-35.137556],[-9.350261,-35.350963],[-9.704100,-35.693098],[-9.694166,-35.741615]],
+"maceio - natal": 						[[-5.750000,-35.200000], [-5.745731,-35.180690],[-6.318291,-34.971689],[-6.956610,-34.770642],[-7.402438,-34.733442],[-7.801440,-34.760852],[-8.110317,-34.805883],[-8.604235,-34.980928],[-8.974766,-35.137556],[-9.350261,-35.350963],[-9.704100,-35.693098],[-9.694166,-35.741615]],
+"maceio - pecem": 						[[-3.528927,-38.811864], [-3.525721,-38.813832],[-3.511213,-38.798903],[-3.688253,-38.475856],[-4.731514,-37.117593],[-5.133326,-35.347170],[-6.350613,-34.910017],[-7.025933,-34.741641],[-7.717837,-34.741641],[-8.110317,-34.805883],[-8.604235,-34.980928],[-8.974766,-35.137556],[-9.350261,-35.350963],[-9.704100,-35.693098],[-9.694166,-35.741615]],
+"maceio - recife": 						[[-8.050000,-34.866667], [-8.045255,-34.854524],[-8.419623,-34.921336],[-8.604235,-34.980928],[-8.974766,-35.137556],[-9.350261,-35.350963],[-9.704100,-35.693098],[-9.694166,-35.741615]],
+"maceio - suape": 						[[-8.388487,-34.940471], [-8.388856,-34.936876],[-8.604235,-34.980928],[-8.974766,-35.137556],[-9.350261,-35.350963],[-9.704100,-35.693098],[-9.694166,-35.741615]],
+"maceio - sao pedro e sao paulo": 		[[ 0.914241,-29.345786], [-8.110317,-34.805883],[-8.604235,-34.980928],[-8.974766,-35.137556],[-9.350261,-35.350963],[-9.704100,-35.693098],[-9.694166,-35.741615]],
+"natal - aracati": 						[[-4.423261,-37.764558], [-4.731514,-37.117593],[-5.133326,-35.347170],[-5.697193,-35.176499],[-5.750000,-35.200000]],
+"natal - areia branca": 				[[-4.928146,-37.144775], [-4.876484,-37.107436],[-5.019828,-35.971879],[-5.133326,-35.347170],[-5.697193,-35.176499],[-5.750000,-35.200000]],
+"natal - atol das rocas": 				[[-3.858260,-33.816604], [-5.750000,-35.200000]],
+"natal - camocim": 						[[-2.910124,-40.825195], [-2.865356,-40.837644],[-2.740346,-40.670737],[-2.754127,-40.099043],[-2.839272,-39.865568],[-2.947540,-39.654120],[-3.202911,-39.207239],[-3.667231,-38.458358],[-4.731514,-37.117593],[-5.133326,-35.347170],[-5.697193,-35.176499],[-5.750000,-35.200000]],
+"natal - fernando de noronha": 			[[-3.859116,-32.451381], [-5.750000,-35.200000]],
+"natal - fortaleza": 					[[-3.703330,-38.487854], [-3.701283,-38.487848],[-3.681860,-38.484177],[-4.731514,-37.117593],[-5.133326,-35.347170],[-5.697193,-35.176499],[-5.750000,-35.200000]],
+"natal - guamare": 						[[-5.083420,-36.305007], [-4.995898,-36.010883],[-5.133326,-35.347170],[-5.629324,-35.167852],[-5.750000,-35.200000]],
+"natal - pecem": 						[[-3.528927,-38.811864], [-3.524492,-38.811629],[-3.500884,-38.804777],[-3.667231,-38.458358],[-4.731514,-37.117593],[-5.133326,-35.347170],[-5.697193,-35.176499],[-5.750000,-35.200000]],
+"natal - sao pedro e sao paulo": 		[[ 0.914241,-29.345786], [-5.750000,-35.200000]],
+"pecem - atol das rocas": 				[[-3.858260,-33.816604], [-3.500884,-38.804777],[-3.524492,-38.811629],[-3.528927,-38.811864]],
+"pecem - camocim": 						[[-3.528927,-38.811864], [-3.266885,-39.104324],[-3.202911,-39.207239],[-2.947540,-39.654120],[-2.839272,-39.865568],[-2.754127,-40.099043],[-2.740346,-40.670737],[-2.865356,-40.837644],[-2.910124,-40.825195]],
+"pecem - fernando de noronha": 			[[-3.859116,-32.451381], [-3.500884,-38.804777],[-3.524492,-38.811629],[-3.528927,-38.811864]],
+"pecem - sao pedro e sao paulo": 		[[ 0.914241,-29.345786], [-3.500884,-38.804777],[-3.524492,-38.811629],[-3.528927,-38.811864]],
+"recife - aracati": 					[[-4.423261,-37.764558], [-4.424164,-37.749124],[-4.731514,-37.117593],[-5.133326,-35.347170],[-6.350613,-34.910017],[-7.025933,-34.741641],[-7.717837,-34.741641],[-7.972986,-34.789823],[-8.037388,-34.848069],[-8.050000,-34.866667]],
+"recife - areia branca": 				[[-4.928146,-37.144775], [-4.921651,-37.142678],[-4.876484,-37.107436],[-5.019828,-35.971879],[-5.133326,-35.347170],[-6.350613,-34.910017],[-7.025933,-34.741641],[-7.717837,-34.741641],[-7.972986,-34.789823],[-8.037388,-34.848069],[-8.050000,-34.866667]],
+"recife - atol das rocas": 				[[-3.858260,-33.816604], [-7.972986,-34.789823],[-8.050000,-34.866667]],
+"recife - cabedelo": 					[[-6.952839,-34.846572], [-7.000000,-34.741641],[-7.717837,-34.741641],[-8.037388,-34.848069],[-8.050000,-34.866667]],
+"recife - camocim": 					[[-2.910124,-40.825195], [-2.865356,-40.837644],[-2.740346,-40.670737],[-2.754127,-40.099043],[-2.839272,-39.865568],[-2.947540,-39.654120],[-3.202911,-39.207239],[-3.667231,-38.458358],[-4.731514,-37.117593],[-5.133326,-35.347170],[-6.350613,-34.910017],[-7.025933,-34.741641],[-7.717837,-34.741641],[-7.972986,-34.789823],[-8.037388,-34.848069],[-8.050000,-34.866667]],
+"recife - fernando de noronha": 		[[-3.859116,-32.451381], [-7.972986,-34.789823],[-8.050000,-34.866667]],
+"recife - fortaleza": 					[[-3.703330,-38.487854], [-3.701283,-38.487848],[-3.681860,-38.484177],[-4.731514,-37.117593],[-5.133326,-35.347170],[-6.350613,-34.910017],[-7.025933,-34.741641],[-7.717837,-34.741641],[-7.972986,-34.789823],[-8.037388,-34.848069],[-8.050000,-34.866667]],
+"recife - guamare": 					[[-5.083420,-36.305007], [-4.995898,-36.010883],[-5.133326,-35.347170],[-6.350613,-34.910017],[-7.025933,-34.741641],[-7.717837,-34.741641],[-8.037388,-34.848069],[-8.050000,-34.866667]],
+"recife - natal": 						[[-5.750000,-35.200000], [-6.350613,-34.910017],[-7.025933,-34.741641],[-7.717837,-34.741641],[-8.037388,-34.848069],[-8.050000,-34.866667]],
+"recife - pecem": 						[[-3.528927,-38.811864], [-3.524492,-38.811629],[-3.500884,-38.804777],[-3.667231,-38.458358],[-4.731514,-37.117593],[-5.133326,-35.347170],[-6.350613,-34.910017],[-7.025933,-34.741641],[-7.717837,-34.741641],[-7.972986,-34.789823],[-8.037388,-34.848069],[-8.050000,-34.866667]],
+"recife - sao pedro e sao paulo": 		[[ 0.914241,-29.345786], [-8.050000,-34.866667]],
+"suape - aracati": 						[[-4.423261,-37.764558], [-4.424164,-37.749124],[-4.731514,-37.117593],[-5.133326,-35.347170],[-6.350613,-34.910017],[-7.025933,-34.741641],[-7.717837,-34.741641],[-7.972986,-34.789823],[-8.037388,-34.848069],[-8.388487,-34.940471]],
+"suape - areia branca": 				[[-4.928146,-37.144775], [-4.921651,-37.142678],[-4.876484,-37.107436],[-5.019828,-35.971879],[-5.133326,-35.347170],[-6.350613,-34.910017],[-7.025933,-34.741641],[-7.717837,-34.741641],[-8.110317,-34.805883],[-8.385079,-34.946451],[-8.388487,-34.940471]],
+"suape - atol das rocas": 				[[-3.858260,-33.816604], [-7.972986,-34.789823],[-8.388487,-34.940471]],
+"suape - cabedelo": 					[[-6.952839,-34.846572], [-6.938268,-34.842440],[-6.930769,-34.764370],[-7.025933,-34.741641],[-7.717837,-34.741641],[-8.110317,-34.805883],[-8.385079,-34.946451],[-8.388487,-34.940471]],
+"suape - camocim": 						[[-2.910124,-40.825195], [-2.865356,-40.837644],[-2.740346,-40.670737],[-2.754127,-40.099043],[-2.839272,-39.865568],[-2.947540,-39.654120],[-3.202911,-39.207239],[-3.667231,-38.458358],[-4.731514,-37.117593],[-5.133326,-35.347170],[-6.350613,-34.910017],[-7.025933,-34.741641],[-7.717837,-34.741641],[-8.110317,-34.805883],[-8.385079,-34.946451],[-8.388487,-34.940471]],
+"suape - fernando de noronha": 			[[-3.859116,-32.451381], [-7.972986,-34.789823],[-8.388487,-34.940471]],
+"suape - fortaleza": 					[[-3.703330,-38.487854], [-3.701283,-38.487848],[-3.681860,-38.484177],[-4.731514,-37.117593],[-5.133326,-35.347170],[-6.350613,-34.910017],[-7.025933,-34.741641],[-7.717837,-34.741641],[-8.110317,-34.805883],[-8.385079,-34.946451],[-8.388487,-34.940471]],
+"suape - guamare": 						[[-5.083420,-36.305007], [-5.033203,-36.672639],[-5.002770,-36.531673],[-4.995898,-36.010883],[-5.133326,-35.347170],[-6.350613,-34.910017],[-7.025933,-34.741641],[-7.717837,-34.741641],[-8.110317,-34.805883],[-8.385079,-34.946451],[-8.388487,-34.940471]],
+"suape - natal": 						[[-5.750000,-35.200000], [-5.750756,-35.197546],[-5.730001,-35.133263],[-6.350613,-34.910017],[-7.025933,-34.741641],[-7.717837,-34.741641],[-8.110317,-34.805883],[-8.385079,-34.946451],[-8.388487,-34.940471]],
+"suape - pecem": 						[[-3.528927,-38.811864], [-3.524492,-38.811629],[-3.500884,-38.804777],[-3.667231,-38.458358],[-4.731514,-37.117593],[-5.133326,-35.347170],[-6.350613,-34.910017],[-7.025933,-34.741641],[-7.717837,-34.741641],[-8.110317,-34.805883],[-8.385079,-34.946451],[-8.388487,-34.940471]],
+"suape - recife": 						[[-8.050000,-34.866667], [-8.052349,-34.857695],[-8.352095,-34.905662],[-8.385079,-34.946451],[-8.388487,-34.940471]],
+"suape - sao pedro e sao paulo": 		[[ 0.914241,-29.345786], [-8.388487,-34.940471]]}
+  };
+
+  // Inicialização do mapa
+  function initMap() {
+    state.map = L.map(elements.mapEl).setView(config.mapOptions.center, config.mapOptions.zoom);
+    L.tileLayer(config.mapOptions.tileLayer, {
+      attribution: config.mapOptions.attribution
+    }).addTo(state.map);
+  }
+
+  // Limpar o mapa
+  function clearMap() {
+    state.markers.forEach(marker => state.map.removeLayer(marker));
+    state.polylines.forEach(polyline => state.map.removeLayer(polyline));
+    state.markers = [];
+    state.polylines = [];
+  }
+
+  // Normalizar texto
+  function normalizeText(text) {
+    return text.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+
+  // Validar entrada
+  function validateInputs(porto1, porto2, velocidade) {
+    const errors = [];
+    
+    if (!porto1 || !state.portos[porto1]) {
+      errors.push('Selecione um porto de origem válido');
+    }
+    
+    if (!porto2 || !state.portos[porto2]) {
+      errors.push('Selecione um porto de destino válido');
+    }
+    
+    if (porto1 === porto2) {
+      errors.push('Os portos de origem e destino devem ser diferentes');
+    }
+    
+    if (isNaN(velocidade)) {
+      errors.push('A velocidade deve ser um número');
+    } else if (velocidade <= 0) {
+      errors.push('A velocidade deve ser maior que zero');
+    }
+    
+    return errors;
+  }
+
+  // Calcular tempo de viagem
+  function calculateTravelTime(distance, speed) {
+    const totalHours = distance / speed;
+    const hours = Math.floor(totalHours);
+    const minutes = Math.round((totalHours % 1) * 60);
+    
+    return { hours, minutes };
+  }
+
+  // Encontrar rota
+  function findRoute(porto1, porto2) {
+    let routeKey = `${porto1} - ${porto2}`;
+    if (!state.distancias[routeKey]) {
+      routeKey = `${porto2} - ${porto1}`;
+    }
+    
+    return {
+      distance: state.distancias[routeKey],
+      points: state.pontos[routeKey]
+    };
+  }
+const portoOrigemIcon = L.icon({
+  iconUrl: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png',
+  iconSize: [32, 32],
+  iconAnchor: [16, 32],
+  popupAnchor: [0, -32]
+});
+
+const portoDestinoIcon = L.icon({
+  iconUrl: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
+  iconSize: [32, 32],
+  iconAnchor: [16, 32],
+  popupAnchor: [0, -32]
+});
+
+  // Mostrar resultados no mapa
+  function displayResultsOnMap(porto1, porto2, routePoints) {
+    clearMap();
+    
+    // Adicionar marcadores
+    // Adicionar marcador de origem
+const marker1 = L.marker(
+  [state.portos[porto1].lat, state.portos[porto1].lon],
+  { icon: portoOrigemIcon }
+).addTo(state.map).bindPopup(`<b>Origem:</b> ${porto1}`).openPopup();
+
+// Adicionar marcador de destino
+const marker2 = L.marker(
+  [state.portos[porto2].lat, state.portos[porto2].lon],
+  { icon: portoDestinoIcon }
+).addTo(state.map).bindPopup(`<b>Destino:</b> ${porto2}`);
+
+    // Adicionar rota
+    const polyline = L.polyline(routePoints, config.polylineStyle).addTo(state.map);
+    
+    // Atualizar estado
+    state.markers.push(marker1, marker2);
+    state.polylines.push(polyline);
+    
+    // Ajustar visualização do mapa
+    state.map.fitBounds(polyline.getBounds(), { padding: [50, 50] });
+  }
+
+  // Função principal de cálculo
+  function calculateDistance() {
+    const porto1 = normalizeText(elements.porto1.value);
+    const porto2 = normalizeText(elements.porto2.value);
+    const velocidade = parseFloat(elements.velocidade.value);
+    
+    // Validação
+    const errors = validateInputs(porto1, porto2, velocidade);
+    if (errors.length > 0) {
+      alert(errors.join('\n'));
+      return;
+    }
+    
+    // Encontrar rota
+    const route = findRoute(porto1, porto2);
+    if (!route.distance || !route.points) {
+      alert('Rota não encontrada entre os portos selecionados');
+      return;
+    }
+    
+    // Calcular tempo
+    const travelTime = calculateTravelTime(route.distance, velocidade);
+    
+    // Exibir resultados
+    elements.distanciaEl.textContent = `Distância: ${route.distance} milhas náuticas`;
+    elements.tempoEl.textContent = `Tempo estimado: ${travelTime.hours}h ${travelTime.minutes}m`;
+    elements.etaEl.textContent = `Deseja calcular o eta? acesse aqui!`;
+    
+    // Mostrar no mapa
+    displayResultsOnMap(porto1, porto2, route.points);
+  }
+
+  // Inicialização
+  function init() {
+    initMap();
+    elements.calcularBtn.addEventListener('click', calculateDistance);
+    
+    // Permitir calcular com Enter
+    [elements.porto1, elements.porto2, elements.velocidade].forEach(el => {
+      el.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') calculateDistance();
+      });
+    });
+  }
+
+  // API pública
+  return {
+    init
+  };
+})();
+
+// Inicializar a aplicação quando o DOM estiver pronto
+document.addEventListener('DOMContentLoaded', PortDistanceCalculator.init);
+
+</script>
+</body>
+</html>
