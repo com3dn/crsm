@@ -1,0 +1,271 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+:root {
+  --primary-color: #4f46e5;}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;}
+/* Container principal */
+#app-container {
+    display: flex;
+    flex: 1;
+    height: 100vh;}
+#main-content {
+    flex: 20;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    padding: 2px;
+    transition: margin-left 5.1s;
+    background-color: #f5f7fa;
+    position: relative;}
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background-color: #e3e9f7;
+    display: flex;
+    flex-direction: column;}
+h1 {background-color: var(--primary-color);
+    color: white;
+    text-align: left;
+    font-size: 1.2em;  }
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 10px 10px;
+    justify-content: center;
+    background-color: #f5f7fa;}
+.card {
+      width: 150px;
+      border-radius: 16px;
+	  flex: 0 0 calc(30% - 14px); /* 33.33% menos o gap */
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      background: #fff;
+      text-decoration: none;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.2s ease-in-out;
+      border: 3px solid #e0e0e0;}
+.card:hover {
+      transform: scale3d(1.2, 1.2, 0.1);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.15);    }
+.card-image {
+      width: 100%;
+      height:calc(50px + 1vw);
+      object-fit: cover;
+      background: #ddd;    }
+.card-title {
+      padding: 0px 0px 0px;
+      font-size: 0.9em;
+      font-weight: 700;
+      text-align: center;
+      color: #34495e;}
+.card-desc {
+      padding: 0px 0px 0px;
+      font-size: 1em;
+      line-height: 1.0;
+      text-align: center;
+      color: #666;
+      flex-grow: 1;    }
+.card-button {
+      padding: 3px 4px;
+      background: #3498db;
+      color: white;
+      text-align: center;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 0.9em;
+      transition: background 0.2s ease;    }
+.card-button:hover {
+      background: #2980b9;}
+/* Sidebar */
+#sidebar {
+    width: 90px;
+    height: 100vh;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.5s;
+    position: relative;
+    z-index: 10;
+    overflow: hidden;}
+#sidebar.open-sidebar {
+    width: 250px;}
+#sidebar_content {
+    padding: 10px;
+    flex: 3;
+    overflow-y: auto;}
+.item-description {
+    width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    transition: width .6s;}
+#sidebar.open-sidebar .item-description {
+    width: 100%;
+    margin-left: 1px;}
+#user {
+    display: flex;
+    align-items: left;
+    gap: 3px;
+    margin-bottom: 2px;}
+#user_avatar {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+      border: 3px solid #c4c4c4;
+    border-radius: 40px;}
+#user_infos {
+    display: flex;
+    width: 100%;
+    flex-direction: column;}
+#user_infos span:last-child {
+    color: #6b6b6b;
+    font-size: 12px;}
+#side_items {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    list-style: none;
+    margin-top: 5px;}
+.side-item {
+    border-radius: 8px;
+    padding: 5px;
+    cursor: pointer;}
+.side-item.active {
+    background-color: var(--primary-color);}
+.side-item:hover{
+      background: #84a4b9;}
+.side-item a {
+    text-decoration: none;
+    display: flex;
+    color: #0a0a0a;}
+.side-item.active a {
+    color: #35b421;}
+.side-item a i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 2px;}
+#logout {display: none;}
+#logout_btn {
+    border: none;
+    padding: 0px;
+    font-size: 10px;
+    display: flex;
+    gap: 0px;
+    align-items: center;
+    border-radius: 8px;
+    text-align: middle;
+    cursor: pointer;
+    background-color: transparent;
+    margin: auto;
+    width: 100%;}
+#open_btn {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background-color: var(--primary-color);
+    color: #e3e9f7;
+    border-radius: 100%;
+    width: 24px;
+    height: 24px;
+    border: 2px solid #c4c4c4;
+    cursor: pointer;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;}
+#open_btn:hover {
+    transform: scale(1.3);
+    background-color: #4338ca;}
+#open_btn_icon {
+    font-size: 12px;
+    transition: transform 1.3s ease;}
+.open-sidebar #open_btn_icon {
+    transform: rotate(-180deg);
+    transition: transform 1.3s ease;}
+/* Media queries para dispositivos móveis */
+@media (max-width: 720px) {
+    #app-container {
+        flex-direction: column;
+    }
+    
+    #sidebar {
+        width: 100%;
+        height: auto;
+        border-radius: 0;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    #sidebar.open-sidebar {
+        width: 100%;
+    }
+    
+    #sidebar_content {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        padding: 8px;
+    }
+    
+    #user {
+        display: none;
+    }
+    
+    #side_items {
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-top: 0;
+        margin-right: 28px;
+        width: 70%;
+        gap: 20px;
+    }
+    
+    .side-item {
+        padding:20px 20px;
+    }
+    
+    #logout {
+        border-top: none;
+        padding: 0px;
+        margin-right: 50px;
+    }
+    
+    #open_btn {
+        display: flex;
+        top: 10px;
+        right: 10px;
+    }
+    
+    #sidebar .item-description {
+        width: auto !important;
+        display: none;
+    }
+    
+    #sidebar.open-sidebar .item-description {
+        display: inline;
+    }
+    
+    .calculator-container {
+        margin-top: 20px;
+        padding: 15px;
+    }
+	#main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    padding: 0px;
+    background-color: #f5f7fa;
+}
