@@ -194,6 +194,16 @@ h1 {background-color: var(--primary-color);
 .open-sidebar #open_btn_icon {
     transform: rotate(-180deg);
     transition: transform 1.3s ease;}
+#sidebar.open-sidebar #logout {
+    border-top: 1px solid #e3e9f7;
+    padding: 2px;
+    align-items: center;
+    justify-content: center;
+	display: flex;}
+#sidebar.open-sidebar #logout_btn {
+    padding: 2px;
+    justify-content: center;
+	display: flex;}
 /* Media queries para dispositivos móveis */
 @media (max-width: 720px) {
     #app-container {
