@@ -27,13 +27,10 @@
 /* Adicione ao seu CSS */
 .flag-display {
     margin: 15px auto;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     width: 150px;
     height: 100px;
     object-fit: contain;
-    background-color: #f8fafc;
+    background-color: #ffffff;
     padding: 5px;
 }
 
@@ -41,20 +38,40 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
-    margin: 20px 0;
+    gap: 1px;
 }
 /* Adicione para o estado de loading */
-.flag-loading {
-    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-    background-size: 200% 100%;
-    animation: loading 1.5s infinite;
+.vertical-pole {
+    position: relative;
+    text-align: center;
+    margin: 15px 0;
+    min-height: 180px; /* Altura mínima para o efeito vertical */
 }
 
-@keyframes loading {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
+.vertical-pole::before {
+    content: "";
+    position: absolute;
+    left: -5px;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--primary-color), #f0f0f0);
+    transform: translateX(-50%);
+    display: none; /* Inicialmente oculto */
 }
+
+/* Mostra quando a bandeira estiver visível */
+.vertical-pole.show::before {
+    display: block;
+}
+
+#bandeira {
+    position: relative;
+    z-index: 2;
+    border: 1px solid #fff;
+    border-radius: 4px;
+    background: white;
+}
+
 </style>
 </head>
 <body>
@@ -114,12 +131,16 @@
 </h3>
   <input type="number" id="mmsiInput" placeholder="Ex: 710 (Brasil)" oninput="consultarPais()" maxlength="3"style="width: 80%; margin-top: 10px; height: 30px;">
 <button onclick="document.getElementById('mmsiInput').value = ''; consultarPais();" 
-style="padding: 8px 12px; background: #f0f0f0; border: none; border-radius: 5px; cursor: pointer;">
+style="padding: 5px 5px; background: #f0f0f0; border: none; border-radius: 5px; cursor: pointer;">
     <i class="fas fa-times"></i> Limpar
 </button>
 <div class="flag-container">
-    <h4 id="resultado2" style="margin: 0;"></h4>
-    <img id="bandeira" class="flag-display" src="" alt="Bandeira do país" style="display: none;">
+    <div style="margin-top:10px" id="resultado2"></div>
+    <div class="separator vertical-pole" style="display: none;">
+        <a id="flag-link" href="#">
+            <img id="bandeira" src="" alt="Bandeira" style="max-width: 120px; display: none;">
+        </a>
+    </div>
 </div>
 
         </div>
