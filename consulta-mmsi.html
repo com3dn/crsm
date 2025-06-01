@@ -204,46 +204,36 @@ const mmsiToPais = {
 };
 
 function consultarPais() {
-resultadoElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Consultando...';
-bandeiraElement.style.display = 'none';
-const mmsi = document.getElementById("mmsiInput").value;
+    const mmsi = document.getElementById("mmsiInput").value;
     const resultadoElement = document.getElementById("resultado2");
     const bandeiraElement = document.getElementById("bandeira");
-    
+    const verticalPole = document.querySelector(".vertical-pole");
+    const flagLink = document.getElementById("flag-link");
     // Reset inicial
     bandeiraElement.style.display = 'none';
-    
-    if (mmsi.length !== 3) {
-        resultadoElement.textContent = "Digite os 3 primeiros dígitos do MMSI";
-        return;
-    }
-
-    if (mmsiToPais[mmsi]) {
-        const pais = mmsiToPais[mmsi].nome;
+    verticalPole.style.display = 'none';
+    verticalPole.classList.remove('show');
+    if (mmsi.length !== 3) {resultadoElement.innerHTML = `Digite os <span style="color: #e53e3e;">3</span> primeiros dígitos do MMSI`;
+        return;}
+    if (mmsiToPais[mmsi]) {const pais = mmsiToPais[mmsi].nome;
         resultadoElement.innerHTML = `
             <span style="color: var(--primary-color); font-weight: bold;">${pais}</span>
-            <div style="font-size: 0.8em; color: #4a5568;">Código: ${mmsi}</div>
+            <span style="font-size: 0.8em; color: #4a5568;"> - mmsi: ${mmsi}</span>
         `;
-        
-        // Carrega o GIF do seu GitHub
-        bandeiraElement.src = `https://com3dn.github.io/crsm/gif/${mmsiToPais[mmsi].bandeira}.gif`;
-        bandeiraElement.style.display = 'block';
-        bandeiraElement.alt = `Bandeira de ${pais}`;
-	    // Modifique a exibição da bandeira para:
-bandeiraElement.style.opacity = 0;
-bandeiraElement.style.display = 'block';
-setTimeout(() => {
-    bandeiraElement.style.opacity = 1;
-    bandeiraElement.style.transition = 'opacity 0.3s ease';
-}, 10);
-        
-    } else {
-        resultadoElement.innerHTML = `
+        // Mostra os elementos
+        verticalPole.style.display = 'block';
+        setTimeout(() => {verticalPole.classList.add('show');
+            bandeiraElement.src = `gif/${pais}.gif`;
+            bandeiraElement.style.display = 'inline-block';
+            bandeiraElement.alt = `Bandeira de ${pais}`;
+            flagLink.href = `gif/${mmsiToPais[mmsi].bandeira}.gif`;
+        }, 10);        
+    } else {                resultadoElement.innerHTML = `
             <span style="color: #e53e3e;">País não encontrado</span>
             <div style="font-size: 0.8em; color: #4a5568;">MMSI: ${mmsi}</div>
-        `;
-    }
+        `; }
 }
+   
 document.getElementById('open_btn').addEventListener('click', function() {
 document.getElementById('sidebar').classList.toggle('open-sidebar');
 });
