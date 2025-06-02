@@ -202,17 +202,36 @@ display: none; /* Esconde inicialmente */
   background-color: #3a70c2;
 }
 
-.copy-btn {
-  background-color: #f5f7fa;
-  color: #333;
-  border: 1px solid #ddd;
-  cursor: pointer;
+.copy-btn {background-color: #4a5568;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 6px;
+    transition: all 0.3s ease;
 }
 
 .copy-btn:hover {
-  background-color: #e6e9ed;
+    background-color: #2d3748;
 }
 
+.copy-btn:active {
+    transform: scale(0.98);
+}
+
+.copy-btn.success {
+    background-color: #38a169;
+}
+
+.copy-btn.success i::before {
+    content: "\f00c"; /* Ícone de check */
+}
 .eta-link:hover {
   text-decoration: underline;
 }
