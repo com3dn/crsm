@@ -393,6 +393,14 @@ display: none; /* Esconde inicialmente */
     </div>
     
     <div class="result-item">
+      <i class="fas fa-ruler-combined"></i>
+      <div>
+        <span class="result-label">Distância:</span>
+        <span id="distancia" class="result-value">-</span>
+      </div>
+    </div>
+	  
+    <div class="result-item">
       <i class="fas fa-tachometer-alt"></i>
       <div>
         <span class="result-label">Velocidade:</span>
@@ -400,13 +408,6 @@ display: none; /* Esconde inicialmente */
       </div>
     </div>
     
-    <div class="result-item">
-      <i class="fas fa-ruler-combined"></i>
-      <div>
-        <span class="result-label">Distância:</span>
-        <span id="distancia" class="result-value">-</span>
-      </div>
-    </div>
     
     <div class="result-item">
       <i class="fas fa-clock"></i>
@@ -732,14 +733,34 @@ const PortDistanceCalculator = (() => {
     return errors;
   }
 
-  // Calcular tempo de viagem
-  function calculateTravelTime(distance, speed) {
-    const totalHours = distance / speed;
-    const hours = Math.floor(totalHours);
-    const minutes = Math.round((totalHours % 1) * 60);
-    
-    return { hours, minutes };
-  }
+  // Calcular tempo de viagem e formatar
+function calculateTravelTime(distance, speed) {
+    const tempoHoras = distance / speed;
+    const dias = Math.floor(tempoHoras / 24);
+    const horas = Math.floor(tempoHoras % 24);
+    const minutos = Math.round((tempoHoras % 1) * 60);
+
+    // Formatação inteligente do tempo
+    let tempoFormatado = '';
+    if (dias > 0) {
+        tempoFormatado = `${dias} ${dias > 1 ? 'dias' : 'dia'}`;
+        if (horas > 0 || minutos > 0) {
+            tempoFormatado += ` ${horas}h:${minutos.toString().padStart(2, '0')}min`;
+        }
+    } else if (horas > 0) {
+        tempoFormatado = `${horas}h:${minutos.toString().padStart(2, '0')}min`;
+    } else {
+        tempoFormatado = `${minutos}min`;
+    }
+
+    return {
+        dias,
+        horas,
+        minutos,
+        tempoFormatado,
+        tempoHoras // retornando também o total em horas para cálculos de ETA
+    };
+}
 
   // Encontrar rota
   function findRoute(porto1, porto2) {
@@ -818,12 +839,35 @@ const marker2 = L.marker(
     // Calcular tempo
     const travelTime = calculateTravelTime(route.distance, velocidade);
     
-    // Exibir resultados
-    elements.portoInicialEl.textContent = `${state.portos[porto1].lat.toFixed(4)}, ${state.portos[porto1].lon.toFixed(4)}`;
-    elements.portoFinalEl.textContent = `${state.portos[porto2].lat.toFixed(4)}, ${state.portos[porto2].lon.toFixed(4)}`;
-    elements.velocidadeResultEl.textContent = `${velocidade} nós`;
+  // Função para converter decimal para DMS
+function decimalToDMS(decimal, isLatitude) {
+    const absolute = Math.abs(decimal);
+    const degrees = Math.floor(absolute);
+    const minutesNotTruncated = (absolute - degrees) * 60;
+    const minutes = Math.floor(minutesNotTruncated);
+    const seconds = Math.round((minutesNotTruncated - minutes) * 60);
+    
+    // Determina a direção (N/S para latitude, E/W para longitude)
+    let direction;
+    if (isLatitude) {
+        direction = decimal >= 0 ? 'N' : 'S';
+    } else {
+        direction = decimal >= 0 ? 'E' : 'W';
+    }
+    
+    // Formata com zeros à esquerda quando necessário
+    const paddedDegrees = String(degrees).padStart(2, '0');
+    const paddedMinutes = String(minutes).padStart(2, '0');
+    const paddedSeconds = String(seconds).padStart(2, '0');
+    
+    return `${paddedDegrees}° ${paddedMinutes}' ${paddedSeconds}" ${direction}`;
+}
+
+// Atualize a exibição dos resultados
+elements.portoInicialEl.textContent = `Lat: ${decimalToDMS(state.portos[porto1].lat, true)}, Long: ${decimalToDMS(state.portos[porto1].lon, false)}`;
+elements.portoFinalEl.textContent = `Lat: ${decimalToDMS(state.portos[porto2].lat, true)}, Long: ${decimalToDMS(state.portos[porto2].lon, false)}`;elements.velocidadeResultEl.textContent = `${velocidade} nós`;
     elements.distanciaEl.textContent = `${route.distance} MN`;
-    elements.tempoEl.textContent = `${travelTime.hours}h ${travelTime.minutes}m`;
+    elements.tempoEl.textContent = travelTime.tempoFormatado;
     
   // Mostrar o container de resultados
   document.querySelector('.results-container').style.display = 'block';
