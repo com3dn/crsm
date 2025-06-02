@@ -840,7 +840,14 @@ function copyResultsToClipboard() {
 					`⏱ *Duração:* ${tempo}`;
   
   navigator.clipboard.writeText(textToCopy).then(() => {
-    alert('Resultados copiados para a área de transferência!');
+   const btn = document.getElementById('copy-results');
+        btn.classList.add('success');
+        btn.innerHTML = '<i class="fas fa-check"></i> Copiado!';
+        
+        setTimeout(() => {
+            btn.classList.remove('success');
+            btn.innerHTML = '<i class="fas fa-copy"></i> Copiar Resultados';
+        }, 2000);
   }).catch(err => {
     console.error('Falha ao copiar: ', err);
     alert('Erro ao copiar resultados');
