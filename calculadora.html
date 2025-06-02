@@ -193,6 +193,20 @@ cursor: pointer;"
 </div>
 
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+const etaData = sessionStorage.getItem('etaData');
+if (etaData) {
+const { distancia, velocidade, horas, minutos } = JSON.parse(etaData);
+// Preencha os campos
+document.getElementById('distancia').value = distancia;
+document.getElementById('velocidade').value = velocidade;
+ // Opcional: calcular automaticamente
+if (typeof calcularTempo === 'function') {calcularTempo();
+    }
+    // Limpa os dados após uso
+    sessionStorage.removeItem('etaData');
+  }
+});
 // Substitua as validações individuais por esta função mais limpa
 function setupValidation() {
     const campos = [
@@ -260,14 +274,7 @@ function calcularTempo() {
     }
 
     // Exibição melhorada
-    const options = {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false
-    };
+    const options = {day: '2-digit',month: '2-digit',year: 'numeric',hour: '2-digit',minute: '2-digit',hour12: false};
 
 document.getElementById("resultado").innerHTML = `
     <div class="result-item" id="result-origem">
@@ -283,14 +290,14 @@ document.getElementById("resultado").innerHTML = `
     <div class="result-item" id="result-distancia">
         <span><strong>Distância:</strong> ${distancia} MN</span>
     </div>
+    <div class="result-item" id="result-velocidade">
+        <span><strong>Velocidade:</strong> ${velocidade.toFixed(1)} nós</span>
+    </div>
     <div class="result-item" id="result-tempo">
         <span><strong>Tempo:</strong> ${tempoFormatado}</span>
     </div>
     <div class="result-item" id="result-eta">
         <span><strong>ETA:</strong> ${eta.toLocaleString("pt-BR", options)}</span>
-    </div>
-    <div class="result-item" id="result-velocidade">
-        <span><strong>Velocidade média:</strong> ${velocidade.toFixed(2)} nós</span>
     </div>
 `;
 // Adicione este evento no final da sua função calcularTempo():
@@ -307,9 +314,9 @@ function copiarResultados() {
     const textoParaCopiar = 
         `🗓️ *DH da posição:* ${origemElement?.textContent.replace('Data/Hora Partida:', '').trim()}\n` +
         `↔️ *Distância:* ${distanciaElement?.textContent.replace('Distância:', '').trim()}\n` +
+        `🚢 *Velocidade:* ${document.querySelector('#result-velocidade span')?.textContent.replace('Velocidade média:', '').trim()}\n` + 
         `⏱ *Duração:* ${document.querySelector('#result-tempo span')?.textContent.replace('Tempo:', '').trim()}\n` +
-        `⏰ *ETA:* ${document.querySelector('#result-eta span')?.textContent.replace('ETA:', '').trim()}\n` +
-        `🚢 *Velocidade:* ${document.querySelector('#result-velocidade span')?.textContent.replace('Velocidade média:', '').trim()}`;
+        `⏰ *ETA:* ${document.querySelector('#result-eta span')?.textContent.replace('ETA:', '').trim()}\n`;
     // Copiar para área de transferência
     navigator.clipboard.writeText(textoParaCopiar).then(() => {
         const btn = document.getElementById('copiarResultado');
