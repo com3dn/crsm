@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Formatador de Mensagens</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="img/favicon.ico" type="image/x-icon">
 <link rel="icon" href="img/favicon.png" type="image/png">
 <link rel="stylesheet" href="style/sidebar_base.css"/>
@@ -211,11 +212,12 @@
                 </td>
             </tr>
             <tr>
-<td colspan="2"><b>Imagem do Navio:<b> <img id="imagemNavio" href="http://www.sistram.mar.mil.br/sistram4/fotos/C6EC3_0.jpg" src="http://www.sistram.mar.mil.br/sistram4/fotos/C6EC3_0.jpg">
+			<td colspan="2">
+			<b>Imagem do Navio:</b> 
+			<img id="imagemNavio" href="http://www.sistram.mar.mil.br/sistram4/fotos/C6EC3_0.jpg" src="http://www.sistram.mar.mil.br/sistram4/fotos/C6EC3_0.jpg">
                 </td>
             </tr>
-<tr>
-    <td colspan="2">
+<tr><td colspan="2">
         <b class="tooltip">Imagem do Navio: 
             <span class="tooltiptext">Anexe uma foto ou imagem relevante do navio (opcional)</span>
         </b><br>
@@ -278,8 +280,7 @@
 		<tr><td rowspan="2">Port State Control (PSC) Inspections</td><td>Fewer than 5 Port State Control (PSC) Inspections in Last 3 Years</td><td id="descrição">Este navio teve menos de 5 inspeções (PSC) nos últimos três anos.</td><td>E4</td><td><input type="checkbox" name="options" value="E4"></td></tr>
         <!-- Example of a standalone entry -->
 		<tr><td></td><td id="descrição">Navio sem comunicação satelital (ComSat)</td><td>F</td><td><input type="checkbox" name="options" value="F"></td></tr>
-    </tbody>
-</table>
+    </tbody></table>
 		
 		
 	<h3>SECURITY</h3>
@@ -333,6 +334,9 @@
         <b style="color: white;">Security: <br><span style="width: 380px;"  type="text" id="security4" name="security4" placeholder="Análise de risco SECURITY"></span></b><br>
       
     </form>
+			</div>
+		</div>
+
 
 <script src="scr/script_base.js" defer></script>
  <script>
@@ -1121,9 +1125,9 @@ BT
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-        }
+        };
 
-    </script>
+</script>
 </body>
 </html>
 
