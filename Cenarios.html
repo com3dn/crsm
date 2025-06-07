@@ -347,6 +347,9 @@ L.control.fullscreen({position: 'topleft', title:'Tela Cheia', titleCancel: 'Sai
         }).addTo(map);
 
 
+document.getElementById('open_btn').addEventListener('click', function() {
+    document.getElementById('sidebar').classList.toggle('open-sidebar');
+});
 document.querySelectorAll('.fas.fa-info-circle').forEach((icon, index) => {
     // Captura do tooltip correspondente
     const tooltip = document.getElementById(`tooltip-${index + 1}`);
@@ -519,9 +522,6 @@ map.on('draw:drawstart', function(e) {
 });
 
 	
-document.getElementById('open_btn').addEventListener('click', function() {
-    document.getElementById('sidebar').classList.toggle('open-sidebar');
-});
 </script>
 </body>
 </html>
