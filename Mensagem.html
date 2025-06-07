@@ -337,6 +337,9 @@
 
 <script src="scr/script_base.js" defer></script>
  <script>
+document.getElementById('open_btn').addEventListener('click', function () {
+document.getElementById('sidebar').classList.toggle('open-sidebar');
+});
         
      // Função para buscar pelo MMSI
     function GetTargetByMMSI(event) {
@@ -866,9 +869,7 @@ case "X11A2YS": return "Yacht (Sailing)"
         }
     }
 
-document.getElementById('open_btn').addEventListener('click', function () {
-document.getElementById('sidebar').classList.toggle('open-sidebar');
-});
+
     // Função para determinar a bandeira a partir do MMSI
     function getFlagFromMMSI(mmsi) {
         const countryCode = Math.floor(mmsi / 1000000);
