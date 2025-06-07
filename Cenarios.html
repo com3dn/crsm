@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Carregar Cenários</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="img/favicon.ico" type="image/x-icon">
 <link rel="icon" href="img/favicon.png" type="image/png">
 <link rel="stylesheet" href="style/sidebar_base.css"/>
@@ -154,6 +155,7 @@
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 	
 <script>
+document.getElementById('open_btn').addEventListener('click', function() {document.getElementById('sidebar').classList.toggle('open-sidebar');});
 const map = L.map('map').setView([-8, -35], 5);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '' }).addTo(map);
 
@@ -495,9 +497,7 @@ map.on('draw:drawstart', function(e) {
 		
     reader.readAsArrayBuffer(file);
 });
-document.getElementById('open_btn').addEventListener('click', function() {
-    document.getElementById('sidebar').classList.toggle('open-sidebar');
-});
+
 </script>
 </body>
 </html>
