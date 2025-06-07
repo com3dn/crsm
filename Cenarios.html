@@ -18,10 +18,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.css"/>
 <!-- Inclua o CSS e JS do plugin Leaflet Draw -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
-<script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
 <link rel="stylesheet" href="style/sidebar_base.css"/>
-<script src="https://unpkg.com/leaflet.wms/dist/leaflet.wms.js"></script>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
@@ -133,8 +131,9 @@ body {
             <i id="open_btn_icon" class="fa-solid fa-chevron-right"></i>
         </button>
     </nav>
-    <div id="main-content">
-  <div id="cenarios-container" class="calculator-container">
+   <div id="main-content">
+  <h1>Interceptação</h1>
+<div style="text-align:center" class="calculator-container">
   <h3>Carregar Arquivo com as Posições</h3>
   <p style="margin-bottom: 15px;">
     Selecione um arquivo Excel (.xlsx) com múltiplas abas. Cada aba representará um contato de interesse com suas posições. As trajetórias serão desenhadas automaticamente no mapa.
@@ -143,7 +142,6 @@ body {
   <div id="map"></div>
 </div>
   </div> 
-</div>
 
 
 	
@@ -158,6 +156,7 @@ body {
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://unpkg.com/leaflet-polylinedecorator@1.6.0/dist/leaflet.polylineDecorator.js"></script>
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+	
 <script>
 const map = L.map('map').setView([-8, -35], 5);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '' }).addTo(map);
