@@ -128,14 +128,638 @@
 
 
 <h2 style="width: 700px;margin-left:0px;white-space: nowrap;">Formulário de Mensagem NAESP - NAVIO DE PESQUISA <span style="color: red; font-size:xx-small" >alt 290525</span></h2>
+    <form id="messageForm">
+        <b class="tooltip" style="width: 600px;margin-left:0px;white-space: nowrap;">PARA: 
+        <input style="width: 300px" type="text" id="para" name="para" value="COMPAZ" placeholder="Digite o destinatário de ação">
+		<span class="tooltiptext">Destinatário principal da mensagem (ex: COMPAZ, DRGNAV, etc.)</span></b><br>
+        
+        <b class="tooltip" style="width: 600px;margin-left:0px;white-space: nowrap;">INFO: 
+        <input style="width: 700px;margin-left:6px;white-space: nowrap;" value="AGAGAG CIMBRA CPCPCP DRGNAV CPNDES OPENAV PRTCOS ZZZBBB XMT NBHAES" type="text" id="info" name="info" placeholder="Mais alguma OM na informação?">
+		<span class="tooltiptext">Organizações Militares que devem receber cópia da informação</span></b>
+		<br><br>
+        <table><tbody>
+            <tr>
+                <td>
+                    <b class="tooltip">IMO: <input type="text" id="imo" name="imo" placeholder="Digite o número IMO" maxlength="7"><span class="tooltiptext">Número de identificação único do navio (7 dígitos)</span></b>
+                    <b class="tooltip"><button style="margin-left: 20px;" onclick="GetTargetByIMO(event)">Buscar</button><span class="tooltiptext">Pressione o botão para puxar os dados do navio</span></b>
+                    <span id="error-message" style="color: red; margin-left: 10px;"></span></td>
+                <td>
+                    <b class="tooltip">MMSI: <input type="text" id="mmsi" name="mmsi" placeholder="Digite o número MMSI" maxlength="9"><span class="tooltiptext">Número de identificação do serviço móvel marítimo (9 dígitos)</span></b>
+                    <b class="tooltip"><button style="margin-left: 20px;" onclick="GetTargetByMMSI(event)">Buscar</button><span class="tooltiptext">Pressione o botão para puxar os dados do navio</span></b>
+                    <span id="error-message-mmsi" style="color: red; margin-left: 10px;"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b class="tooltip">Nome do Navio: 
+                        
+                    <input type="text" id="nomeNavio" name="nomeNavio" placeholder="Digite o nome do navio"><span class="tooltiptext">Nome oficial do navio conforme registro</span>
+                    </b>
+                </td>
+                <td>
+                    <b class="tooltip">Bandeira: 
+                        
+                    <input type="text" id="bandeira" name="bandeira" placeholder="Digite a bandeira"><span class="tooltiptext">País de registro do navio (ex: Brasil, Panama, etc.)</span>
+                    </b>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b class="tooltip">Tipo de Navio: 
+                        
+                    <input type="text" id="tipoNavio" name="tipoNavio" placeholder="Digite o tipo do navio"><span class="tooltiptext">Categoria do navio (ex: Cargo, Pesquisa, Petroleiro, etc.)</span>
+                    </b>
+                </td>
+                <td>
+                    <b class="tooltip">Porto destino: 
+                        
+                    <input type="text" id="porto" name="porto" placeholder="Digite o porto de destino"><span class="tooltiptext">Próximo porto de destino do navio</span>
+                    </b>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b class="tooltip">Irin: 
+                        
+                    <input type="text" id="Irin" name="irin" placeholder="Digite o irin do navio"><span class="tooltiptext">Número de identificação do navio no sistema IRIN</span>
+                    </b>
+                </td>
+                <td>
+                    <b class="tooltip">ETA: 
+                        
+                    <input type="text" id="ETA" name="ETA" placeholder="000000ZXXX2025"><span class="tooltiptext">Data e hora estimada de chegada (formato: 000000ZXXX2025)</span>
+                    </b>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b class="tooltip">Última Posição: 
+                    <input type="text" style="width: 40px" id="latitudeGrau" name="latitudeGrau" placeholder="00" maxlength="2">°
+                    <input type="text" style="width: 40px" id="latitudeMinuto" name="latitudeMinuto" placeholder="00" maxlength="2">' 
+                    <input type="text" style="width: 40px" id="latitudeSegundo" name="latitudeSegundo" placeholder="00" maxlength="2">"
+                    <select id="latitudeDirecao" name="latitudeDirecao"> <option value="S">S</option> <option value="N">N</option></select>,
+                    <input type="text" style="width: 40px" id="longitudeGrau" name="longitudeGrau" placeholder="000" maxlength="3">°
+                    <input type="text" style="width: 40px" id="longitudeMinuto" name="longitudeMinuto" placeholder="00" maxlength="2">' 
+                    <input type="text" style="width: 40px" id="longitudeSegundo" name="longitudeSegundo" placeholder="00" maxlength="2">"
+                    <select id="longitudeDirecao" name="longitudeDirecao"><option value="W">W</option><option value="E">E</option></select><span class="tooltiptext">Coordenadas da última posição conhecida do navio</span>
+                    </b>
+                </td>
+                <td>
+                    <b class="tooltip">Data-Hora da Última Posição: 
+                        
+                    <input style="width: 160px" type="text" id="dataPosicao" name="dataPosicao" placeholder="000000ZXXX2025"><span class="tooltiptext">Data e hora da última posição conhecida (formato: 000000ZXXX2025)</span>
+                    </b>
+                </td>
+            </tr>
+            <tr>
+			<td colspan="2">
+			<b>Imagem do Navio:</b> 
+			<img id="imagemNavio" href="http://www.sistram.mar.mil.br/sistram4/fotos/C6EC3_0.jpg" src="http://www.sistram.mar.mil.br/sistram4/fotos/C6EC3_0.jpg">
+                </td>
+            </tr>
+<tr><td colspan="2">
+        <b class="tooltip">Imagem do Navio: 
+            <span class="tooltiptext">Anexe uma foto ou imagem relevante do navio (opcional)</span>
+        </b><br>
+        <input type="file" id="imagemNavio" name="imagemNavio" accept="image/*">
+        <div id="imagemContainer" style="margin-top: 10px;">
+            <!-- A imagem será carregada aqui -->
+            <img id="fotoNavio" src="" alt="Foto do Navio" style="max-width: 300px; max-height: 200px; display: none;">
+        </div>
+    </td>
+</tr>
+        </tbody></table>
+    
+		  
+		<b class="tooltip"><button class="tybbutton" style="margin-left:0px;white-space: nowrap;" onclick="if(document.getElementById('TG1') .style.display=='none') {document.getElementById('TG1') .style.display=''}else{document.getElementById('TG1') .style.display='none'}" title="Click To Show/Hide Content" type="button">Abrir Formulário NAESP</button><span class="tooltiptext">Pressione sobre o botão para abrir formulario de Critérios de Classificação de NAESP</span>
+                    </b><br>
+		<div class="tybtogglecontent" id="TG1" style="display: none;"><h3>SAFETY</h3>
+		<table><thead><tr><th>Menu</th><th>Categoria</th><th>Subcategoria</th><th>Descrição</th><th>Code</th><th>Mark</th></tr></thead><tbody>
+        <!-- Pollution Hazard (DPC) -->
+        <tr><td rowspan="3">Pollution Hazard (DPC)</td>
+            <td>Hazardous Materials (DPC)</td>
+            <td>(DPC) Nuclear Materials Carrier</td>
+            <td id="descrição">Navios transportando resíduos (lixo) nuclear.</td><td>A2</td><td><input type="checkbox" name="options" value="A2"></td></tr>
+        <tr><td>Pollution History (DPC)</td>
+            <td>(DPC) Pollution Casualties</td>
+            <td id="descrição">Navio envolvidos em alguma ocorrência de poluição nos últimos dois anos.</td><td>A1</td><td><input type="checkbox" name="options" value="A1"></td></tr>
+        <tr><td>Single Hull (DPC)</td>
+            <td>(DPC) Single Hull Tanker</td>
+            <td id="descrição">Navios Petroleiros com casco simples.</td><td>A3</td><td><input type="checkbox" name="options" value="A3"></td></tr>
 
+        <!-- Vessel Associations (DPC) -->
+        <tr><td rowspan="8">Vessel Associations (DPC)</td>
+            <td rowspan="3">Classification Society (DPC)</td>
+            <td>(DPC) Class Society Performance</td>
+            <td id="descrição">A Sociedade Classificadora não é um membro da International Association Of Classification Society (IACS)</td><td>B1</td><td><input type="checkbox" name="options" value="B1"></td></tr>
+        <tr><td>(DPC) Class Suspended</td>
+            <td id="descrição">Navio encontra-se com uma classificação suspensa</td><td>B2</td><td><input type="checkbox" name="options" value="B2"></td></tr>
+        <tr><td>(DPC) No Classification Society</td>
+            <td id="descrição">Navio não possui uma Sociedade Classificadora e/ou foi desclassificado.</td><td>B3</td><td><input type="checkbox" name="options" value="B3"></td></tr>
+        <tr><td rowspan="2">P&I Club (DPC)</td>
+            <td>(DPC) Lower Tier P and I Clubs</td>
+            <td id="descrição">Cobertura do Clube "P & I” em nível inferior.</td><td>C1</td><td><input type="checkbox" name="options" value="C1"></td></tr>
+		<tr><td>(DPC) Unknown P and I Club</td>
+            <td id="descrição">O P e I Club não é fornecido ou está listado como Desconhecido.</td><td>C2</td><td><input type="checkbox" name="options" value="C2"></td></tr>
+        <tr><td  rowspan="3">Vessel Flag (DPC)</td>
+            <td>(DPC) Flag is Unknown</td>
+            <td id="descrição">Navio com bandeira desconhecida.</td><td>D1</td><td><input type="checkbox" name="options" value="D1"></td></tr>
+        <tr><td>(DPC) Vessel Flag Falkland Islands</td>
+            <td id="descrição">Navio com bandeira das ilhas Falkland.</td><td>D2</td><td><input type="checkbox" name="options" value="D2"></td></tr>
+		<tr><td>(DPC) Vessel Flag from non LRIT country</td>
+            <td id="descrição">Bandeira do navio não consta na lista de países apoiados por um Sistema Long Range and Tracking of Ships (LRIT).</td><td>D3</td><td><input type="checkbox" name="options" value="D3"></td></tr>
+		<tr><td>Vessel Characteristics (DPC)</td>
+            <td>Vessel Age (DPC)</td>
+            <td>(DPC) Vessel Age 18 Years or more.</td>
+            <td id="descrição">Navio com idade superior a 18 anos.</td><td>D4</td><td><input type="checkbox" name="options" value="D4"></td></tr>
+
+		<tr><td rowspan="6">Vessel Performance (DPC)</td><td rowspan="2">Collision History (DPC)</td><td>(DPC) Non-Serious/Non-Pollution Casualty in Last 2 Years</td><td id="descrição" rowspan="2">A embarcação teve um acidente sem gravidade e sem poluição nos últimos 2 anos ou nao esteve emvolvido em nenhum incidente.</td><td rowspan="2">E1</td><td rowspan="2"><input type="checkbox" name="options" value="E1"></td></tr>
+		<tr><td>(DPC) Serious Casualty in Past Year</td></td></tr>
+		<tr><td>Detention History (DPC)</td><td>(DPC) History of detentions in the past thee years.</td><td id="descrição">Navio detido nos últimos três anos.</td><td>E2</td><td><input type="checkbox" name="options" value="E2"></td></tr>
+		<tr><td>ISPS Compliance (DPC)</td><td>(DPC) ISPS Port Compliance</td><td id="descrição">Navio atracou em um ou mais portos não aderentes ao The International Ship and Port Facility Security(ISPS CODE) nos últimos 3 portos.</td><td>E3</td><td><input type="checkbox" name="options" value="E3"></td></tr>
+		<tr><td rowspan="2">Port State Control (PSC) Inspections</td><td>Fewer than 5 Port State Control (PSC) Inspections in Last 3 Years</td><td id="descrição">Este navio teve menos de 5 inspeções (PSC) nos últimos três anos.</td><td>E4</td><td><input type="checkbox" name="options" value="E4"></td></tr>
+        <!-- Example of a standalone entry -->
+		<tr><td></td><td id="descrição">Navio sem comunicação satelital (ComSat)</td><td>F</td><td><input type="checkbox" name="options" value="F"></td></tr>
+    </tbody></table>
+		
+		
+	<h3>SECURITY</h3>
+	<table><thead><tr><th>Menu</th><th>Categoria</th><th>Subcategoria</th><th>Descrição</th><th>Code</th><th>Mark</th></tr></thead><tbody>
+        <!-- Pollution Hazard (DPC) -->
+        <tr><td rowspan="4">Trusted Ownership</td><td>Fleet Size</td><td>Small Fleet Size</td><td id="descrição">Frota de tamanho reduzido.</td><td>A1</td><td><input type="checkbox" name="options2" value="A1"></td></tr>
+		<tr><td>High Risk Ownership Country</td><td>Brasil VOI due to Ownership Countries </td><td id="descrição">Navios de Acompanhamento Especial devido ao País Proprietário</td><td>A2</td><td><input type="checkbox" name="options2" value="A2"></td></tr>
+		<tr><td>Research Vessel</td><td>Research Vessel</td><td id="descrição">Navio de Pesquisa em Águas Jurisdicionais Brasileiras</td><td>A3</td><td><input type="checkbox" name="options2" value="A3"></td></tr>
+		<tr><td>Vessel Flag</td><td>Brasil VOI due to Flag State</td><td id="descrição">Navios de Acompanhamento Especial devido ao Estado de Bandeira</td><td>A4</td><td><input type="checkbox" name="options2" value="A4"></td></tr>
+		
+		<tr><td rowspan="4">Vessel Movements</td><td>First Time in Country</td><td>First Time in Brasil</td><td id="descrição">Embarcação há mais de 2 anos sem atracar em Porto Brasileiro.</td><td>B1</td><td><input type="checkbox" name="options2" value="B1"></td></tr>
+		<tr><td>High Risk Country Visit</td><td>Brasil VOI due to Previous Country Visit</td><td id="descrição">Navios de Acompanhamento Especial devido ao último País visitado</td><td>B2</td><td><input type="checkbox" name="options2" value="B2"></td></tr>
+		<tr><td>LPOC Age</td><td>No Port Call in Last 45 Days</td><td id="descrição">Nenhum porto visitado nos últimos 45 dias, exceto embarcações envolvidas em atividade de petróleo e gás (Apoio Marítimo).</td><td>B3</td><td><input type="checkbox" name="options2" value="B3"></td></tr>
+		<tr><td>No AIS Destination</td><td>Vessels not broadcasting NPOC in AIS</td><td id="descrição">Navios sem transmitir o próximo porto no AIS</td><td>B4</td><td><input type="checkbox" name="options2" value="B4"></td></tr>
+		
+		<tr><td>Vessel Performance</td><td>ISPS Compliance (DPC)</td><td>ISPS Port Compliance Last 3 Ports</td><td id="descrição">Navio atracou em um ou mais portos não aderentes ao The International Ship and Port Facility Security CODE (ISPS CODE) nos últimos 3 portos.</td><td>C1</td><td><input type="checkbox" name="options2" value="C1"></td></tr>
+		
+		<tr><td rowspan="13">Watchlists</td><td rowspan="13">VOI</td><td>Activist Group IMOs</td><td id="descrição">Embarcação ou Grupo Ativista</td><td>D1</td><td><input type="checkbox" name="options2" value="D1"></td></tr>
+		<tr><td>Foreign Vessels with Nuclear Propulsion</td><td id="descrição">Embarcações Estrangeiras com Propulsão Nuclear</td><td>D2           </td><td><input type="checkbox" name="options2" value="D2"></td></tr>
+		<tr><td>Vessel Crew Support of Terrorism</td><td id="descrição">Embarcação empregada em Apoio ao Terrorismo</td><td>D3                     </td><td><input type="checkbox" name="options2" value="D3"></td></tr>
+		<tr><td>Vessel Drug or Precursor Smuggling</td><td id="descrição">Embarcações Transportando Droga ou Contrabandeando Precursores</td><td>D4</td><td><input type="checkbox" name="options2" value="D4"></td></tr>
+		<tr><td>Vessel Human Smuggling</td><td id="descrição">Embarcação empregada no Tráfico de Seres Humanos</td><td>D5                          </td><td><input type="checkbox" name="options2" value="D5"></td></tr>
+		<tr><td>Vessel Intel Collection</td><td id="descrição">Embarcação empregada na Coleta de Dados de Inteligência</td><td>D6                  </td><td><input type="checkbox" name="options2" value="D6"></td></tr>
+		<tr><td>Vessel Piracy Activity</td><td id="descrição">Embarcação envolvida em atos de Pirataria</td><td>D7                                 </td><td><input type="checkbox" name="options2" value="D7"></td></tr>
+		<tr><td>Vessel Transporting WMD</td><td id="descrição">Embarcação transportando Armas de Destruição em Massa (WMD)</td><td>D8              </td><td><input type="checkbox" name="options2" value="D8"></td></tr>
+		<tr><td>Vessel Weapons Smuggling</td><td id="descrição">Embarcação empregada no Contrabando de Armas</td><td>D9                            </td><td><input type="checkbox" name="options2" value="D9"></td></tr>
+		<tr><td>Vessel with Criminal Activity</td><td id="descrição">Embarcação empregada em Atividade Criminosa</td><td>D10                       </td><td><input type="checkbox" name="options2" value="D10"></td></tr>
+		<tr><td>Vessels Carrying Invasive Species or Pathogens</td><td id="descrição">Embarcação que Transporta Espécies Invasivas ou de Agentes Patogênicos</td><td>D11</td><td><input type="checkbox" name="options2" value="D11"></td></tr>
+		<tr><td>Vessels Harmful to Marine Resources</td><td id="descrição">Embarcação Nociva aos Meio Ambiente Marinhos</td><td>D12</td><td><input type="checkbox" name="options2" value="D12"></td></tr>
+		<tr><td>Vessels Sanctioned by UM</td><td id="descrição">Embarcação objeto de sansão por Resolução da ONU</td><td>D13       </td><td><input type="checkbox" name="options2" value="D13"></td></tr>
+		
+		<tr><td rowspan="6">COMPORTAMENTOS ANOMALOS</td><td rowspan="6" colspan="2" >Lista Externa ao Camtes</td><td id="descrição">Velocidade inferior a 8 nós em mar aberto.</td><td>E1</td><td><input type="checkbox" name="options2" value="E1"></td></tr>
+		<tr><td id="descrição">Alteração de rumo superior a  40º navegando em mar aberto.</td><td>E2</td><td><input type="checkbox" name="options2" value="E2"></td></tr>
+		<tr><td id="descrição">Navio sem comando( com avaria de propulsão ou de governo).</td><td>E3</td><td><input type="checkbox" name="options2" value="E3"></td></tr>
+		<tr><td id="descrição">Navios com guardas armados a Bordo.</td><td>E4</td><td><input type="checkbox" name="options2" value="E4"></td></tr>
+		<tr><td id="descrição">Navios com Avaria Grave(“ Broken Ships”) ou  com Perda Total(“Total Loss”).</td><td>E5</td><td><input type="checkbox" name="options2" value="E5"></td></tr>
+		<tr><td id="descrição">Navios de Pesquisa Não Autorizados pelo EMA/DPC ou operando em desacordo com a autorização concedida.</td><td>E6</td><td><input type="checkbox" name="options2" value="E6"></td></tr>
+		</tbody></table>
+	<br>
+	<button onclick="generateResponse2(event)">Gerar Codigo NAESP</button><br>
 		</div>
-	</div>
-</div>
+<br>
+        <b>Safety: <span style="width: 380px" type="text" id="safety1" name="safety1" placeholder="Análise de risco SAFETY"></span></b><br>
+        <b>Security: <span style="width: 380px" type="text" id="security2" name="security2" placeholder="Análise de risco SECURITY"></span></b><br>
+        <b>CLASSIFICAÇÃO CAMTES: </b><select style="width: 80px" type="text" id="naesp" name="naesp">
+        <option value="VOI">VOI</option> <option value="COI">COI</option> <option value="CCOI">CCOI</option> </select><br><br>  
+	
+        <button style="margin-left: 10px;" type="button" onclick="criarTxt()">Criar TXT</button><br>
+        <b style="color: white;">Para comentario:</b><br>
+        <b style="color: white;">Safety: <br><span style="width: 380px;" type="text" id="safety3" name="safety3" placeholder="Análise de risco SAFETY"></span></b><br>
+        <b style="color: white;">Security: <br><span style="width: 380px;"  type="text" id="security4" name="security4" placeholder="Análise de risco SECURITY"></span></b><br>
+      
+    </form>
+			</div>
+		</div>
 
 
 <script>
-document.getElementById('open_btn').addEventListener('click', function () {document.getElementById('sidebar').classList.toggle('open-sidebar');});
+document.getElementById('open_btn').addEventListener('click', function () {
+document.getElementById('sidebar').classList.toggle('open-sidebar');
+});
+        
+     // Função para buscar pelo MMSI
+    function GetTargetByMMSI(event) {
+        event.preventDefault();
+        const mmsi = document.getElementById("mmsi").value;
+		const errorMessageElement = document.getElementById("error-message-mmsi");
+		const errorMessageElementimo = document.getElementById("error-message");
+		const apiUrl = "https://aiswebservices.ihs.com/AISSvc.svc/AIS/GetTargetByMMSIEnhanced";
+
+		// Limpa mensagem de erro anterior
+		errorMessageElement.textContent = "";
+		errorMessageElementimo.textContent = "";
+	 // Verifica se o campo MMSI foi preenchido
+    if (!mmsi) {errorMessageElement.textContent = "Por favor, insira um número MMSI.";
+        return;
+    }
+        // Configurar o corpo e autenticação
+        const data = { "MMSI": mmsi };
+        const headers = new Headers({
+            "Authorization": "Basic " + btoa("marfab493:741860"),
+            "Content-Type": "application/json"
+        });
+
+        // Faz a requisição
+        fetch("https://cors-anywhere.herokuapp.com/" + apiUrl, {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify(data)
+        })
+    .then(response => response.json())
+    .then(result => {
+        preencherFormulario(result.targetEnhanced);
+        // Tenta carregar a imagem se houver callsign
+        if (result.targetEnhanced.Callsign) {
+            
+        }
+    })
+    .catch(error => {
+        console.error("Erro ao buscar por MMSI:", error);
+        errorMessageElement.textContent = "Erro ao realizar a busca. Tente novamente mais tarde.";
+    });
+}
+	
+	
+	
+
+
+// Função para buscar pelo IMO
+function GetTargetByIMO(event) {
+    event.preventDefault();
+    const imo = document.getElementById("imo").value;
+    const errorMessageElement = document.getElementById("error-message");
+    const errorMessageElementmmsi = document.getElementById("error-message-mmsi");
+    const apiUrl = "https://aiswebservices.ihs.com/AISSvc.svc/AIS/GetTargetsByIMOEnhanced";
+
+    // Limpa mensagem de erro anterior
+    errorMessageElement.textContent = "";
+    errorMessageElementmmsi.textContent = "";
+
+    // Verifica se o campo IMO foi preenchido
+    if (!imo) {
+        errorMessageElement.textContent = "Por favor, insira um número IMO.";
+        return;
+    }
+
+    const data = { "IMO": imo };
+    const headers = new Headers({
+        "Authorization": "Basic " + btoa("marfab493:741860"),
+        "Content-Type": "application/json"
+    });
+
+    fetch("https://cors-anywhere.herokuapp.com/" + apiUrl, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.targetEnhancedArr && result.targetEnhancedArr.length > 0) {
+            preencherFormulario(result.targetEnhancedArr[0]);
+            // Tenta carregar a imagem se houver callsign
+            if (result.targetEnhancedArr[0].Callsign) {
+                
+            }
+        } else {
+            errorMessageElement.textContent = "Nenhum resultado encontrado para o IMO fornecido.";
+        }
+    })
+    .catch(error => {
+        console.error("Erro ao buscar por IMO:", error);
+        errorMessageElement.textContent = "Erro ao realizar a busca. Verifique numero IMO ou busque pelo mmsi.";
+    });
+}
+
+
+    // Função para preencher o formulário
+    function preencherFormulario(target) {
+		console.log(target.Name);
+        document.getElementById("nomeNavio").value = target.Name || "N/A";
+        document.getElementById("imo").value = target.IMO || "N/A";
+        document.getElementById("mmsi").value = target.MMSI || "N/A";
+        document.getElementById("bandeira").value = getFlagFromMMSI(target.MMSI);
+        document.getElementById("tipoNavio").value = gettypeFromcode(target.STAT5CODE) || "N/A";
+        document.getElementById("Irin").value = target.Callsign || "N/A";
+        document.getElementById("imagemNavio").value = target.Callsign || "N/A";
+        document.getElementById("porto").value = target.Destination || "N/A";
+        document.getElementById("porto").value = target.Destination || "N/A";
+        preencherCoordenadas(target.Lat, target.Lon);
+		function formatarDataPersonalizada(dataISO) {
+		const data = new Date(dataISO);
+		
+		const dia = String(data.getUTCDate()).padStart(2, '0');
+		const hora = String(data.getUTCHours()).padStart(2, '0');
+		const minuto = String(data.getUTCMinutes()).padStart(2, '0');
+		const mesAbreviado = data.toLocaleString('pt-BR', { month: 'short' }).toUpperCase(); // Mês abreviado
+		const ano = data.getUTCFullYear();
+		
+		return `${dia}${hora}${minuto}Z${mesAbreviado}${ano}`;
+		}
+
+		const dataFormatada = formatarDataPersonalizada(target.ReceivedDate);
+		document.getElementById("dataPosicao").value = dataFormatada || "N/A";
+		const ETAFormatada = formatarDataPersonalizada(target.ETA);
+		document.getElementById("ETA").value = ETAFormatada || "N/A";
+
+   // Atualiza a imagem do navio se existir callsign
+    if (target.Callsign) {
+        updateShipImage(target.Callsign);
+    }
+}
+// Função para atualizar a imagem do navio
+function updateShipImage(callsign) {
+    const imgElement = document.getElementById("imagemNavio");
+    if (imgElement) {
+        // Tenta carregar imagens com diferentes sufixos (0, 1, 2)
+        for (let i = 0; i <= 2; i++) {
+            const testImg = new Image();
+            testImg.src = `http://www.sistram.mar.mil.br/sistram4/fotos/${callsign}_${i}.jpg`;
+            
+            testImg.onload = function() {
+                // Se a imagem carregar, atualiza o src do elemento principal
+                imgElement.src = testImg.src;
+                imgElement.style.display = 'inline';
+            };
+            
+            testImg.onerror = function() {
+                // Se não encontrar, tenta o próximo sufixo
+                if (i === 2) {
+                    imgElement.style.display = 'none'; // Esconde se nenhuma imagem for encontrada
+                }
+            };
+        }
+    }
+}
+    // Função para preencher o formulário
+    function preencherFormulario(target) {
+        document.getElementById("nomeNavio").value = target.Name || "N/A";
+        document.getElementById("imo").value = target.IMO || "N/A";
+        document.getElementById("mmsi").value = target.MMSI || "N/A";
+        document.getElementById("bandeira").value = getFlagFromMMSI(target.MMSI);
+        document.getElementById("tipoNavio").value = gettypeFromcode(target.STAT5CODE) || "N/A";
+        document.getElementById("Irin").value = target.Callsign || "N/A";
+        document.getElementById("porto").value = target.Destination || "N/A";
+        document.getElementById("porto").value = target.Destination || "N/A";
+        preencherCoordenadas(target.Lat, target.Lon);
+		function formatarDataPersonalizada(dataISO) {
+		const data = new Date(dataISO);
+		
+		const dia = String(data.getUTCDate()).padStart(2, '0');
+		const hora = String(data.getUTCHours()).padStart(2, '0');
+		const minuto = String(data.getUTCMinutes()).padStart(2, '0');
+		const mesAbreviado = data.toLocaleString('pt-BR', { month: 'short' }).toUpperCase(); // Mês abreviado
+		const ano = data.getUTCFullYear();
+		
+		return `${dia}${hora}${minuto}Z${mesAbreviado}${ano}`;
+		}
+
+		const dataFormatada = formatarDataPersonalizada(target.ReceivedDate);
+		document.getElementById("dataPosicao").value = dataFormatada || "N/A";
+		const ETAFormatada = formatarDataPersonalizada(target.ETA);
+		document.getElementById("ETA").value = ETAFormatada || "N/A";
+//        document.getElementById("dataPosicao").value = new Date(target.ReceivedDate).toLocaleString() || "N/A";
+    }
+
+    // Função para preencher as coordenadas
+    function preencherCoordenadas(lat, lon) {
+        const latitude = convertToDMS(lat, true);
+        const longitude = convertToDMS(lon, false);
+
+        // Preenche latitude
+        document.getElementById("latitudeGrau").value = latitude.degrees;
+        document.getElementById("latitudeMinuto").value = latitude.minutes;
+        document.getElementById("latitudeSegundo").value = latitude.seconds;
+        document.getElementById("latitudeDirecao").value = latitude.direction;
+
+        // Preenche longitude
+        document.getElementById("longitudeGrau").value = longitude.degrees;
+        document.getElementById("longitudeMinuto").value = longitude.minutes;
+        document.getElementById("longitudeSegundo").value = longitude.seconds;
+        document.getElementById("longitudeDirecao").value = longitude.direction;
+    }
+
+    // Função para converter coordenadas decimais para graus, minutos e segundos
+    function convertToDMS(coordinate, isLatitude) {
+        const absolute = Math.abs(coordinate);
+        const degrees = Math.floor(absolute);
+        const minutes = Math.floor((absolute - degrees) * 60);
+        const seconds = ((absolute - degrees - minutes / 60) * 3600).toFixed(0);
+
+        const direction = coordinate >= 0
+            ? (isLatitude ? "N" : "E")
+            : (isLatitude ? "S" : "W");
+
+        return { degrees, minutes, seconds, direction };
+    }
+
+    // Função para determinar a bandeira a partir do MMSI
+    function gettypeFromcode(tipoNavio) {
+        switch (tipoNavio) {
+case "B31A2SR": return "Navio Pesquisa"
+            default: return "Desconhecida";
+        }
+    }
+
+
+    // Função para determinar a bandeira a partir do MMSI
+    function getFlagFromMMSI(mmsi) {
+        const countryCode = Math.floor(mmsi / 1000000);
+        switch (countryCode) {
+            case 201: return "Albania"; case 202: return "Andorra"; case 203: return "Austria"; case 204: return "Azores"; case 205: return "Belgium"; case 206: return "Belarus"; case 207: return "Bulgaria"; case 208: return "Vatican City State"; case 209: return "Cyprus"; case 210: return "Cyprus"; case 211: return "Germany"; case 212: return "Cyprus"; case 213: return "Georgia"; case 214: return "Moldova"; case 215: return "Malta"; case 216: return "Armenia"; case 218: return "Germany"; case 219: return "Denmark"; case 220: return "Denmark"; case 224: return "Spain"; case 225: return "Spain"; case 226: return "France"; case 227: return "France"; case 228: return "France"; case 229: return "Malta"; case 230: return "Finland"; case 231: return "Faroe Islands"; case 232: return "United Kingdom"; case 233: return "United Kingdom"; case 234: return "United Kingdom"; case 235: return "United Kingdom"; case 236: return "Gibraltar"; case 237: return "Greece"; case 238: return "Croatia"; case 239: return "Greece"; case 240: return "Greece"; case 241: return "Greece"; case 242: return "Morocco"; case 243: return "Hungary"; case 244: return "Netherlands"; case 245: return "Netherlands"; case 246: return "Netherlands"; case 247: return "Italy"; case 248: return "Malta"; case 249: return "Malta"; case 250: return "Ireland"; case 251: return "Iceland"; case 252: return "Liechtenstein"; case 253: return "Luxembourg"; case 254: return "Monaco"; case 255: return "Madeira"; case 256: return "Malta"; case 257: return "Norway"; case 258: return "Norway"; case 259: return "Norway"; case 261: return "Poland"; case 262: return "Montenegro"; case 263: return "Portugal"; case 264: return "Romania"; case 265: return "Sweden"; case 266: return "Sweden"; case 267: return "Slovak Republic"; case 268: return "San Marino"; case 269: return "Switzerland"; case 270: return "Czech Republic"; case 271: return "Turkey"; case 272: return "Ukraine"; case 273: return "Russian Federation"; case 274: return "Former Yugoslav Republic of Macedonia"; case 275: return "Latvia"; case 276: return "Estonia"; case 277: return "Lithuania"; case 278: return "Slovenia"; case 279: return "Serbia"; case 301: return "Anguilla"; case 303: return "Alaska (State of, USA)"; case 304: return "Antigua and Barbuda"; case 305: return "Antigua and Barbuda"; case 306: return "Sint Maarten (Dutch part)"; case 306: return "Bonaire, Sint Eustatius and Saba"; case 306: return "Curaçao"; case 307: return "Aruba"; case 308: return "Bahamas"; case 309: return "Bahamas"; case 310: return "Bermuda"; case 311: return "Bahamas"; case 312: return "Belize"; case 314: return "Barbados"; case 316: return "Canada"; case 319: return "Cayman Islands"; case 321: return "Costa Rica"; case 323: return "Cuba"; case 325: return "Dominica"; case 327: return "Dominican Republic"; case 329: return "Guadeloupe (French Department)"; case 330: return "Grenada"; case 331: return "Greenland"; case 332: return "Guatemala"; case 334: return "Honduras"; case 336: return "Haiti"; case 338: return "United States of America"; case 339: return "Jamaica"; case 341: return "Saint Kitts and Nevis"; case 343: return "Saint Lucia"; case 345: return "Mexico"; case 347: return "Martinique"; case 348: return "Montserrat"; case 350: return "Nicaragua"; case 351: return "Panama"; case 352: return "Panama"; case 353: return "Panama"; case 354: return "Panama"; case 355: return "-"; case 356: return "-"; case 357: return "-"; case 358: return "Puerto Rico"; case 359: return "El Salvador"; case 361: return "Saint Pierre and Miquelon"; case 362: return "Trinidad and Tobago"; case 364: return "Turks and Caicos Islands"; case 366: return "United States of America"; case 367: return "United States of America"; case 368: return "United States of America"; case 369: return "United States of America"; case 370: return "Panama"; case 371: return "Panama"; case 372: return "Panama"; case 373: return "Panama"; case 374: return "-"; case 375: return "Saint Vincent and the Grenadines"; case 376: return "Saint Vincent and the Grenadines"; case 377: return "Saint Vincent and the Grenadines"; case 378: return "British Virgin Islands"; case 379: return "United States Virgin Islands"; case 401: return "Afghanistan"; case 403: return "Saudi Arabia"; case 405: return "Bangladesh"; case 408: return "Bahrain"; case 410: return "Bhutan"; case 412: return "China"; case 413: return "China"; case 414: return "China"; case 416: return "Taiwan"; case 417: return "Sri Lanka"; case 419: return "India"; case 422: return "Iran"; case 423: return "Azerbaijan"; case 425: return "Iraq"; case 428: return "Israel"; case 431: return "Japan"; case 432: return "Japan"; case 434: return "Turkmenistan"; case 436: return "Kazakhstan"; case 437: return "Uzbekistan"; case 438: return "Jordan"; case 440: return "South Korea"; case 441: return "South Korea"; case 443: return "State of Palestine"; case 445: return "Democratic People's Republic of Korea"; case 447: return "Kuwait"; case 450: return "Lebanon"; case 451: return "Kyrgyz Republic"; case 453: return "Macao"; case 455: return "Maldives"; case 457: return "Mongolia"; case 459: return "Nepal"; case 461: return "Oman"; case 463: return "Pakistan"; case 466: return "Qatar"; case 468: return "Syrian Arab Republic"; case 470: return "United Arab Emirates"; case 472: return "Tajikistan"; case 473: return "Yemen"; case 475: return "Yemen"; case 477: return "Hong Kong"; case 478: return "Bosnia and Herzegovina"; case 501: return "Adelie Land"; case 503: return "Australia"; case 506: return "Myanmar"; case 508: return "Brunei Darussalam"; case 510: return "Micronesia"; case 511: return "Palau"; case 512: return "New Zealand"; case 514: return "Cambodia"; case 515: return "Cambodia"; case 516: return "Christmas Island (Indian Ocean)"; case 518: return "Cook Islands"; case 520: return "Fiji"; case 523: return "Cocos (Keeling) Islands"; case 525: return "Indonesia"; case 529: return "Kiribati"; case 531: return "Lao People's Democratic Republic"; case 533: return "Malaysia"; case 536: return "Northern Mariana Islands"; case 538: return "Ilhas Marshall"; case 540: return "New Caledonia"; case 542: return "Niue"; case 544: return "Nauru"; case 546: return "French Polynesia"; case 548: return "Philippines"; case 553: return "Papua New Guinea"; case 555: return "Pitcairn Island"; case 557: return "Solomon Islands"; case 559: return "American Samoa"; case 561: return "Samoa"; case 563: return "Singapore"; case 564: return "Singapore"; case 565: return "Singapore"; case 566: return "Singapore"; case 567: return "Thailand"; case 570: return "Tonga"; case 572: return "Tuvalu"; case 574: return "Viet Nam"; case 576: return "Vanuatu"; case 577: return "Vanuatu"; case 578: return "Wallis and Futuna Islands"; case 601: return "South Africa"; case 603: return "Angola"; case 605: return "Algeria"; case 607: return "Saint Paul and Amsterdam Islands"; case 608: return "Ascension Island"; case 609: return "Burundi"; case 610: return "Benin"; case 611: return "Botswana"; case 612: return "Central African Republic"; case 613: return "Cameroon"; case 615: return "Congo"; case 616: return "Comoros"; case 617: return "Cabo Verde"; case 618: return "Crozet Archipelago"; case 619: return "Côte d'Ivoire"; case 620: return "Comoros"; case 621: return "Djibouti"; case 622: return "Egypt"; case 624: return "Ethiopia"; case 625: return "Eritrea"; case 626: return "Gabonese Republic"; case 627: return "Ghana"; case 629: return "Gambia"; case 630: return "Guinea-Bissau"; case 631: return "Equatorial Guinea"; case 632: return "Guinea"; case 633: return "Burkina Faso"; case 634: return "Kenya"; case 635: return "Kerguelen Islands"; case 636: return "Liberia"; case 637: return "Liberia"; case 638: return "South Sudan"; case 642: return "Libya"; case 644: return "Lesotho"; case 645: return "Mauritius"; case 647: return "Madagascar"; case 649: return "Mali"; case 650: return "Mozambique"; case 654: return "Mauritania"; case 655: return "Malawi"; case 656: return "Niger"; case 657: return "Nigeria"; case 659: return "Namibia"; case 660: return "Reunion (French Department)"; case 661: return "Rwanda"; case 662: return "Sudan"; case 663: return "Senegal"; case 664: return "Seychelles"; case 665: return "Saint Helena"; case 666: return "Somalia"; case 667: return "Sierra Leone"; case 668: return "Sao Tome and Principe"; case 669: return "Swaziland"; case 670: return "Chad"; case 671: return "Togolese Republic"; case 672: return "Tunisia"; case 674: return "Tanzania"; case 675: return "Uganda"; case 676: return "Democratic Republic of the Congo"; case 677: return "Tanzania"; case 678: return "Zambia"; case 679: return "Zimbabwe"; case 701: return "Argentine"; case 710: return "Brazil"; case 720: return "Bolivia"; case 725: return "Chile"; case 730: return "Colombia"; case 735: return "Ecuador"; case 740: return "Falkland Islands (Malvinas)"; case 745: return "Guiana (French Department)"; case 750: return "Guyana"; case 755: return "Paraguay"; case 760: return "Peru"; case 765: return "Suriname"; case 770: return "Uruguay"; case 775: return "Venezuela";            default: return "Desconhecida";
+        }
+    }
+	
+    function generateResponse2() {
+	event.preventDefault();
+        let checkboxes2 = document.querySelectorAll('input[name="options2"]:checked');
+        let response2 = [];
+        let response4 = [];
+        checkboxes2.forEach((checkbox) => {
+        let row = checkbox.closest('tr'); // Encontra a linha da checkbox
+        let value = checkbox.value; // Pega o valor da checkbox
+        let description = row.querySelector('td#descrição').innerText; // Pega o texto do <td> com id "descrição"
+          response4.push(`${value} - ${description}`);
+          response2.push(value);
+        });
+        document.getElementById('security2').innerText = response2.join('; ');
+        document.getElementById('security4').innerText = response4.join(';\n');
+		let checkboxes = document.querySelectorAll('input[name="options"]:checked');
+        let response1 = [];
+        let response3 = [];
+        checkboxes.forEach((checkbox) => {
+            let row = checkbox.closest('tr'); // Encontra a linha da checkbox
+            let value = checkbox.value; // Pega o valor da checkbox
+            let description = row.querySelector('td#descrição').innerText; // Pega o texto do <td> com id "descrição"
+            response3.push(`${value} - ${description}`);
+            response1.push(checkbox.value);
+        });
+        document.getElementById('safety1').innerText = response1.join('; ');
+        document.getElementById('safety3').innerText = response3.join(';\n');
+    }
+		function openFormButton(event) {
+            // Prevenir o comportamento padrão de envio do formulário
+            event.preventDefault();
+			window.open('Formulario_NAESP_-_CAMTES.html', '_blank');
+        }
+		function openFormButton(event) {
+            // Prevenir o comportamento padrão do botão
+            event.preventDefault();
+            // Abrir o formulário em uma nova aba
+            window.open('1.1.Formulario_NAESP_-_CAMTES.html', '_blank');
+        }
+
+        function abrirEquasis() {
+            // Prevenir o comportamento padrão do botão
+            event.preventDefault();
+			
+            // Obter o valor do campo de entrada
+            const imoValue = document.getElementById('imo').value.trim();
+			
+			 // Verificar se o campo não está vazio
+            if (imoValue) {
+                // Construir a URL com o valor do IMO
+                const url = `http://www.sistram.mar.mil.br/sistram4/MAG/buscar_navio_equasis_limpo.php?P1=${imoValue}`;
+
+                // Abrir a URL em uma nova aba
+                window.open(url, '_blank');
+            } else {
+                alert('Por favor, insira um número IMO válido.');
+            }
+        }
+					
+            function buscarIMO(event) {
+            // Prevenir o comportamento padrão de envio do formulário
+            event.preventDefault();
+
+            // Obter o valor do campo de entrada
+            const imoValue = document.getElementById('imo').value.trim();
+
+            // Verificar se o campo não está vazio
+            if (imoValue) {
+                // Construir a URL com o valor do IMO
+                const url = `https://camtes.net/VSS/Vessels/VesselDetails.aspx?IMO=${imoValue}`;
+
+                // Abrir a URL em uma nova aba
+                window.open(url, '_blank');
+            } else {
+                alert('Por favor, insira um número IMO válido.');
+            }
+        }
+ 
+        function criarTxt() {
+            const form = document.getElementById('messageForm');
+			// Verificação dos campos obrigatórios
+    if (!form.para.value) {
+        alert("Coloque um Distrito Naval, como Destino!");
+        return;
+    }
+    if (!form.info.value) {
+        alert("Preencha uma CDA ou coloque um 'espaço'!");
+        return;
+    }
+    if (!form.nomeNavio.value) {
+        alert("Preencha o 'Nome do Navio'!");
+        return;
+    }
+    if (!form.imo.value) {
+        alert("Preencha o 'IMO'!");
+        return;
+    }
+    if (!form.mmsi.value) {
+        alert("Preencha o 'MMSI'!");
+        return;
+    }
+    if (!form.bandeira.value) {
+        alert("O navio não tem Bandeira?");
+        return;
+    }
+    if (!form.tipoNavio.value) {
+        alert("Preencha o 'Tipo do Navio'!");
+        return;
+    }
+    if (!form.porto.value) {
+        alert("Preencha o campo 'Porto' para criar a mensagem!");
+        return;
+    }
+    if (!form.latitudeGrau.value || !form.latitudeMinuto.value || !form.latitudeSegundo.value || !form.latitudeDirecao.value || 
+        !form.longitudeGrau.value || !form.longitudeMinuto.value || !form.longitudeSegundo.value || !form.longitudeDirecao.value) {
+        alert("Preencha todos os campos de coordenadas para criar a mensagem!");
+        return;
+    }
+    if (!form.dataPosicao.value) {
+        alert("Preencha os campos de data de posição (dia, mês, ano) para criar a mensagem!");
+        return;
+    }
+            const ultimaPosicao = `${form.latitudeGrau.value}°${form.latitudeMinuto.value}'${form.latitudeSegundo.value}"${form.latitudeDirecao.value}, ${form.longitudeGrau.value}°${form.longitudeMinuto.value}'${form.longitudeSegundo.value}"${form.longitudeDirecao.value}`;
+            const texto = `ESSA PARTE VAI SER ESCRITA/COLADA NO CABEÇALHO:
+
+ROTINA
+R-XXXXXXZ/___/202_
+DE: TERDIS
+PARA: COMPAZ
+INFO: AGAGAG CIMBRA CPCPCP DRGNAV GPNDES OPENAV PRTCOS ZZZBBB XMT NBHAES ${form.info.value}
+ASSUNTO: NAVIO DE ACOMPANHAMENTO ESPECIAL (NAESP)
+
+------------------------------------------------
+ESSA PARTE VAI SER COLADA NO TEXTO DA MENSAGEM:
+
+ROTINA
+R-XXXXXXZ/___/202_
+DE TERDIS
+PARA  COMPAZ
+INFO  AGAGAG CIMBRA CPCPCP DRGNAV GPNDES OPENAV PRTCOS ZZZBBB XMT NBHAES ${form.info.value}
+GRNC
+BT
+DOCUMENTO PREPARATÓRIO - ACESSO RESTRITO
+
+NAVIO DE ACOMPANHAMENTO ESPECIAL (NAESP) - ${form.nomeNavio.value}
+
+ALFA - COMPAAz: Em rotina de monitoramento do TM na Aj deste CRSM,foi identificado,
+via SISTRAM V, a EMB "${form.nomeNavio.value}",navio de pesquisa estrangeiro,
+sendo classificada como NAESP(VOI) ACD inciso 6.1 da COMOPNAVINST 31-22A.
+
+UNO - Dados da Embarcação:
+- NOME: ${form.nomeNavio.value};
+- IMO: ${form.imo.value};
+- MMSI: ${form.mmsi.value};
+- IRIN: ${form.Irin.value};
+- TIPO: Pesquisa;
+- BANDEIRA: ${form.bandeira.value};
+- ÚLTIMA POSIÇÃO: ${ultimaPosicao} em: ${form.dataPosicao.value};
+- Último porto visitado:
+- Destino:${form.porto.value}, ACD SISTRAM V;e
+- Situação:
+
+DOIS - ACD Tabelas de Segurança Marítima ("SAFETY") e/ou Proteção Marítima ("SECURITY"),
+REF EMB apresenta risco ao Tráfego Marítimo, à luz dos seguintes
+parâmetros envolvidos em sua classificação: 
+Safety: (${document.getElementById('safety1').innerText}) e 
+Security: (${document.getElementById('security2').innerText}); e
+
+BRAVO - Este CRSM manterá o ACO da EMB e informará tempestivamente caso ocorra fatos relevantes.
+BT
+`;
+
+
+	    const filename = `${form.imo.value} - ${form.nomeNavio.value}.txt`.replace(/[/\\?%*:|"<>]/g, '-');
+
+            const blob = new Blob([texto], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        };
+
 </script>
 </body>
 </html>
