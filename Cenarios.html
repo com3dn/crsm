@@ -173,6 +173,76 @@ const portos = {
     "Recife": { lat: -8.050000, lon: -34.866667 },
     "Suape": { lat: -8.388487, lon: -34.940471 }
 };
+function calcularDistancia(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Raio da Terra em km
+    const φ1 = lat1 * Math.PI / 180;
+    const φ2 = lat2 * Math.PI / 180;
+    const Δφ = (lat2 - lat1) * Math.PI / 180;
+    const Δλ = (lon2 - lon1) * Math.PI / 180;
+
+    // Fórmula de Haversine
+    const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+        Math.cos(φ1) * Math.cos(φ2) *
+        Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    // Distância em Milhas Náuticas (MN)
+    return (R * c * 0.539957);
+};
+
+// Função para encontrar o porto mais próximo
+function portoMaisProximo(latMouse, lonMouse) {
+    let menorDistancia = Infinity;
+    let portoMaisProx = null;
+
+    for (const porto in portos) {
+        let { lat, lon } = portos[porto];
+        let distancia = calcularDistancia(latMouse, lonMouse, lat, lon);
+        
+        if (distancia < menorDistancia) {
+            menorDistancia = distancia;
+            portoMaisProx = porto;
+        }
+    }
+    
+    return { portoMaisProx, menorDistancia: menorDistancia.toFixed(2) };
+};
+
+// Converter Decimal para Graus, Minutos e Segundos (GMS)
+function decimalParaGMS(num, isLatitude) {
+    var grau = Math.floor(Math.abs(num));
+    var minuto = Math.floor((Math.abs(num) - grau) * 60);
+    var segundo = Math.round((Math.abs(num) - grau - (minuto / 60)) * 3600);
+    var direction = isLatitude ? (num >= 0 ? 'N' : 'S') : (num >= 0 ? 'E' : 'W');
+    return grau + "º " + minuto + "' " + segundo + '" ' + direction;
+};
+
+// Criar um único controle de posição do mouse
+var mouse_position = new L.Control.MousePosition({
+    "emptyString": "NaN",
+    "lngFirst": false,
+    "numDigits": 6,
+    "position": "topright",
+    "prefix": "Posição:",
+    "separator": " | "
+});
+
+// Adicionar controle ao mapa
+map.addControl(mouse_position);
+
+// Evento para calcular distância e exibir dados
+map.on("mousemove", function(e) {
+    let { portoMaisProx, menorDistancia } = portoMaisProximo(e.latlng.lat, e.latlng.lng);
+    let decimalLat = e.latlng.lat.toFixed(4);
+    let decimalLng = e.latlng.lng.toFixed(4);
+    let gmsLat = decimalParaGMS(e.latlng.lat, true);
+    let gmsLng = decimalParaGMS(e.latlng.lng, false);
+
+    document.querySelector(".leaflet-control-mouseposition").innerHTML = `
+        DEC: ${decimalLat}, ${decimalLng}<br>
+        GMS: ${gmsLat}, ${gmsLng}<br>
+        ${menorDistancia} MN de ${portoMaisProx}`;
+});
 
 </script>
 </body>
