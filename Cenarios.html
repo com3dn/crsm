@@ -37,63 +37,20 @@
 
 <style>
 /* Mapa */
-#map-container {
+#cenarios-container {
     top: 2px;
     flex: 1;
+    width: 80vw;
     position: relative;
     overflow: hidden;
 }
 
 #map {
-    height: 100%;
-    width: 100%;
+    height: 80vh;
+    width: 80vw;
     position: relative;
 }
 
-/* Filtro */
-#filtro {
-    position: relative;
-    top: 1px;
-    z-index: 1000;
-    background: white;
-    padding: 1px 1px;
-    box-shadow: 0 0 8px rgba(0,0,0,0.2);
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 8px;
-    align-items: center;
-    max-width: 100%
-}
-
-#filtro label {
-    font-weight: 500;
-    flex-wrap: nowrap;
-    min-width: 130px
-}
-
-#filtro input {
-    flex: 1;
-    min-width: 120px;
-    padding: 6px 10px;
-    border: 1px solid #ddd;
-    flex-wrap: nowrap;
-    border-radius: 4px;
-}
-
-#filtro button {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 4px;
-    background-color: #4f46e5;
-    color: white;
-    cursor: pointer;
-    white-space: nowrap;
-    flex-wrap: nowrap;
-}
-
-#filtro button:hover {
-    background-color: #382fb0;
-}
 </style>
 </head>
 <body>
@@ -147,7 +104,7 @@
             <i id="open_btn_icon" class="fa-solid fa-chevron-right"></i>
         </button>
     </nav>
-<div id="main-content">
+<div id="main-content" >
 <h1>Interceptação</h1>
 <div id="cenarios-container" class="calculator-container">
   <h3>Carregar Arquivo com as Posições</h3>
@@ -160,6 +117,7 @@
 
 </div>
 </div> 
+	
 	
 	
 
