@@ -18,6 +18,16 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.css"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/ardhi/Leaflet.MousePosition/src/L.Control.MousePosition.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://unpkg.com/leaflet-polylinedecorator@1.6.0/dist/leaflet.polylineDecorator.js"></script>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <style>
 /* Mapa */
 #map-container {
@@ -132,27 +142,20 @@
     </nav>
 <div id="main-content">
 <h1>Interceptação</h1>
-<h3>Carregar Arquivo com as Posições</h3>
-<p style="margin-bottom: 15px;">
+<div id="cenarios-container" class="calculator-container">
+  <h3>Carregar Arquivo com as Posições</h3>
+  <p style="margin-bottom: 15px;">
     Selecione um arquivo Excel (.xlsx) com múltiplas abas. Cada aba representará um contato de interesse com suas posições. As trajetórias serão desenhadas automaticamente no mapa.
   </p>
-<input type="file" id="fileInput" /><br>
+  <input type="file" id="fileInput" />
+  <div id="map"></div>
+</div>
 
-<div id="map"></div>
 </div>
 </div> 
 	
 	
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/ardhi/Leaflet.MousePosition/src/L.Control.MousePosition.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://unpkg.com/leaflet-polylinedecorator@1.6.0/dist/leaflet.polylineDecorator.js"></script>
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
 	
 <script>
 document.getElementById('open_btn').addEventListener('click', function() {document.getElementById('sidebar').classList.toggle('open-sidebar');});
@@ -174,6 +177,8 @@ const portos = {
     "Recife": { lat: -8.050000, lon: -34.866667 },
     "Suape": { lat: -8.388487, lon: -34.940471 }
 };
+
+// Função para calcular distância em Milhas Náuticas (MN)
 function calcularDistancia(lat1, lon1, lat2, lon2) {
     const R = 6371; // Raio da Terra em km
     const φ1 = lat1 * Math.PI / 180;
@@ -189,7 +194,7 @@ function calcularDistancia(lat1, lon1, lat2, lon2) {
 
     // Distância em Milhas Náuticas (MN)
     return (R * c * 0.539957);
-};
+}
 
 // Função para encontrar o porto mais próximo
 function portoMaisProximo(latMouse, lonMouse) {
@@ -207,7 +212,7 @@ function portoMaisProximo(latMouse, lonMouse) {
     }
     
     return { portoMaisProx, menorDistancia: menorDistancia.toFixed(2) };
-};
+}
 
 // Converter Decimal para Graus, Minutos e Segundos (GMS)
 function decimalParaGMS(num, isLatitude) {
@@ -216,7 +221,7 @@ function decimalParaGMS(num, isLatitude) {
     var segundo = Math.round((Math.abs(num) - grau - (minuto / 60)) * 3600);
     var direction = isLatitude ? (num >= 0 ? 'N' : 'S') : (num >= 0 ? 'E' : 'W');
     return grau + "º " + minuto + "' " + segundo + '" ' + direction;
-};
+}
 
 // Criar um único controle de posição do mouse
 var mouse_position = new L.Control.MousePosition({
@@ -226,7 +231,7 @@ var mouse_position = new L.Control.MousePosition({
     "position": "topright",
     "prefix": "Posição:",
     "separator": " | "
-})
+});
 
 // Adicionar controle ao mapa
 map.addControl(mouse_position);
@@ -244,6 +249,7 @@ map.on("mousemove", function(e) {
         GMS: ${gmsLat}, ${gmsLng}<br>
         ${menorDistancia} MN de ${portoMaisProx}`;
 });
+
 document.getElementById('fileInput').addEventListener('change', function(e) {
     const file = e.target.files[0];
     const reader = new FileReader();
@@ -342,7 +348,6 @@ L.control.fullscreen({position: 'topleft', title:'Tela Cheia', titleCancel: 'Sai
         }).addTo(map);
 
 
-
 document.querySelectorAll('.fas.fa-info-circle').forEach((icon, index) => {
     // Captura do tooltip correspondente
     const tooltip = document.getElementById(`tooltip-${index + 1}`);
@@ -411,7 +416,7 @@ map.on('draw:drawstart', function(e) {
         let cor;
         switch (aba.trim().toLowerCase()) {
             case 'patrulha': cor = 'gray'; break;
-            case 'interceptacao': cor = 'red'; break;
+            case 'interceptaçao (pma)': cor = 'red'; break;
             case 'estimada': cor = 'purple'; break;
             default: cor = 'green'; break;
         }
@@ -460,15 +465,31 @@ map.on('draw:drawstart', function(e) {
         markers.addLayer(marker);
     } else {
         // Caso contrário → seta rotacionada
-        const icon = L.divIcon({className: '',html: `<div style="transform: rotate(${headingDeg}deg);width: 24px;height: 24px;display: flex;align-items: center;justify-content: center;">
+        const icon = L.divIcon({
+            className: '',
+            html: `
+                <div style="
+                    transform: rotate(${headingDeg}deg);
+                    width: 24px;
+                    height: 24px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                ">
                     <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 2 L16 10 H13 V22 H11 V10 H8 Z" fill="${cor}" stroke="black" stroke-width="1"/></svg></div>`,
-                         iconSize: [24, 24],iconAnchor: [12, 12],});
+                        <path d="M12 2 L16 10 H13 V22 H11 V10 H8 Z" fill="${cor}" stroke="black" stroke-width="1"/>
+                    </svg>
+                </div>
+            `,
+            iconSize: [24, 24],
+            iconAnchor: [12, 12],
+        });
 
         const marker = L.marker([lat, long], { icon }).bindPopup(`
             ${row[0]}<br>${row[1]} - DH: ${datahora}<br>
             Lat: ${row[5]}, Long: ${row[6]}<br>
-            Rumo: ${row[8]?.toFixed(0)}, Veloc: ${row[9]?.toFixed(0)} nós`);
+            Rumo: ${row[8]?.toFixed(0)}, Veloc: ${row[9]?.toFixed(0)} nós
+        `);
 
         markers.addLayer(marker);
     }
@@ -497,7 +518,6 @@ map.on('draw:drawstart', function(e) {
 		
     reader.readAsArrayBuffer(file);
 });
-
 </script>
 </body>
 </html>
