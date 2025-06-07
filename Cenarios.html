@@ -17,16 +17,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.css"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.css"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/ardhi/Leaflet.MousePosition/src/L.Control.MousePosition.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://unpkg.com/leaflet-polylinedecorator@1.6.0/dist/leaflet.polylineDecorator.js"></script>
 <!-- Inclua o CSS e JS do Leaflet -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />    
 <!-- Inclua o CSS e JS do plugin Leaflet Draw -->
@@ -68,48 +58,7 @@ body {
         .active {display: block;}
 		
         #map { height: 700px; }
-/* Container principal */
-#app-container {
-    display: flex;
-    flex: 1;
-    height: 100vh;
-}
 
-/* Sidebar */
-#sidebar {
-    width: var(--sidebar-width);
-    height: 100vh;
-    background-color: #ffffff;
-    border-radius: 0px 10px 0px 0px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: all 0.5s;
-    position: relative;
-    z-index: 10;
-    overflow: hidden;
-}
-
-#sidebar.open-sidebar {
-    width: var(--sidebar-expanded-width);
-}
-
-#sidebar_content {
-    padding: 12px;
-    flex: 1;
-    overflow-y: auto;
-}
-
-/* Conteúdo principal */
-#main-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: auto;
-    padding: 20px;
-    transition: margin-left 0.3s;
-    position: relative;
-    background-color: #f5f7fa;
 }
 
 /* Estilos para a calculadora */
@@ -132,271 +81,6 @@ body {
     display: flex;
     flex-direction: column;
     gap: 15px;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-}
-
-.form-group label {
-    margin-bottom: 5px;
-    font-weight: 500;
-    color: #333;
-}
-
-.form-group input {
-    padding: 10px 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
-}
-
-.form-group input:focus {
-    outline: none;
-    
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
-}
-
-#resultado {
-    margin-top: 20px;
-    padding: 15px;
-    background-color: #f8f9fa;
-    border-radius: 5px;
-    border-left: 4px solid var(--primary-color);
-    font-size: 16px;
-    white-space: pre-line;
-}
-
-/* Estilos comuns da sidebar */
-#user {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 2px;
-}
-
-#user_avatar {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-    border-radius: 20px;
-}
-
-#user_infos {
-    display: flex;
-    flex-direction: column;
-}
-
-#user_infos span:last-child {
-    color: #6b6b6b;
-    font-size: 12px;
-}
-
-#side_items {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    list-style: none;
-    margin-top: 20px;
-}
-
-.side-item {
-    border-radius: 8px;
-    padding: 10px;
-    cursor: pointer;
-}
-
-.side-item.active {
-    background-color: var(--primary-color);
-}
-
-.side-item:hover:not(.active),
-#logout_btn:hover {
-    background-color: #e3e9f7;
-}
-
-.side-item a {
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    color: #0a0a0a;
-}
-
-.side-item.active a {
-    color: #e3e9f7;
-}
-
-.side-item a i {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 24px;
-}
-
-#logout {
-    border-top: 1px solid #e3e9f7;
-    padding: 12px;
-}
-
-#logout_btn {
-    border: none;
-    padding: 12px;
-    font-size: 14px;
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    border-radius: 8px;
-    text-align: start;
-    cursor: pointer;
-    background-color: transparent;
-    width: 100%;
-}
-
-#open_btn {
-    position: absolute;
-    top: 2px;
-    right: 2px; /* Aumentei um pouco para ficar mais para fora */
-    background-color: #4f46e5;
-    color: #e3e9f7;
-    border-radius: 100%;
-    width: 24px; /* Aumentei o tamanho */
-    height: 24px;
-    border: 2px solid white; /* Borda para destacar */
-    cursor: pointer;
-    z-index: 9000; /* Garante que fique por cima */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Sombra para profundidade */
-    transition: all 0.3s ease;
-}
-
-#open_btn:hover {
-    transform: scale(1.1);
-    background-color: #4338ca;
-}
-
-#open_btn_icon {
-    font-size: 12px;
-    transition: transform 0.3s ease;
-}
-
-.open-sidebar #open_btn_icon {
-    transform: rotate(180deg);
-}
-
-.item-description {
-    width: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    font-size: 14px;
-    transition: width .6s;
-}
-
-#sidebar.open-sidebar .item-description {
-    width: 150px;
-    margin-left: 10px;
-}#map {
-      width: 65vw;
-      height: 70vh;
-      margin-top: 20px;
-      border: 1px solid #ccc;
-    }
-
-    #distancia2, #tempo {
-      font-size: 18px;
-      margin-top: 10px;
-    }
-
-/* Media queries para dispositivos móveis */
-@media (max-width: 720px) {
-    #app-container {
-        flex-direction: column;
-    }
-    
-    #sidebar {
-        width: 100%;
-        height: auto;
-        border-radius: 0;
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
-    
-    #sidebar.open-sidebar {
-        width: 100%;
-    }
-    
-    #sidebar_content {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 5px;
-        padding: 8px;
-    }
-    
-    #user {
-        display: none;
-    }
-    
-    #side_items {
-        flex-direction: row;
-        flex-wrap: wrap;
-        margin-top: 0;
-        margin-right: 28px;
-        width: 70%;
-        gap: 20px;
-    }
-    
-    .side-item {
-        padding: 20px 20px;
-    }
-    
-    #logout {
-        border-top: none;
-        padding: 0px;
-        margin-right: 50px;
-    }
-    
-    #open_btn {
-        display: flex;
-        top: 10px;
-        right: 10px;
-    }
-    
-    #sidebar .item-description {
-        width: auto !important;
-        display: none;
-    }
-    
-    #sidebar.open-sidebar .item-description {
-        display: inline;
-    }
-    
-    .calculator-container {
-        margin-top: 20px;
-        padding: 15px;
-    }
-}
-
-/* Ajustes para telas muito pequenas */
-@media (max-width: 480px) {
-    .calculator-form {
-        gap: 2px;
-    }
-    
-    .form-group input {
-        padding: 8px 12px;
-    }
-    
-    #side_items {
-        gap: 3px;
-    }
-    
-    .side-item {
-        padding: 6px 8px;
-    }
 }
 </style>
 </head>
@@ -464,7 +148,15 @@ body {
 
 	
 	
-
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/ardhi/Leaflet.MousePosition/src/L.Control.MousePosition.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://unpkg.com/leaflet-polylinedecorator@1.6.0/dist/leaflet.polylineDecorator.js"></script>
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
 const map = L.map('map').setView([-8, -35], 5);
