@@ -117,7 +117,7 @@
         </button>
     </nav>
    <div id="main-content">
- <h1>Interceptação V.006</h1>
+ <h1>Interceptação V.007</h1>
   <div class="converter-container">
 <table border="6" style="width:100%;border-radius: 5px;" ><tbody>
 <tr><td colspan="4" style="vertical-align:top;text-align: center">
@@ -1658,7 +1658,7 @@ const { marcador: markerEST2, linhaDinamica: linhaEST } = criarMarcadorArrastave
 		'\nPOS:Lat: ' + latFinalDMS + '\n    Long: ' + lonFinalDMS +
 		'\n'+ calcularDistancia(latFinal,lonFinal,-5.75,-35.2).toFixed(0) + 'MN de Natal'+
 		'\nDados CTT:Rumo:'+ rumoParaAlvofinal.toFixed(0) + '°, Veloc: ' + patru_veloc + ' nós' + 
-		'\nDados p122:Rumo:' + alvo_rumo.toFixed(0) + '° , Veloc: ' + alvo_veloc + ' nós'+
+		'\nDados p122:Rumo:' + alvo_rumo.toFixed(0) + '° , Veloc: ' + alvo_veloc + ' nós\n\n'+
 		'\nDecimal'+
 		'\nLat: '+ latFinal.toFixed(4) + ',Long: ' + lonFinal.toFixed(4);
   
@@ -1883,7 +1883,7 @@ const posicaoPatrulha3 = [patru_lat_final2, patru_long_final2];
 const posicaoCI3 = [alvo_latinicial2, alvo_longinicial2];
 const posicaoEST3 = [alvo_latestimada2, alvo_longestimada2];
 const posicaoPMA3 = [latFinal2, lonFinal2];
-
+const distnatal = calcularDistancia(latFinal,lonFinal,-5.75,-35.2).toFixed(0)
 // Criar os marcadores com cores personalizadas
 const { marcador: markerPatrulha2, linhaDinamica: linhaPatrulha } = criarMarcadorArrastavel(
     [patru_lat_final2, patru_long_final2], 
@@ -1919,7 +1919,7 @@ const { marcador: markerPMA2, linhaDinamica: linhaPMA } = criarMarcadorArrastave
     `<b>Posição Estimada</b><br>
     DH:${dhPMA2}<br>
     Lat: ${latFinalDMS2},Long: ${lonFinalDMS2}<br>
-    {calcularDistancia(latFinal,lonFinal,-5.75,-35.2).toFixed(0)} de Natal <br>
+    ${distnatal} de Natal <br>
     Dados do CI: Rumo: ${alvo_rumo2.toFixed(0)}° , Veloc: ${alvo_veloc2} nós<br>
     Dados do Pat: Rumo: ${rumoParaAlvofinal2.toFixed(0)}°, Veloc: ${patru_veloc2} nós`, 
     posicaoPMA3, 
