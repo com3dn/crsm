@@ -117,7 +117,7 @@
         </button>
     </nav>
    <div id="main-content">
- <h1>Interceptação V.003</h1>
+ <h1>Interceptação V.004</h1>
   <div class="converter-container">
 <table border="6" style="width:100%;border-radius: 5px;" ><tbody>
 <tr><td colspan="4" style="vertical-align:top;text-align: center">
@@ -1146,7 +1146,7 @@ map.on("mousemove", function(e) {
    let patru_lat_final = patru_lat;
    let patru_long_final = patru_long;
 
-let diffHoras = Math.round((((patru_datapos - alvo_datainicial) / (1000 * 60 * 60)))*100)/100; // É A DIFERENÇA EM HORAS ENTRE A ULTIMA POSIÇÃO CONHECIDA DO CI E A DO PATRULHA
+let diffHoras = Math.abs(Math.round((((patru_datapos - alvo_datainicial) / (1000 * 60 * 60)))*100)/100); // É A DIFERENÇA EM HORAS ENTRE A ULTIMA POSIÇÃO CONHECIDA DO CI E A DO PATRULHA
     console.log("🧭 Ponto Inicial ➜ \n" +
 	`Data inicial do CI: ${alvo_datainicial.toLocaleString("pt-BR", {day: "2-digit",month: "2-digit",year: "numeric", hour: "2-digit", minute: "2-digit", hour12: false}) + "P"}\n`+
 	`Data inicial do patrulha: ${patru_datapos.toLocaleString("pt-BR", {day: "2-digit",month: "2-digit",year: "numeric", hour: "2-digit", minute: "2-digit", hour12: false}) + "P"}\n`+
@@ -1219,7 +1219,7 @@ if (patru_lat5 !== null && patru_lat5 !== "" && !isNaN(patru_lat5)) {
 
   
   let distanciaPercorrida = alvo_veloc * diffHoras;
-    let alvo_latestimada = alvo_latinicial + ((distanciaPercorrida / 60) * Math.cos((alvo_rumo * Math.PI / 180)));
+  let alvo_latestimada = alvo_latinicial + ((distanciaPercorrida / 60) * Math.cos((alvo_rumo * Math.PI / 180)));
   let alvo_longestimada = alvo_longinicial + ((distanciaPercorrida / 60) * Math.sin((alvo_rumo * Math.PI / 180)));  
   
 
@@ -1634,7 +1634,7 @@ const { marcador: markerEST2, linhaDinamica: linhaEST } = criarMarcadorArrastave
 		'\nLat: '+ alvo_latinicialDMS + ',Long: ' + alvo_longinicialDMS + 
 		'\nRumo: ' + alvo_rumo.toFixed(0) + '° , Veloc: ' + alvo_veloc + ' nós.\n\n'+
 		'\nDecimal'+
-		'\nLat: '+ alvo_latinicial + ',Long: ' + alvo_longinicial;  
+		'\nLat: '+ alvo_latinicial.toFixed(4) + ',Long: ' + alvo_longinicial.toFixed(4);  
 	
 	document.getElementById("dadosestimada").innerText = 'Posição Estimada' +
 		'\nDH - ' + estimadaDATA +
@@ -1642,7 +1642,7 @@ const { marcador: markerEST2, linhaDinamica: linhaEST } = criarMarcadorArrastave
 		'\nRumo: ' + alvo_rumo.toFixed(0) + '° , Veloc: ' + alvo_veloc + ' nós'+
 		'\nNavegou: ' + calcularDistancia(alvo_latinicial,alvo_longinicial,alvo_latestimada,alvo_longestimada).toFixed(0) + ' MN.\n\n'+
 		'\nDecimal'+
-		'\nLat: '+ alvo_latestimada + ',Long: ' + alvo_longestimada;
+		'\nLat: '+ alvo_latestimada.toFixed(4) + ',Long: ' + alvo_longestimada.toFixed(4);
 			
 	
 	document.getElementById("dadospatrulha").innerText = 'Posiçao do Patrulha' + 
@@ -1651,14 +1651,16 @@ const { marcador: markerEST2, linhaDinamica: linhaEST } = criarMarcadorArrastave
 		'\nRumo: ' + rumoParaAlvofinal.toFixed(0) + '°, Veloc: ' + patru_veloc + ' nós' + 
 		'\nDistancia para PMA: ' + calcularDistancia(latFinal,lonFinal,patru_lat_final,patru_long_final).toFixed(0) + ' MN\n\n'+
 		'\nDecimal'+
-		'\nLat: '+ patru_lat + ',Long: ' + patru_long;
+		'\nLat: '+ patru_lat.toFixed(4) + ',Long: ' + patru_long.toFixed(4);
 	
-	        document.getElementById("dadosPMA").innerText = '<b>Posição da Interceptação</b>'+
+	        document.getElementById("dadosPMA").innerText = 'Posição da Interceptação'+
 		'\nETA: ' + dhPMA + 
 		'\nPOS:Lat: ' + latFinalDMS + '\n    Long: ' + lonFinalDMS +
-		'\n'+ calcularDistancia(latFinal,lonFinal,-5.75,-35.2).toFixed(0) + ' de Natal'+
+		'\n'+ calcularDistancia(latFinal,lonFinal,-5.75,-35.2).toFixed(0) + 'MN de Natal'+
 		'\nDados CTT:Rumo:'+ rumoParaAlvofinal.toFixed(0) + '°, Veloc: ' + patru_veloc + ' nós' + 
-		'\nDados p122:Rumo:' + alvo_rumo.toFixed(0) + '° , Veloc: ' + alvo_veloc + ' nós';
+		'\nDados p122:Rumo:' + alvo_rumo.toFixed(0) + '° , Veloc: ' + alvo_veloc + ' nós'+
+		'\nDecimal'+
+		'\nLat: '+ latFinal.toFixed(4) + ',Long: ' + lonFinal.toFixed(4);
   
   console.log("pos2: ",patru_lat3,patru_long3)
   console.log("pos3: ",patru_lat4,patru_long4)
