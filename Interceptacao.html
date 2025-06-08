@@ -606,49 +606,69 @@ document.getElementById('open_btn').addEventListener('click', function() {
 		
 		
 		
+	// Definir as cartas e suas bounding boxes
+const cartas = {
+    "Carta 01": {
+        url: 'cartas/10_Costa_Nordeste_da_América_do_Sul.png',
+        bounds: [[-8, -62], [15, -28]]
+    },
+    "Carta 10": {
+        url: 'cartas/10_Costa_Nordeste_da_América_do_Sul.png',
+        bounds: [[-8, -62], [15, -28]]
+    },
+    "Carta 20": {
+        url: 'cartas/20_Costa_Leste_da_America_do_Sul.png',
+        bounds: [[-24, -47], [-3, -14]]
+    },
+    "Carta 30": {
+        url: 'cartas/30_Costa_Sueste_da_America_do_Sul.png',
+        bounds: [[-38.3333, -59], [-19, -26]]
+    },
+    "Carta 22300": {
+        url: 'cartas/22300_De_Maceio_a_Aracaju.png',
+        bounds: [[-11.250000, -37.333333], [-9.500000, -34.583333]]
+    },
+    "Carta 22200": {
+        url: 'cartas/22200_De_Cabedelo_a_Maceio.png',
+        bounds: [[-9.916667, -36.0], [-6.916667, -33.916667]]
+    },
+    "Carta 22000": {
+        url: 'cartas/22000_Atol_das_Rocas_e_Arquipelago_de_Fernando_de_Noronha.png',
+        bounds: [[-5., -35.3], [-3, -32.3333]]
+    },
+    "Carta 22100": {
+        url: 'cartas/22100_Do_Cabo_Calcanhar_a_Cabedelo.png',
+        bounds: [[-7.25, -35.583333], [-4.3333, -33.550000]]
+    },
+    "Carta 21900": {
+        url: 'cartas/21900_Da_Ponta_Maceio_ao_Cabo_Calcanhar.png',
+        bounds: [[-5.25, -38.1], [-3.216667, -35.13333]]
+    },
+    "Carta 21020": {
+        url: 'cartas/21020_De_Salinopolis_a_Fortaleza.png',
+        bounds: [[-3.833333, -47.6666], [2.916667, -38.0833]]
+    },
+    "Carta 21800": {
+        url: 'cartas/21800_Da_Ponta_de_Itapage_a_Fortaleza.png',
+        bounds: [[-4.316667, -39.966667], [-1.3333, -37.933333]]
+    }
+};
+
+// Criar as camadas e armazenar no objeto baseLayers
+const baseLayers = {};
+
+// Adicionar cada carta como uma camada
+for (const [nome, carta] of Object.entries(cartas)) {
+    baseLayers[nome] = L.imageOverlay(carta.url, carta.bounds);
+}
+
+// Adicionar o controle de camadas ao mapa
+L.control.layers(null, baseLayers, {
+    collapsed: false // Para deixar o controle sempre expandido
+}).addTo(map);
+
 		
-		
-    let Cartabase_10 = 'cartas/10_Costa_Nordeste_da_América_do_Sul.png'; // Substitua pelo caminho correto
-    let Cartabase_20 = 'cartas/20_Costa_Leste_da_America_do_Sul.png'; // Substitua pelo caminho correto
-    let Cartabase_30 = 'cartas/30_Costa_Sueste_da_America_do_Sul.png'; // Substitua pelo caminho correto
-    let Cartabase_22300 = 'cartas/22300_De_Maceio_a_Aracaju.png'; // Substitua pelo caminho correto
-    let Cartabase_22200 = 'cartas/22200_De_Cabedelo_a_Maceio.png'; // Substitua pelo caminho correto
-    let Cartabase_22000 = 'cartas/22000_Atol_das_Rocas_e_Arquipelago_de_Fernando_de_Noronha.png'; // Substitua pelo caminho correto
-    let Cartabase_22100 = 'cartas/22100_Do_Cabo_Calcanhar_a_Cabedelo.png'; // Substitua pelo caminho correto
-    let Cartabase_21900 = 'cartas/21900_Da_Ponta_Maceio_ao_Cabo_Calcanhar.png'; // Substitua pelo caminho correto
-    let Cartabase_21020 = 'cartas/21020_De_Salinopolis_a_Fortaleza.png'; // Substitua pelo caminho correto
-    let Cartabase_21800 = 'cartas/21800_Da_Ponta_de_Itapage_a_Fortaleza.png'; // Substitua pelo caminho correto
-	//
-	//
-    let box_Cartabase_10 = [[-8, -62], [15, -28]];  // Defina as coordenadas geográficas para o limite da carta náutica
-    let box_Cartabase_20 = [[-24, -47], [-3, -14]];  // Defina as coordenadas geográficas para o limite da carta náutica
-    let box_Cartabase_30 = [[-38.3333, -59], [-19, -26]];  // Defina as coordenadas geográficas para o limite da carta náutica
-    //
-    let box_Cartabase_22300 = [[-11.250000, -37.333333], [-9.500000, -34.583333]];  // Defina as coordenadas geográficas para o limite da carta náutica
-    let box_Cartabase_22200 = [[-9.916667, -36.0], [-6.916667, -33.916667]];  // Defina as coordenadas geográficas para o limite da carta náutica
-    let box_Cartabase_22000 = [[-5., -35.3], [-3, -32.3333]];  // Defina as coordenadas geográficas para o limite da carta náutica
-    let box_Cartabase_22100 = [[-7.25, -35.583333], [-4.3333, -33.550000]];  // Defina as coordenadas geográficas para o limite da carta náutica
-    let box_Cartabase_21900 = [[-5.25, -38.1], [-3.216667, -35.13333]];  // Defina as coordenadas geográficas para o limite da carta náutica
-    let box_Cartabase_21020 = [[-3.833333, -47.6666], [2.916667, -38.0833]];  // Defina as coordenadas geográficas para o limite da carta náutica
-    let box_Cartabase_21800 = [[-4.316667, -39.966667], [-1.3333, -37.933333]];  // Defina as coordenadas geográficas para o limite da carta náutica
-	//
-    L.imageOverlay(Cartabase_10, box_Cartabase_10).addTo(map);
-    L.imageOverlay(Cartabase_20, box_Cartabase_20).addTo(map);
-    L.imageOverlay(Cartabase_30, box_Cartabase_30).addTo(map);
-    //
-    L.imageOverlay(Cartabase_22300, box_Cartabase_22300).addTo(map);
-    L.imageOverlay(Cartabase_22200, box_Cartabase_22200).addTo(map);
-    L.imageOverlay(Cartabase_22000, box_Cartabase_22000).addTo(map);
-    L.imageOverlay(Cartabase_22100, box_Cartabase_22100).addTo(map);
-    L.imageOverlay(Cartabase_21900, box_Cartabase_21900).addTo(map);
-    L.imageOverlay(Cartabase_21020, box_Cartabase_21020).addTo(map);
-    L.imageOverlay(Cartabase_21800, box_Cartabase_21800).addTo(map);
-		
-		
-		
-		
-		
-		// Adicionar a ferramenta de medição de distância usando Leaflet Draw
+	// Adicionar a ferramenta de medição de distância usando Leaflet Draw
         let drawnItems = new L.FeatureGroup().addTo(map);
         let drawControl = new L.Control.Draw({
          edit: {featureGroup: drawnItems },
