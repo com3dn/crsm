@@ -117,7 +117,7 @@
         </button>
     </nav>
    <div id="main-content">
- <h1>Interceptação V.002</h1>
+ <h1>Interceptação V.003</h1>
   <div class="converter-container">
 <table border="6" style="width:100%;border-radius: 5px;" ><tbody>
 <tr><td colspan="4" style="vertical-align:top;text-align: center">
@@ -1640,18 +1640,25 @@ const { marcador: markerEST2, linhaDinamica: linhaEST } = criarMarcadorArrastave
 		'\nDH - ' + estimadaDATA +
 		'\nLat: ' + alvo_latestimadaDMS + ',Long: ' + alvo_longestimadaDMS +
 		'\nRumo: ' + alvo_rumo.toFixed(0) + '° , Veloc: ' + alvo_veloc + ' nós'+
-		'\nNavegou: ' + calcularDistancia(alvo_latinicial,alvo_longinicial,alvo_latestimada,alvo_longestimada).toFixed(0) + ' MN.\n\n'
+		'\nNavegou: ' + calcularDistancia(alvo_latinicial,alvo_longinicial,alvo_latestimada,alvo_longestimada).toFixed(0) + ' MN.\n\n'+
 		'\nDecimal'+
 		'\nLat: '+ alvo_latestimada + ',Long: ' + alvo_longestimada;
 			
 	
-			;
+	document.getElementById("dadospatrulha").innerText = 'Posiçao do Patrulha' + 
+		'\nDH - ' + dhpatrulha + 
+		'\nLat: ' + latpatDMS + ',Long: ' + longpatDMS + 
+		'\nRumo: ' + rumoParaAlvofinal.toFixed(0) + '°, Veloc: ' + patru_veloc + ' nós' + 
+		'\nDistancia para PMA: ' + calcularDistancia(latFinal,lonFinal,patru_lat_final,patru_long_final).toFixed(0) + ' MN\n\n'+
+		'\nDecimal'+
+		'\nLat: '+ patru_lat + ',Long: ' + patru_long;
 	
-	document.getElementById("dadospatrulha").innerText = 'Posiçao do Patrulha\n' + dhpatrulha + '\nLat: ' + latpatDMS + 
-	',Long: ' + longpatDMS + '\nVeloc: ' + patru_veloc + ' nós' + 
-	'\nRumo: ' + rumoParaAlvofinal.toFixed(0) + '°, Distancia: ' + calcularDistancia(latFinal,lonFinal,patru_lat_final,patru_long_final).toFixed(0) + ' MN';
-	
-	        document.getElementById("dadosPMA").innerText = 'Posição da Interceptação\n' + dhPMA + '\nLat: ' + latFinalDMS + ',Long: ' + lonFinalDMS;
+	        document.getElementById("dadosPMA").innerText = '<b>Posição da Interceptação</b>'+
+		'\nETA: ' + dhPMA + 
+		'\nPOS:Lat: ' + latFinalDMS + '\n    Long: ' + lonFinalDMS +
+		'\n'+ calcularDistancia(latFinal,lonFinal,-5.75,-35.2).toFixed(0) + ' de Natal'+
+		'\nDados CTT:Rumo:'+ rumoParaAlvofinal.toFixed(0) + '°, Veloc: ' + patru_veloc + ' nós' + 
+		'\nDados p122:Rumo:' + alvo_rumo.toFixed(0) + '° , Veloc: ' + alvo_veloc + ' nós';
   
   console.log("pos2: ",patru_lat3,patru_long3)
   console.log("pos3: ",patru_lat4,patru_long4)
