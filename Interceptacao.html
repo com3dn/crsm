@@ -117,7 +117,7 @@
         </button>
     </nav>
    <div id="main-content">
- <h1>Interceptação V.004</h1>
+ <h1>Interceptação V.006</h1>
   <div class="converter-container">
 <table border="6" style="width:100%;border-radius: 5px;" ><tbody>
 <tr><td colspan="4" style="vertical-align:top;text-align: center">
@@ -1919,7 +1919,7 @@ const { marcador: markerPMA2, linhaDinamica: linhaPMA } = criarMarcadorArrastave
     `<b>Posição Estimada</b><br>
     DH:${dhPMA2}<br>
     Lat: ${latFinalDMS2},Long: ${lonFinalDMS2}<br>
-    xxx de Natal <br>
+    {calcularDistancia(latFinal,lonFinal,-5.75,-35.2).toFixed(0)} de Natal <br>
     Dados do CI: Rumo: ${alvo_rumo2.toFixed(0)}° , Veloc: ${alvo_veloc2} nós<br>
     Dados do Pat: Rumo: ${rumoParaAlvofinal2.toFixed(0)}°, Veloc: ${patru_veloc2} nós`, 
     posicaoPMA3, 
