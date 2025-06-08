@@ -117,7 +117,7 @@
         </button>
     </nav>
    <div id="main-content">
- <h1>Interceptação</h1>
+ <h1>Interceptação V.001</h1>
   <div class="converter-container">
 <table border="6" style="width:100%;border-radius: 5px;" ><tbody>
 <tr><td colspan="4" style="vertical-align:top;text-align: center">
@@ -664,7 +664,7 @@ for (const [nome, carta] of Object.entries(cartas)) {
 
 // Adicionar o controle de camadas ao mapa
 L.control.layers(null, baseLayers, {
-    collapsed: false // Para deixar o controle sempre expandido
+    collapsed: true // Para deixar o controle sempre expandido
 }).addTo(map);
 
 		
@@ -734,7 +734,6 @@ const portos = {
     "Areia Branca": { lat: -4.928146, lon: -37.144775 },
     "Cabedelo": { lat: -6.952839, lon: -34.846572 },
     "Camocim": { lat: -2.910124, lon: -40.825195 },
-    "Fernando de Noronha": { lat: -3.859116, lon: -32.451381 },
     "Fortaleza": { lat: -3.703330, lon: -38.487854 },
     "Guamaré": { lat: -5.083420, lon: -36.305007 },
     "Maceió": { lat: -9.694166, lon: -35.741615 },
@@ -1630,11 +1629,23 @@ const { marcador: markerEST2, linhaDinamica: linhaEST } = criarMarcadorArrastave
 
   
 	//APRESENTAR OS VALORES NA TABELA ABAIXO DO MAPA
-	document.getElementById("dadosCI").innerText = 'Dados do CI:\n\nDH - '+ dhposini + '\nLat: '+ alvo_latinicialDMS + 
-	',Long: ' + alvo_longinicialDMS + '\nRumo: ' + alvo_rumo.toFixed(0) + '° , Veloc: ' + alvo_veloc + ' nós';  
+	document.getElementById("dadosCI").innerText = 'Dados do CI:\n
+		DH - '+ dhposini + '\n
+		Lat: '+ alvo_latinicialDMS + ',Long: ' + alvo_longinicialDMS + '\n
+		Rumo: ' + alvo_rumo.toFixed(0) + '° , Veloc: ' + alvo_veloc + ' nós.\n\n\n
+		Decimal
+		Lat: '+ alvo_latinicial + ',Long: ' + alvo_longinicial;  
 	
-	document.getElementById("dadosestimada").innerText = 'Posição Estimada\n' + estimadaDATA + '\nLat: ' + alvo_latestimadaDMS + 
-	',Long: ' + alvo_longestimadaDMS + '\nRumo: ' + alvo_rumo.toFixed(0) + '° , Veloc: ' + alvo_veloc + ' nós\nNavegou: ' + calcularDistancia(alvo_latinicial,alvo_longinicial,alvo_latestimada,alvo_longestimada).toFixed(0) + ' MN';
+	document.getElementById("dadosestimada").innerText = 'Posição Estimada\n
+		DH - ' + estimadaDATA + '\n
+		Lat: ' + alvo_latestimadaDMS + ',Long: ' + alvo_longestimadaDMS + '\n
+		Rumo: ' + alvo_rumo.toFixed(0) + '° , Veloc: ' + alvo_veloc + ' nós\n
+		Navegou: ' + calcularDistancia(alvo_latinicial,alvo_longinicial,alvo_latestimada,alvo_longestimada).toFixed(0) + ' MN.\n\n\n
+		Decimal
+		Lat: '+ alvo_latestimada + ',Long: ' + alvo_longestimada;
+			
+	
+			;
 	
 	document.getElementById("dadospatrulha").innerText = 'Posiçao do Patrulha\n' + dhpatrulha + '\nLat: ' + latpatDMS + 
 	',Long: ' + longpatDMS + '\nVeloc: ' + patru_veloc + ' nós' + 
