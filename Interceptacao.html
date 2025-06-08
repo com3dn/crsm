@@ -117,7 +117,7 @@
         </button>
     </nav>
    <div id="main-content">
- <h1>Interceptação V.001</h1>
+ <h1>Interceptação V.002</h1>
   <div class="converter-container">
 <table border="6" style="width:100%;border-radius: 5px;" ><tbody>
 <tr><td colspan="4" style="vertical-align:top;text-align: center">
@@ -1629,20 +1629,20 @@ const { marcador: markerEST2, linhaDinamica: linhaEST } = criarMarcadorArrastave
 
   
 	//APRESENTAR OS VALORES NA TABELA ABAIXO DO MAPA
-	document.getElementById("dadosCI").innerText = 'Dados do CI:\n
-		DH - '+ dhposini + '\n
-		Lat: '+ alvo_latinicialDMS + ',Long: ' + alvo_longinicialDMS + '\n
-		Rumo: ' + alvo_rumo.toFixed(0) + '° , Veloc: ' + alvo_veloc + ' nós.\n\n\n
-		Decimal
-		Lat: '+ alvo_latinicial + ',Long: ' + alvo_longinicial;  
+	document.getElementById("dadosCI").innerText = 'Dados do CI' +
+		'\nDH - '+ dhposini +
+		'\nLat: '+ alvo_latinicialDMS + ',Long: ' + alvo_longinicialDMS + 
+		'\nRumo: ' + alvo_rumo.toFixed(0) + '° , Veloc: ' + alvo_veloc + ' nós.\n\n'+
+		'\nDecimal'+
+		'\nLat: '+ alvo_latinicial + ',Long: ' + alvo_longinicial;  
 	
-	document.getElementById("dadosestimada").innerText = 'Posição Estimada\n
-		DH - ' + estimadaDATA + '\n
-		Lat: ' + alvo_latestimadaDMS + ',Long: ' + alvo_longestimadaDMS + '\n
-		Rumo: ' + alvo_rumo.toFixed(0) + '° , Veloc: ' + alvo_veloc + ' nós\n
-		Navegou: ' + calcularDistancia(alvo_latinicial,alvo_longinicial,alvo_latestimada,alvo_longestimada).toFixed(0) + ' MN.\n\n\n
-		Decimal
-		Lat: '+ alvo_latestimada + ',Long: ' + alvo_longestimada;
+	document.getElementById("dadosestimada").innerText = 'Posição Estimada' +
+		'\nDH - ' + estimadaDATA +
+		'\nLat: ' + alvo_latestimadaDMS + ',Long: ' + alvo_longestimadaDMS +
+		'\nRumo: ' + alvo_rumo.toFixed(0) + '° , Veloc: ' + alvo_veloc + ' nós'+
+		'\nNavegou: ' + calcularDistancia(alvo_latinicial,alvo_longinicial,alvo_latestimada,alvo_longestimada).toFixed(0) + ' MN.\n\n'
+		'\nDecimal'+
+		'\nLat: '+ alvo_latestimada + ',Long: ' + alvo_longestimada;
 			
 	
 			;
