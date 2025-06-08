@@ -1883,11 +1883,11 @@ const posicaoPatrulha3 = [patru_lat_final2, patru_long_final2];
 const posicaoCI3 = [alvo_latinicial2, alvo_longinicial2];
 const posicaoEST3 = [alvo_latestimada2, alvo_longestimada2];
 const posicaoPMA3 = [latFinal2, lonFinal2];
-const distnatal = calcularDistancia(latFinal,lonFinal,-5.75,-35.2).toFixed(0)
+const distnatal = calcularDistancia(latFinal2,lonFinal2,-5.75,-35.2).toFixed(0)
 // Criar os marcadores com cores personalizadas
 const { marcador: markerPatrulha2, linhaDinamica: linhaPatrulha } = criarMarcadorArrastavel(
     [patru_lat_final2, patru_long_final2], 
-    `Posiçao do patrulha<br>
+    `Posiçao do Patrulha<br>
     DH: ${dhpatrulha2}<br>
     Lat: ${latpatDMS2}, Long: ${longpatDMS2}<br>
     Rumo: ${rumoParaAlvofinal2.toFixed(0)}°, Veloc: ${patru_veloc2} nós`, 
@@ -1916,7 +1916,7 @@ const { marcador: markerEST2, linhaDinamica: linhaEST } = criarMarcadorArrastave
 
 const { marcador: markerPMA2, linhaDinamica: linhaPMA } = criarMarcadorArrastavel(
     [latFinal2, lonFinal2], 
-    `<b>Posição Estimada</b><br>
+    `<b>Posição da Interceptação</b><br>
     DH:${dhPMA2}<br>
     Lat: ${latFinalDMS2},Long: ${lonFinalDMS2}<br>
     ${distnatal} de Natal <br>
