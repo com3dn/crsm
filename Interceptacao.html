@@ -1838,6 +1838,12 @@ function criarMarcadorArrastavel(latlng, texto, posicaoFixa, corFundo) {
     return { marcador, linhaDinamica };
 }
 
+// Definir as posições fixas para cada marcador (AGORA NO INÍCIO)
+const posicaoPatrulha3 = [patru_lat_final2, patru_long_final2];
+const posicaoCI3 = [alvo_latinicial2, alvo_longinicial2];
+const posicaoEST3 = [alvo_latestimada2, alvo_longestimada2];
+const posicaoPMA3 = [latFinal2, lonFinal2];
+
 // Criar os marcadores com cores personalizadas
 const { marcador: markerPatrulha2, linhaDinamica: linhaPatrulha } = criarMarcadorArrastavel(
     [patru_lat_final2, patru_long_final2], 
