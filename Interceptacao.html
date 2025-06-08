@@ -117,16 +117,15 @@
         </button>
     </nav>
    <div id="main-content">
- <h1>Interceptação V.007</h1>
+ <h1>Interceptação V.008</h1>
   <div class="converter-container">
 <table border="6" style="width:100%;border-radius: 5px;" ><tbody>
-<tr><td colspan="4" style="vertical-align:top;text-align: center">
+<tr><td colspan="4" style="vertical-align:top;text-align: left">
 	<h3>Cálculo de Interceptação</h3>
 	
 	<!-- DADOS DO CONTATO DE INTERESSE-->
 	<strong>Dados do Contato de Interesse</strong><br><br>
-	Data-Hora (Posição recebida mais recente "PAPA")<br>
-	<input style="width:210px" type="datetime-local" id="pesq_datetime"><i class="fas fa-question-circle" style="cursor: pointer;" id="info-icon">info</i>
+	Data-Hora (Posição recebida mais recente "PAPA")<input style="width:210px" type="datetime-local" id="pesq_datetime"><i class="fas fa-question-circle" style="cursor: pointer;" id="info-icon">info</i>
 	<div id="tooltip-1" style="display: none; position: absolute; background: rgba(0,0,0,0.7); color: white; padding: 5px; border-radius: 5px; font-size: 14px; max-width: 700px;z-index: 9999;">
 	Neste campo escreva a DATA-HORA no fuso P(PAPA) da posição mais recente fornecida ou obtida do contato de interesse no formato dia-mes-ano hh:mm (ex: 30/02/2025 11:13)[24h]</div>
 	
@@ -144,7 +143,7 @@
 		<div class="form-group">
 	Lat (decimal): <input type="number" style="width:150px" min="-90" max="90" id="bp_Lat" step="0.0001" placeholder="Lat -0.0000">
     <i class="fas fa-question-circle info-icon" id="info-icon-2"></i>
-    <div id="tooltip-2" style="display: none; position: absolute; background: rgba(0,0,0,0.7); color: white; padding: 5px; border-radius: 5px; font-size: 14px; max-width: 700px;z-index: 9999;">Insira a latitude em formato decimal (ex: -12.3456 ou -12,3456)</div><br>
+    <div id="tooltip-2" style="display: none; position: absolute; background: rgba(0,0,0,0.7); color: white; padding: 5px; border-radius: 5px; font-size: 14px; max-width: 700px;z-index: 9999;">Insira a latitude em formato decimal (ex: -12.3456 ou -12,3456)</div>
     Long (decimal): <input type="number" style="width:150px" min="-180" max="180"id="bp_Long" step="0.0001" placeholder="Long -00.0000">
     <i class="fas fa-question-circle info-icon" id="info-icon-3"></i>
     <div id="tooltip-3" style="display: none; position: absolute; background: rgba(0,0,0,0.7); color: white; padding: 5px; border-radius: 5px; font-size: 14px; max-width: 700px;z-index: 9999;">Insira a longitude em formato decimal (ex: -42.8901 ou -42,8901)</div> 
@@ -186,13 +185,13 @@
 	
 	<strong>Dados do Patrulha</strong><br><br>
 	
-	Data-Hora do Suspender ou ultima posição recebida "PAPA"<br>
+	Data-Hora do Suspender ou ultima posição recebida "PAPA"
 	<input style="width:210px" type="datetime-local" id="patr_datetime">
 	<i class="fas fa-question-circle" style="cursor: pointer;" id="info-icon"></i>
 	<div id="tooltip-6" style="display: none; position: absolute; background: rgba(0,0,0,0.7); color: white; padding: 5px; border-radius: 5px; font-size: 14px; max-width: 700px;z-index: 9999;">Neste campo escreva a DATA-HORA no fuso "PAPA" da posição mais recente ou a DATA-HORA do suspender no formato dia-mes-ano hh:mm (ex: 30/02/2025 11:13)[24h] </div>
 	
 	<br><br>
-	<strong>Posição inicial</strong><br>
+	<strong>Posição inicial/Posição mais Recente</strong><br>
 	
 	<span style="color: #00910f;">Escolha o formato das coordenadas</span>
 	<!-- SELETOR DECIMAL PARA GMS-->
@@ -207,7 +206,7 @@
 	Lat (decimal): <input type="number" style="width:150px" min="-90" max="90" step="0.0001" placeholder="Lat -0.0000" id="patr_lat" value="-5.75" step="any">
 	<i class="fas fa-question-circle" style="cursor: pointer;" id="info-icon"></i>
 	<div id="tooltip-7" style="display: none; position: absolute; background: rgba(0,0,0,0.7); color: white; padding: 5px; border-radius: 5px; font-size: 14px; max-width: 700px;z-index: 9999;">
-        insira a latitude em formato decimal (ex: -5.7500 (entrada de natal))</div><br>
+        insira a latitude em formato decimal (ex: -5.7500 (entrada de natal))</div>
 	Long (decimal): <input type="number" style="width:150px" min="-180" max="180" step="0.0001" placeholder="Long -00.0000" id="patr_lng" value="-35.2" step="any">
 	<i class="fas fa-question-circle" style="cursor: pointer;" id="info-icon"></i>
 	<div id="tooltip-8" style="display: none; position: absolute; background: rgba(0,0,0,0.7); color: white; padding: 5px; border-radius: 5px; font-size: 14px; max-width: 700px;z-index: 9999;">
@@ -270,7 +269,7 @@
 					<i class="fas fa-question-circle" style="cursor: pointer;" id="info-icon"></i>
 					<div id="tooltip-10" style="display: none; position: absolute; background: rgba(0,0,0,0.7); color: white; padding: 5px; border-radius: 5px; font-size: 14px; max-width: 700px; z-index: 9999;">
 						Insira a latitude em formato decimal (ex: -5.7500 entrada de Natal)
-					</div><br>
+					</div>
 					Long (decimal): <input type="number" style="width:150px" min="-180" max="180" step="0.0001" placeholder="Long -00.0000" id="patr_lng3" value="">
 					<i class="fas fa-question-circle" style="cursor: pointer;" id="info-icon"></i>
 					<div id="tooltip-11" style="display: none; position: absolute; background: rgba(0,0,0,0.7); color: white; padding: 5px; border-radius: 5px; font-size: 14px; max-width: 700px; z-index: 9999;">
@@ -325,7 +324,7 @@
 					<i class="fas fa-question-circle" style="cursor: pointer;" id="info-icon"></i>
 					<div id="tooltip-12" style="display: none; position: absolute; background: rgba(0,0,0,0.7); color: white; padding: 5px; border-radius: 5px; font-size: 14px; max-width: 700px; z-index: 9999;">
 						Insira a latitude em formato decimal (ex: -5.7500 entrada de Natal)
-					</div><br>
+					</div>
 					Long (decimal): <input type="number" style="width:150px" min="-180" max="180" step="0.0001" placeholder="Long -00.0000" id="patr_lng4" value="">
 					<i class="fas fa-question-circle" style="cursor: pointer;" id="info-icon"></i>
 					<div id="tooltip-13" style="display: none; position: absolute; background: rgba(0,0,0,0.7); color: white; padding: 5px; border-radius: 5px; font-size: 14px; max-width: 700px; z-index: 9999;">
@@ -378,7 +377,7 @@
 					<i class="fas fa-question-circle" style="cursor: pointer;" id="info-icon"></i>
 					<div id="tooltip-14" style="display: none; position: absolute; background: rgba(0,0,0,0.7); color: white; padding: 5px; border-radius: 5px; font-size: 14px; max-width: 700px; z-index: 9999;">
 						Insira a latitude em formato decimal (ex: -5.7500 entrada de Natal)
-					</div><br>
+					</div>
 					Long (decimal): <input type="number" style="width:150px" min="-180" max="180" step="0.0001" placeholder="Long -00.0000" id="patr_lng5" value="">
 					<i class="fas fa-question-circle" style="cursor: pointer;" id="info-icon"></i>
 					<div id="tooltip-15" style="display: none; position: absolute; background: rgba(0,0,0,0.7); color: white; padding: 5px; border-radius: 5px; font-size: 14px; max-width: 700px; z-index: 9999;">
