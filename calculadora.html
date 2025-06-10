@@ -167,7 +167,7 @@ cursor: pointer;"
  </nav>
  
  <div id="main-content">
- <h1>Calculadora de Tempo e Distância</h1>
+ <h1>Calculadora de Tempo e Distância V.001</h1>
  <div style="text-align:center" class="calculator-container">
  <form class="calculator-form" onsubmit="event.preventDefault(); calcularTempo();">
  <div class="form-group">
@@ -322,7 +322,8 @@ function copiarResultados() {
         `↔️ *Distância:* ${distanciaElement?.textContent.replace('Distância:', '').trim()}\n` +
         `🚢 *Velocidade:* ${document.querySelector('#result-velocidade span')?.textContent.replace('Velocidade média:', '').trim()}\n` + 
         `⏱ *Duração:* ${document.querySelector('#result-tempo span')?.textContent.replace('Tempo:', '').trim()}\n` +
-        `⏰ *ETA:* ${document.querySelector('#result-eta span')?.textContent.replace('ETA:', '').trim()}\n`;
+        `⏰ *ETA:* ${document.querySelector('#result-eta span')?.textContent.replace('ETA:', '').trim()}\n`+
+	`📍 *LAT/LONG:*`;
     // Copiar para área de transferência
     navigator.clipboard.writeText(textoParaCopiar).then(() => {
         const btn = document.getElementById('copiarResultado');
