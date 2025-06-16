@@ -196,8 +196,12 @@ cursor: pointer;"
     </div>
   </form>
 </div>
-			</div>
-		</div>
+<div id="explicacao" style="margin-top: 20px; text-align: left; font-size: 14px; background: #fff3cd; padding: 15px; border-radius: 8px; border: 1px solid #ffeeba; display: none;">
+  <!-- A explicação será inserida via JavaScript -->
+</div>
+
+</div>
+</div>
 
 
 <script>
@@ -205,45 +209,64 @@ document.getElementById('open_btn').addEventListener('click', function () {
 document.getElementById('sidebar').classList.toggle('open-sidebar');
 });
 function calcularTempo() {
-    const p1 = new Date(document.getElementById("pos1").value);
-    const p2 = new Date(document.getElementById("pos2").value);
-    const distancia = parseFloat(document.getElementById("distancia").value);
+  const p1 = new Date(document.getElementById("pos1").value);
+  const p2 = new Date(document.getElementById("pos2").value);
+  const distancia = parseFloat(document.getElementById("distancia").value);
 
-    if (!p1 || !p2 || isNaN(distancia)) {
-      alert("Preencha todos os campos corretamente.");
-      return;
-    }
-
-    const deltaMs = Math.abs(p2 - p1);
-    const deltaHoras = deltaMs / (1000 * 60 * 60);
-    const deltaMin = (deltaHoras * 60) % 60;
-    const horas = Math.floor(deltaHoras);
-    const velocidade = distancia / deltaHoras;
-
-    const texto = `Δt: ${horas}h ${Math.round(deltaMin)}min\nVelocidade média: ${velocidade.toFixed(2)} MN/h`;
-    document.getElementById("resultado").innerText = texto;
-    document.getElementById("copiarResultado").style.display = 'inline-block';
-
-    // Prepara botão de redirecionamento
-    setupETALink(distancia, velocidade.toFixed(2), {
-      hours: horas,
-      minutes: Math.round(deltaMin)
-    });
+  if (!p1 || !p2 || isNaN(distancia)) {
+    alert("Preencha todos os campos corretamente.");
+    return;
   }
 
-  function setupETALink(distance, speed, travelTime) {
-    const etaLink = document.getElementById('eta');
-    etaLink.onclick = function (e) {
-      e.preventDefault();
-      sessionStorage.setItem('etaData', JSON.stringify({
-        distancia: distance,
-        velocidade: speed,
-        horas: travelTime.hours,
-        minutos: travelTime.minutes
-      }));
-      window.location.href = 'https://com3dn.github.io/crsm/calculadora.html';
-    };
-  }
+  const deltaMs = Math.abs(p2 - p1);
+  const deltaHoras = deltaMs / (1000 * 60 * 60);
+  const horas = Math.floor(deltaHoras);
+  const minutos = Math.round((deltaHoras * 60) % 60);
+  const velocidade = distancia / deltaHoras;
+
+  // Exibe resultado resumido
+  document.getElementById("resultado").innerText =
+    `Tempo navegado: ${horas}h ${minutos}min\nVelocidade média: ${velocidade.toFixed(2)} MN/h`;
+  document.getElementById("copiarResultado").style.display = 'inline-block';
+
+  // Salva para redirecionamento
+  setupVelocidadeLink(document.getElementById("pos2").value, velocidade.toFixed(2));
+
+  // Gera explicação
+  const posicaoMaisRecente = document.getElementById("pos2").value;
+  const explicacaoHTML = `
+    <strong>Explicação passo a passo:</strong><br><br>
+    1. O operador deve pegar a <strong>posição mais recente</strong>: <code>${posicaoMaisRecente}</code><br>
+    2. Subtrair da <strong>posição anterior</strong> para obter o tempo total navegado.<br>
+    3. Exemplo: Valor 2 - Valor 1 = <strong>${horas}h e ${minutos}min</strong><br>
+    4. Convertendo esse tempo para horas decimais (Δt):<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;${horas} + (${minutos} ÷ 60) = <strong>${deltaHoras.toFixed(2)}</strong> horas<br>
+    5. Com o valor da distância navegada: <strong>${distancia} MN</strong><br>
+    6. Calcula-se a velocidade média: <strong>Distância ÷ Δt</strong> = ${distancia} ÷ ${deltaHoras.toFixed(2)} = <strong>${velocidade.toFixed(2)} nós</strong><br><br>
+    <strong>Resultados finais:</strong><br>
+    - Tempo navegado: <strong>${horas}h e ${minutos}min</strong><br>
+    - Velocidade média: <strong>${velocidade.toFixed(2)} nós</strong>
+  `;
+  const explicacao = document.getElementById("explicacao");
+  explicacao.innerHTML = explicacaoHTML;
+  explicacao.style.display = 'block';
+}
+
+
+  function setupVelocidadeLink(posicaoMaisRecente, velocidadeMedia) {
+  const etaLink = document.getElementById('eta');
+  etaLink.onclick = function (e) {
+    e.preventDefault();
+
+    sessionStorage.setItem('velocidadeData', JSON.stringify({
+      dataHora: posicaoMaisRecente,
+      velocidade: velocidadeMedia
+    }));
+
+    window.location.href = 'https://com3dn.github.io/crsm/calculadora.html';
+  };
+}
+
 
   document.getElementById('copiarResultado').onclick = function () {
     const texto = document.getElementById("resultado").innerText;
