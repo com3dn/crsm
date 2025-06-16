@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculadora de Velocidade</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" href="https://com3dn.github.io/crsm/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="https://com3dn.github.io/crsm/img/favicon.ico" type="image/x-icon">
+<link rel="icon" href="https://com3dn.github.io/crsm/img/favicon.png" type="image/png">
+<link rel="stylesheet" href="https://com3dn.github.io/crsm/style/sidebar_base.css"/>
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<!-- Leaflet Control Layers Tree CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet.control.layers.tree/L.Control.Layers.Tree.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+<style>
+/* Estilos para a calculadora */
+.calculator-container {
+ width: 500px;
+ margin: 2px 0px;
+ padding: 10px;
+ background: white;
+ border-radius: 0 10px 10px 0;
+ box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.calculator-form {
+ display: flex;
+ flex-direction: column;
+ gap: 15px;
+}
+
+.form-group {
+ display: flex;
+ flex-direction: column;
+}
+
+.form-group label {
+ margin-bottom: 5px;
+ font-weight: 500;
+ color: #333;
+}
+
+.form-group label {
+ margin-bottom: 5px;
+ font-weight: 500;
+ color: #333;
+} 
+
+.form-group button {background-color: var(--primary-color);
+color: white;
+padding: 10px;
+border: none;
+border-radius: 5px;
+cursor: pointer;"
+}
+.form-group input:focus {
+ outline: solid;
+ border-color: var(--primary-color);
+ box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+}
+
+#resultado {
+ margin-top: 2px;
+ padding: 5px;
+ background-color: #f8f9fa;
+ border-radius: 5px;
+ justify-content:left;
+ text-align:left;
+ border-left: 4px solid var(--primary-color);
+ font-size: 16px;
+}
+/* Adicione ao seu style existente */
+#copiarResultado {
+    background-color: #4a5568;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+}
+
+#copiarResultado:hover {
+    background-color: #2d3748;
+}
+
+#copiarResultado:active {
+    transform: scale(0.98);
+}
+
+#copiarResultado.success {
+    background-color: #38a169;
+}
+
+#copiarResultado.success i::before {
+    content: "\f00c"; /* Ícone de check */
+}
+
+.result-item span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+</style>
+</head>
+<body>
+<div id="app-container">
+    <nav id="sidebar">
+        <div id="sidebar_content">
+<div id="user"><img src="https://com3dn.github.io/crsm/img/avatar.png" id="user_avatar" alt="Avatar">
+<p id="user_infos"><span class="item-description">CRSM</span><span class="item-description">COM3DN</span></p>
+</div>
+            <ul id="side_items">
+                <li class="side-item"><a href="index.html"><i class="fa-solid fa-landmark"></i>
+                    <span class="item-description">Inicio</span></a>
+                </li>
+				
+                <li class="side-item"><a href="Map.html"><i class="fa-solid fa-globe"></i>
+                    <span class="item-description">Mapa Interativo</span></a>
+                </li>
+                <li class="side-item "><a href="calculadora.html"><i class="fa-solid fa-calculator"></i>
+                    <span class="item-description">Calculadora de ETA</span></a>
+                </li>  
+                <li class="side-item"><a href="consulta-mmsi.html"><i class="fa-solid fa-flag"></i>
+                    <span class="item-description">Consulta MMSI</span></a>
+                </li>  
+                <li class="side-item"><a href="conversor-gms.html"><i class="fa-solid fa-compass"></i>
+                    <span class="item-description">Conv. GMS >> DECIMAL</span></a>
+                </li>
+                <li class="side-item"><a href="conversor-decimal.html"><i class="fa-solid fa-gear"></i>
+                    <span class="item-description">Conv. DECIMAL >> GMS</span></a>
+                </li>
+                <li class="side-item"><a href="distancia-portos.html"><i class="fa-solid fa-house-flood-water-circle-arrow-right"></i>
+                    <span class="item-description">Distancia x Portos</span></a>
+                </li>
+		<li class="side-item"><a href="Interceptacao.html"><i class="fa-solid fa-arrows-to-circle"></i>
+      		     <span class="item-description">Interceptação</span></a>
+  		</li>
+		<li class="side-item"><a href="Cenarios.html"><i class="fa-solid fa-layer-group"></i>
+      			<span class="item-description">Carregar Cenários</span></a>
+  		</li>
+		  <li class="side-item active"><a href="Mensagem.html"><i class="fa-solid fa-file-lines"></i>
+    			<span class="item-description">Gerar Mensagem</span></a>
+		</li>
+            </ul>
+        </div>
+        
+<div id="logout"><button style="align: center;" id="logout_btn">Criado pelo 2°SG-SI Jefferson Correia</button></div>
+        
+        <button id="open_btn">
+            <i id="open_btn_icon" class="fa-solid fa-chevron-right"></i>
+        </button>
+    </nav>
+    
+   <div id="main-content">
+  <h1>Calculadora de Velocidade entre Posições</h1>
+<div style="text-align:center" class="calculator-container">
+  <form class="calculator-form" onsubmit="event.preventDefault(); calcularTempo();">
+    <div class="form-group">
+      <label for="pos1">Posição 1 (Data e Hora):</label>
+      <input type="datetime-local" id="pos1" required title="Por favor, preencha a data e hora corretamente">
+    </div>
+
+    <div class="form-group">
+      <label for="pos2">Posição 2 (Data e Hora):</label>
+      <input type="datetime-local" id="pos2" required title="Por favor, preencha a data e hora corretamente">
+    </div>
+
+    <div class="form-group">
+      <label for="distancia">Distância a Navegar (MN):</label>
+      <input type="number" id="distancia" placeholder="Distância em MN" min="0" step="0.01" required title="Preencha a distância em MN">
+    </div>
+
+    <div class="form-group">
+      <button type="submit">Calcular</button>
+    </div>
+
+    <div id="resultado"></div>
+
+    <div class="form-group">
+      <button type="button" id="copiarResultado" style="display: none;">
+        Copiar Resultado
+      </button>
+    </div>
+
+    <div class="form-group">
+      <button type="button" id="eta">Abrir na Calculadora de ETA</button>
+    </div>
+  </form>
+</div>
+			</div>
+		</div>
+
+
+<script>
+document.getElementById('open_btn').addEventListener('click', function () {
+document.getElementById('sidebar').classList.toggle('open-sidebar');
+});
+function calcularTempo() {
+    const p1 = new Date(document.getElementById("pos1").value);
+    const p2 = new Date(document.getElementById("pos2").value);
+    const distancia = parseFloat(document.getElementById("distancia").value);
+
+    if (!p1 || !p2 || isNaN(distancia)) {
+      alert("Preencha todos os campos corretamente.");
+      return;
+    }
+
+    const deltaMs = Math.abs(p2 - p1);
+    const deltaHoras = deltaMs / (1000 * 60 * 60);
+    const deltaMin = (deltaHoras * 60) % 60;
+    const horas = Math.floor(deltaHoras);
+    const velocidade = distancia / deltaHoras;
+
+    const texto = `Δt: ${horas}h ${Math.round(deltaMin)}min\nVelocidade média: ${velocidade.toFixed(2)} MN/h`;
+    document.getElementById("resultado").innerText = texto;
+    document.getElementById("copiarResultado").style.display = 'inline-block';
+
+    // Prepara botão de redirecionamento
+    setupETALink(distancia, velocidade.toFixed(2), {
+      hours: horas,
+      minutes: Math.round(deltaMin)
+    });
+  }
+
+  function setupETALink(distance, speed, travelTime) {
+    const etaLink = document.getElementById('eta');
+    etaLink.onclick = function (e) {
+      e.preventDefault();
+      sessionStorage.setItem('etaData', JSON.stringify({
+        distancia: distance,
+        velocidade: speed,
+        horas: travelTime.hours,
+        minutos: travelTime.minutes
+      }));
+      window.location.href = 'https://com3dn.github.io/crsm/calculadora.html';
+    };
+  }
+
+  document.getElementById('copiarResultado').onclick = function () {
+    const texto = document.getElementById("resultado").innerText;
+    navigator.clipboard.writeText(texto).then(() => {
+      alert("Resultado copiado!");
+    });
+  };
+</script>
+</body>
+</html>
+
+
+
