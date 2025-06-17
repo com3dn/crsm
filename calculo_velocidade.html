@@ -165,17 +165,17 @@ cursor: pointer;"
 <div style="text-align:center" class="calculator-container">
   <form class="calculator-form" onsubmit="event.preventDefault(); calcularTempo();">
     <div class="form-group">
-      <label for="pos1">Posição 1 (Data e Hora):</label>
+      <label for="pos1">Posição mais antiga</label>
       <input type="datetime-local" id="pos1" required title="Por favor, preencha a data e hora corretamente">
     </div>
 
     <div class="form-group">
-      <label for="pos2">Posição 2 (Data e Hora):</label>
+      <label for="pos2">Posição mais recente</label>
       <input type="datetime-local" id="pos2" required title="Por favor, preencha a data e hora corretamente">
     </div>
 
     <div class="form-group">
-      <label for="distancia">Distância a Navegar (MN):</label>
+      <label for="distancia">Distância Navegadas (MN):</label>
       <input type="number" id="distancia" placeholder="Distância em MN" min="0" step="0.01" required title="Preencha a distância em MN">
     </div>
 
@@ -191,9 +191,8 @@ cursor: pointer;"
       </button>
     </div>
 
-    <a href="calculadora.html" id="eta" class="eta-link">
-        <i class="fas fa-flag-checkered"></i> Calcular ETA
-      </a>
+    <a href="calculadora.html" id="eta" style="display: none;" class="eta-link">
+        <i class="fas fa-flag-checkered"></i>Ir para calculo do ETA</a>
 	  
   </form>
 </div>
@@ -228,7 +227,8 @@ function calcularTempo() {
   // Exibe resultado resumido
   document.getElementById("resultado").innerText =
     `Tempo navegado: ${horas}h ${minutos}min\nVelocidade média: ${velocidade.toFixed(2)} MN/h`;
-  document.getElementById("copiarResultado").style.display = 'inline-block';
+  	document.getElementById("copiarResultado").style.display = 'inline-block';
+	document.getElementById('eta').style.display = 'block';
 
   // Salva para redirecionamento
   setupVelocidadeLink(document.getElementById("pos2").value, velocidade.toFixed(2));
