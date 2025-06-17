@@ -316,7 +316,7 @@ const explicacaoHTML = `
   3. Informa-se a <strong>velocidade do navio</strong>: <code>${velocidade.toFixed(1)} nós</code><br>
   4. Calcula-se o tempo estimado dividindo <strong>distância ÷ velocidade</strong>:
   &nbsp;<code>${distancia} ÷ ${velocidade.toFixed(1)} = ${tempoHoras.toFixed(2)} horas</code><br>
-  5. Converte-se esse tempo para um formato mais legível:${horas} + (${Math.round((tempoHoras % 1)} * 0,6) = &nbsp;<strong>${dias > 0 ? dias + ' dia(s), ' : ''}${horas}h${minutos.toString().padStart(2, '0')}min</strong><br>
+  5. Converte-se esse tempo para um formato mais legível:${horas} + (${Math.round(tempoHoras % 1)} * 0,6) = &nbsp;<strong>${dias > 0 ? dias + ' dia(s), ' : ''}${horas}h${minutos.toString().padStart(2, '0')}min</strong><br>
   6. Soma-se esse tempo à data/hora de partida para obter a <strong>ETA</strong>:<br>
   <code>${dataHoraPosicao.toLocaleString("pt-BR", options)} + ${tempoHoras.toFixed(2)} horas </code> = &nbsp;<code>${eta.toLocaleString("pt-BR", options)}</code><br><br>
   <strong>Resultados finais:</strong><br>
