@@ -195,6 +195,10 @@ cursor: pointer;"
 </div>
  </form>
  </div>
+<div id="explicacao" style="margin-top: 20px; text-align: left; font-size: 14px; background: #fff3cd; padding: 15px; border-radius: 8px; border: 1px solid #ffeeba; display: none;">
+  <!-- A explicação será inserida via JavaScript -->
+</div>
+
  </div>
 </div>
 
@@ -319,6 +323,28 @@ document.getElementById("resultado").innerHTML = `
 // Adicione este evento no final da sua função calcularTempo():
 document.getElementById('copiarResultado').style.display = 'block';
 document.getElementById('copiarResultado').addEventListener('click', copiarResultados);
+
+// Geração da explicação detalhada
+const explicacaoHTML = `
+  <strong>Explicação passo a passo:</strong><br><br>
+  1. O operador insere a <strong>data e hora da posição</strong>: <code>${dataHoraPosicao.toLocaleString("pt-BR", options)}</code><br>
+  2. Define-se a <strong>distância a navegar</strong>: <code>${distancia} MN</code><br>
+  3. Informa-se a <strong>velocidade do navio</strong>: <code>${velocidade.toFixed(1)} nós</code><br>
+  4. Calcula-se o tempo estimado dividindo <strong>distância ÷ velocidade</strong>:<br>
+     &nbsp;&nbsp;&nbsp;&nbsp;<code>${distancia} ÷ ${velocidade.toFixed(1)} = ${tempoHoras.toFixed(2)} horas</code><br>
+  5. Converte-se esse tempo para um formato mais legível:<br>
+     &nbsp;&nbsp;&nbsp;&nbsp;<strong>${dias > 0 ? dias + ' dia(s), ' : ''}${horas}h${minutos.toString().padStart(2, '0')}min</strong><br>
+  6. Soma-se esse tempo à data/hora de partida para obter a <strong>ETA</strong>:<br>
+     &nbsp;&nbsp;&nbsp;&nbsp;<code>${eta.toLocaleString("pt-BR", options)}</code><br><br>
+  <strong>Resultados finais:</strong><br>
+  - Duração estimada: <strong>${tempoFormatado}</strong><br>
+  - ETA: <strong>${eta.toLocaleString("pt-BR", options)}</strong>
+`;
+
+const explicacao = document.getElementById("explicacao");
+explicacao.innerHTML = explicacaoHTML;
+explicacao.style.display = 'block';
+
 }
 // Função para copiar os resultados
 function copiarResultados() {
