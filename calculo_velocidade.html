@@ -245,7 +245,7 @@ function calcularTempo() {
     1. O operador deve pegar a <strong>posição mais recente</strong>: <code>${posicao2.toLocaleString("pt-BR", options)}</code><br>
     2. Subtrair da <strong>posição anterior</strong>:<code>${posicao1.toLocaleString("pt-BR", options)}</code> (para obter o tempo total navegado.)<br>
     3. Exemplo: <code>${posicao2.toLocaleString("pt-BR", options)}</code> - <code>${posicao1.toLocaleString("pt-BR", options)}</code> = <strong>${horas}h e ${minutos}min</strong><br>
-    4. Convertendo esse tempo para horas decimais (Δt):&nbsp;${horas} + (${minutos} ÷ 60) = <strong>${deltaHoras.toFixed(2)}</strong> horas<br>
+    4. Convertendo esse tempo para horas decimais (Δt):&nbsp;${horas} + (${minutos} ÷ 0.6) = <strong>${deltaHoras.toFixed(2)}</strong> horas<br>
     5. Com o valor da distância navegada: <strong>${distancia} MN</strong><br>
     6. Calcula-se a velocidade média:Dividindo <strong>Distância navegada ÷ Δt(decimal)</strong> = ${distancia} ÷ ${deltaHoras.toFixed(2)} = <strong>${velocidade.toFixed(2)} nós</strong><br><br>
     <strong>Resultados finais:</strong><br>
