@@ -200,26 +200,27 @@ cursor: pointer;"
 
 <script>
 	
-document.addEventListener('DOMContentLoaded', function() {
-const velocidadeData = sessionStorage.getItem('velocidadeData');
-if (velocidadeData) {
-const { dataHora, velocidade } = JSON.parse(velocidadeData);
-if (dataHora) {document.getElementById('dataHoraPosicao').value = dataHora;}
-if (velocidade) {document.getElementById('velocidade').value = velocidade;}
-sessionStorage.removeItem('velocidadeData');
-}
+  // Recebe os dados da página de VELOCIDADE
+  const velocidadeData = sessionStorage.getItem('velocidadeData');
+  if (velocidadeData) {
+    const { dataHora, velocidade } = JSON.parse(velocidadeData);
+    if (dataHora) document.getElementById('dataHoraPosicao').value = dataHora;
+    if (velocidade) document.getElementById('velocidade').value = velocidade;
+    sessionStorage.removeItem('velocidadeData');
+  }
 
-const portosData = sessionStorage.getItem('portosData');
-if (portosData) {
-const { distancia, velocidade, horas, minutos } = JSON.parse(portosData);
-// Preencha os campos
-document.getElementById('distancia').value = distancia;
-document.getElementById('velocidade').value = velocidade;
- // Opcional: calcular automaticamente
-if (typeof calcularTempo === 'function') {calcularTempo();}
-// Limpa os dados após uso
- sessionStorage.removeItem('portosData');
-}
+  // Recebe os dados da página de PORTOS
+  const portosData = sessionStorage.getItem('portosData');
+  if (portosData) {
+    const { distancia, velocidade, horas, minutos } = JSON.parse(portosData);
+    if (distancia) document.getElementById('distancia').value = distancia;
+    if (velocidade) document.getElementById('velocidade').value = velocidade;
+
+    // Se quiser calcular automaticamente ao carregar:
+    if (typeof calcularTempo === 'function') calcularTempo();
+
+    sessionStorage.removeItem('portosData');
+  }
 });
 
 // Substitua as validações individuais por esta função mais limpa
