@@ -165,12 +165,12 @@ cursor: pointer;"
 <div style="text-align:center" class="calculator-container">
   <form class="calculator-form" onsubmit="event.preventDefault(); calcularTempo();">
     <div class="form-group">
-      <label for="pos1">Posição mais antiga</label>
+      <label for="pos1">Data-Hora inicial</label>
       <input type="datetime-local" id="pos1" required title="Por favor, preencha a data e hora corretamente">
     </div>
 
     <div class="form-group">
-      <label for="pos2">Posição mais recente</label>
+      <label for="pos2">Data-Hora Final</label>
       <input type="datetime-local" id="pos2" required title="Por favor, preencha a data e hora corretamente">
     </div>
 
@@ -223,10 +223,14 @@ function calcularTempo() {
   const horas = Math.floor(deltaHoras);
   const minutos = Math.round((deltaHoras * 60) % 60);
   const velocidade = distancia / deltaHoras;
-
+// Exibição melhorada
+    const options = {day: '2-digit',month: '2-digit',year: 'numeric',hour: '2-digit',minute: '2-digit',hour12: false};
   // Exibe resultado resumido
   document.getElementById("resultado").innerText =
-    `Tempo navegado: ${horas}h ${minutos}min\nVelocidade média: ${velocidade.toFixed(2)} nós`;
+  `🗓️ *Data/hora inicial:* ${p1.toLocaleString("pt-BR", options)}\n` +
+  `🗓️ *Data/hora final:* ${p2.toLocaleString("pt-BR", options)}\n` +
+  `⏱ *Tempo navegado:* ${horas}h ${minutos}min\n` +
+  `🚢 *Velocidade média:* ${velocidade.toFixed(2)} nós`;
   	document.getElementById("copiarResultado").style.display = 'inline-block';
 	document.getElementById('eta').style.display = 'block';
 
@@ -234,13 +238,13 @@ function calcularTempo() {
   setupVelocidadeLink(document.getElementById("pos2").value, velocidade.toFixed(2));
 
   // Gera explicação
-  const posicao2 = document.getElementById("pos2").value;
-  const posicao1 = document.getElementById("pos1").value;
+  const posicao2 = new Date(document.getElementById("pos2").value);
+  const posicao1 = new Date(document.getElementById("pos1").value);
   const explicacaoHTML = `
     <strong>Explicação passo a passo:</strong><br><br>
-    1. O operador deve pegar a <strong>posição mais recente</strong>: <code>${posicao2}</code><br>
-    2. Subtrair da <strong>posição anterior</strong>:<code>${posicao1}</code> (para obter o tempo total navegado.)<br>
-    3. Exemplo: <code>${posicao2}</code> - <code>${posicao1}</code> = <strong>${horas}h e ${minutos}min</strong><br>
+    1. O operador deve pegar a <strong>posição mais recente</strong>: <code>${posicao2.toLocaleString("pt-BR", options)}</code><br>
+    2. Subtrair da <strong>posição anterior</strong>:<code>${posicao1.toLocaleString("pt-BR", options)}</code> (para obter o tempo total navegado.)<br>
+    3. Exemplo: <code>${posicao2.toLocaleString("pt-BR", options)}</code> - <code>${posicao1.toLocaleString("pt-BR", options)}</code> = <strong>${horas}h e ${minutos}min</strong><br>
     4. Convertendo esse tempo para horas decimais (Δt):&nbsp;${horas} + (${minutos} ÷ 60) = <strong>${deltaHoras.toFixed(2)}</strong> horas<br>
     5. Com o valor da distância navegada: <strong>${distancia} MN</strong><br>
     6. Calcula-se a velocidade média:Dividindo <strong>Distância navegada ÷ Δt(decimal)</strong> = ${distancia} ÷ ${deltaHoras.toFixed(2)} = <strong>${velocidade.toFixed(2)} nós</strong><br><br>
