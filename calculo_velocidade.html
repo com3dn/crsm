@@ -227,10 +227,10 @@ function calcularTempo() {
     const options = {day: '2-digit',month: '2-digit',year: 'numeric',hour: '2-digit',minute: '2-digit',hour12: false};
   // Exibe resultado resumido
   document.getElementById("resultado").innerText =
-  `🗓️ *Data/hora inicial:* ${p1.toLocaleString("pt-BR", options)}\n` +
-  `🗓️ *Data/hora final:* ${p2.toLocaleString("pt-BR", options)}\n` +
-  `⏱ *Tempo navegado:* ${horas}h ${minutos}min\n` +
-  `🚢 *Velocidade média:* ${velocidade.toFixed(2)} nós`;
+  `🗓️<strong>Data/hora inicial</strong>: ${p1.toLocaleString("pt-BR", options)}\n` +
+  `🗓️<strong>Data/hora final</strong>: ${p2.toLocaleString("pt-BR", options)}\n` +
+  `⏱<strong>Tempo navegado</strong>: ${horas}h ${minutos}min\n` +
+  `🚢<strong>Velocidade média</strong>: ${velocidade.toFixed(2)} nós`;
   	document.getElementById("copiarResultado").style.display = 'inline-block';
 	document.getElementById('eta').style.display = 'block';
 
