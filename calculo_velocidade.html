@@ -226,7 +226,7 @@ function calcularTempo() {
 
   // Exibe resultado resumido
   document.getElementById("resultado").innerText =
-    `Tempo navegado: ${horas}h ${minutos}min\nVelocidade média: ${velocidade.toFixed(2)} MN/h`;
+    `Tempo navegado: ${horas}h ${minutos}min\nVelocidade média: ${velocidade.toFixed(2)} nós`;
   	document.getElementById("copiarResultado").style.display = 'inline-block';
 	document.getElementById('eta').style.display = 'block';
 
@@ -234,16 +234,16 @@ function calcularTempo() {
   setupVelocidadeLink(document.getElementById("pos2").value, velocidade.toFixed(2));
 
   // Gera explicação
-  const posicaoMaisRecente = document.getElementById("pos2").value;
+  const posicao2 = document.getElementById("pos2").value;
+  const posicao1 = document.getElementById("pos2").value;
   const explicacaoHTML = `
     <strong>Explicação passo a passo:</strong><br><br>
-    1. O operador deve pegar a <strong>posição mais recente</strong>: <code>${posicaoMaisRecente}</code><br>
-    2. Subtrair da <strong>posição anterior</strong> para obter o tempo total navegado.<br>
-    3. Exemplo: Valor 2 - Valor 1 = <strong>${horas}h e ${minutos}min</strong><br>
-    4. Convertendo esse tempo para horas decimais (Δt):<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;${horas} + (${minutos} ÷ 60) = <strong>${deltaHoras.toFixed(2)}</strong> horas<br>
+    1. O operador deve pegar a <strong>posição mais recente</strong>: <code>${posicao2}</code><br>
+    2. Subtrair da <strong>posição anterior</strong>:<code>${posicao1}</code> (para obter o tempo total navegado.)<br>
+    3. Exemplo: <code>${posicao2}</code> - <code>${posicao1}</code> = <strong>${horas}h e ${minutos}min</strong><br>
+    4. Convertendo esse tempo para horas decimais (Δt):&nbsp;${horas} + (${minutos} ÷ 60) = <strong>${deltaHoras.toFixed(2)}</strong> horas<br>
     5. Com o valor da distância navegada: <strong>${distancia} MN</strong><br>
-    6. Calcula-se a velocidade média: <strong>Distância ÷ Δt</strong> = ${distancia} ÷ ${deltaHoras.toFixed(2)} = <strong>${velocidade.toFixed(2)} nós</strong><br><br>
+    6. Calcula-se a velocidade média:Dividindo <strong>Distância navegada ÷ Δt(decimal)</strong> = ${distancia} ÷ ${deltaHoras.toFixed(2)} = <strong>${velocidade.toFixed(2)} nós</strong><br><br>
     <strong>Resultados finais:</strong><br>
     - Tempo navegado: <strong>${horas}h e ${minutos}min</strong><br>
     - Velocidade média: <strong>${velocidade.toFixed(2)} nós</strong>
