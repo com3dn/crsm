@@ -205,3 +205,35 @@ h1 {background-color: var(--primary-color);
     padding: 2px;
     justify-content: center;
 	display: flex;}
+.submenu {
+    list-style: none;
+    padding-left: 20px;
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.submenu li a {
+    font-size: 13px;
+    color: #444;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+#sidebar.open-sidebar .submenu-toggle.open > .submenu {
+    display: flex;
+}
+
+.submenu-toggle a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.submenu-toggle a::after {
+    content: '';
+    margin-left: auto;
+    margin-right: 5px;
+}
+
