@@ -297,29 +297,13 @@ function calcularTempo() {
     const options = {day: '2-digit',month: '2-digit',year: 'numeric',hour: '2-digit',minute: '2-digit',hour12: false};
 
 document.getElementById("resultado").innerHTML = `
-    <div class="result-item" id="result-origem">
-        <span><strong>Data/Hora Partida:</strong> ${dataHoraPosicao.toLocaleString("pt-BR", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric", 
-    hour: "2-digit", 
-    minute: "2-digit", 
-    hour12: false
-})}</span>
-    </div>
-    <div class="result-item" id="result-distancia">
-        <span><strong>Distância:</strong> ${distancia} MN</span>
-    </div>
-    <div class="result-item" id="result-velocidade">
-        <span><strong>Velocidade:</strong> ${velocidade.toFixed(1)} nós</span>
-    </div>
-    <div class="result-item" id="result-tempo">
-        <span><strong>Tempo:</strong> ${tempoFormatado}</span>
-    </div>
-    <div class="result-item" id="result-eta">
-        <span><strong>ETA:</strong> ${eta.toLocaleString("pt-BR", options)}</span>
-    </div>
+<div class="result-item" id="result-origem">🗓️<span><strong>Data/Hora Partida:</strong> ${dataHoraPosicao.toLocaleString("pt-BR", options)}</span></div>
+<div class="result-item" id="result-distancia">↔️<span><strong>Distância:</strong> ${distancia} MN</span></div>
+<div class="result-item" id="result-velocidade">🚢<span><strong>Velocidade:</strong> ${velocidade.toFixed(1)} nós</span></div>
+<div class="result-item" id="result-tempo">⏱<span><strong>Tempo:</strong> ${tempoFormatado}</span></div>
+<div class="result-item" id="result-eta">⏰<span><strong>ETA:</strong> ${eta.toLocaleString("pt-BR", options)}</span></div>
 `;
+	
 // Adicione este evento no final da sua função calcularTempo():
 document.getElementById('copiarResultado').style.display = 'block';
 document.getElementById('copiarResultado').addEventListener('click', copiarResultados);
