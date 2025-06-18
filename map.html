@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <title>Mapa Interativo</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
-<link rel="icon" href="img/favicon.ico" type="image/x-icon">
-<link rel="icon" href="img/favicon.png" type="image/png">
-<link rel="stylesheet" href="style/sidebar_base.css"/>
+<meta charset="utf-8" />
+<title>Mapa Interativo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="https://com3dn.github.io/crsm/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="https://com3dn.github.io/crsm/img/favicon.ico" type="image/x-icon">
+<link rel="icon" href="https://com3dn.github.io/crsm/img/favicon.png" type="image/png">
+<link rel="stylesheet" href="https://com3dn.github.io/crsm/style/sidebar_base.css"/>
 <!-- Leaflet CSS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <!-- Leaflet Control Layers Tree CSS -->
@@ -73,69 +73,11 @@
 #filtro button:hover {
     background-color: #382fb0;
 }
-
-/* Media queries para dispositivos móveis */
-@media (max-width: 720px) {
-
-}
-
 </style>
 </head>
 <body>
 <div id="app-container">
-    <nav id="sidebar">
-        <div id="sidebar_content">
-            <div id="user">
-                <img src="img/avatar.png" id="user_avatar" alt="Avatar">
-				
-                <p id="user_infos">
-                    <span class="item-description">CRSM</span>
-                    <span class="item-description">COM3DN</span>
-                </p>
-            </div>
-<ul id="side_items">
-                <li class="side-item "><a href="index.html"><i class="fa-solid fa-landmark"></i>
-                    <span class="item-description">Inicio</span></a>
-                </li>
-                <li class="side-item active"><a href="Map.html"><i class="fa-solid fa-globe"></i>
-                    <span class="item-description">Mapa Interativo</span></a>
-                </li>
-                <li class="side-item "><a href="calculadora.html"><i class="fa-solid fa-calculator"></i>
-                    <span class="item-description">Calculadora de ETA</span></a>
-                </li>  
-                <li class="side-item"><a href="consulta-mmsi.html"><i class="fa-solid fa-flag"></i>
-                    <span class="item-description">Consulta MMSI</span></a>
-                </li>  
-                <li class="side-item"><a href="conversor-gms.html"><i class="fa-solid fa-compass"></i>
-                    <span class="item-description">Conv. GMS >> DECIMAL</span></a>
-                </li>
-                <li class="side-item"><a href="conversor-decimal.html"><i class="fa-solid fa-gear"></i>
-                    <span class="item-description">Conv. DECIMAL >> GMS</span></a>
-                </li>
-                <li class="side-item"><a href="distancia-portos.html"><i class="fa-solid fa-house-flood-water-circle-arrow-right"></i>
-                    <span class="item-description">Distancia x Portos</span></a>
-                </li>
-		<li class="side-item"><a href="Interceptacao.html"><i class="fa-solid fa-arrows-to-circle"></i>
-      		     <span class="item-description">Interceptação</span></a>
-  		</li>
-		<li class="side-item"><a href="Cenarios.html"><i class="fa-solid fa-layer-group"></i>
-      			<span class="item-description">Carregar Cenários</span></a>
-  		</li>
-		  <li class="side-item"><a href="Mensagem.html"><i class="fa-solid fa-file-lines"></i>
-    			<span class="item-description">Gerar Mensagem</span></a>
-		</li>
-            </ul>
-        </div>
-        
-        <div id="logout">
-            <button style="align: center;" id="logout_btn">Criado pelo 2°SG-SI Jefferson Correia</button>
-        </div>
-		
-			<button id="open_btn">
-                <i id="open_btn_icon" class="fa-solid fa-chevron-right"></i>
-            </button>
-  
-    </nav>
+    <div id="sidebar-container"></div>
     
     <div id="main-content">
         <h1>Mapa Interativo</h1>
@@ -157,9 +99,7 @@
   <script>
     // Inicialização do mapa
     const map = L.map('map').setView([-10, -40], 5);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '© COM3DN DN-60'}).addTo(map);
 
     // URLs das abas da planilha
     const urlPortos = 'https://opensheet.vercel.app/1NeWdSYOcd3DI9l2yPA507lveb-sKvuJ45ABAXPfKr0o/Portos';
