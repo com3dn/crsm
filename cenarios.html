@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <title>Carregar Cenários</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
-<link rel="icon" href="img/favicon.ico" type="image/x-icon">
-<link rel="icon" href="img/favicon.png" type="image/png">
-<link rel="stylesheet" href="style/sidebar_base.css"/>
+<link rel="icon" href="https://com3dn.github.io/crsm/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="https://com3dn.github.io/crsm/img/favicon.ico" type="image/x-icon">
+<link rel="icon" href="https://com3dn.github.io/crsm/img/favicon.png" type="image/png">
+<link rel="stylesheet" href="https://com3dn.github.io/crsm/style/sidebar_base.css"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ardhi/Leaflet.MousePosition/src/L.Control.MousePosition.min.css"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.css"/>
@@ -52,61 +52,14 @@
 </head>
 <body>
 <div id="app-container">
-<nav id="sidebar">
-        <div id="sidebar_content">
-            <div id="user">
-                <img src="img/avatar.png" id="user_avatar" alt="Avatar">
-                <p id="user_infos">
-                    <span class="item-description">CRSM</span>
-                    <span class="item-description">COM3DN</span>
-                </p>
-            </div>
-            <ul id="side_items">
-                <li class="side-item"><a href="index.html"><i class="fa-solid fa-landmark"></i>
-                    <span class="item-description">Inicio</span></a>
-                </li>
-                <li class="side-item"><a href="Map.html"><i class="fa-solid fa-globe"></i>
-                    <span class="item-description">Mapa Interativo</span></a>
-                </li>
-                <li class="side-item"><a href="calculadora.html"><i class="fa-solid fa-calculator"></i>
-                    <span class="item-description">Calculadora</span></a>
-                </li>  
-                <li class="side-item"><a href="consulta-mmsi.html"><i class="fa-solid fa-flag"></i>
-                    <span class="item-description">Consulta MMSI</span></a>
-                </li>  
-                <li class="side-item "><a href="conversor-gms.html"><i class="fa-solid fa-compass"></i>
-                    <span class="item-description">Conversor(GMS)</span></a>
-                </li>
-                <li class="side-item "><a href="conversor-decimal.html"><i class="fa-solid fa-gear"></i>
-                    <span class="item-description">Conversor(DEC)</span></a>
-                </li>
-                <li class="side-item "><a href="distancia-portos.html"><i class="fa-solid fa-house-flood-water-circle-arrow-right"></i>
-                    <span class="item-description">Distancia Portos</span></a>
-                </li>
-		<li class="side-item"><a href="Interceptacao.html"><i class="fa-solid fa-arrows-to-circle"></i>
-      		     <span class="item-description">Interceptação</span></a>
-  		</li>
-		<li class="side-item active"><a href="Cenarios.html"><i class="fa-solid fa-layer-group"></i>
-      			<span class="item-description">Carregar Cenários</span></a>
-  		</li>
-		  <li class="side-item"><a href="Mensagem.html"><i class="fa-solid fa-file-lines"></i>
-    			<span class="item-description">Gerar Mensagem</span></a>
-		</li>
-            </ul>
-        </div>
-        
-   <div id="logout"><button style="align: center;" id="logout_btn">Criado pelo 2°SG-SI Jefferson Correia</button></div>
-        
-        <button id="open_btn">
-            <i id="open_btn_icon" class="fa-solid fa-chevron-right"></i>
-        </button>
-    </nav>
+    <div id="sidebar-container"></div>
+	
 <div id="main-content" >
 <h1>Interceptação</h1>
 <div id="cenarios-container" class="calculator-container">
   <h3>Carregar Arquivo com as Posições</h3>
   <p style="margin-bottom: 15px;">
-    Selecione um arquivo Excel (.xlsx) com múltiplas abas. Cada aba representará um contato de interesse com suas posições. As trajetórias serão desenhadas automaticamente no mapa.
+    Selecione o arquivo Padrão do Excel (.xlsx) com as múltiplas abas de Plotagem . Cada aba representará um contato de interesse com suas posições. As trajetórias serão desenhadas automaticamente no mapa.
   </p>
   <input type="file" id="fileInput" />
   <div id="map"></div>
@@ -120,8 +73,36 @@
 
 	
 <script>
-document.getElementById('open_btn').addEventListener('click', function() {document.getElementById('sidebar').classList.toggle('open-sidebar');});
-const map = L.map('map').setView([-8, -35], 5);
+ fetch('https://com3dn.github.io/crsm/scr/sidebar.html')
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById('sidebar-container').innerHTML = html;
+
+        const current = location.pathname.split('/').pop();
+        document.querySelectorAll('#side_items a').forEach(link => {
+          if (link.getAttribute('href') === current) {
+            link.parentElement.classList.add('active');
+            let parent = link.closest('.submenu');
+            if (parent) {
+              parent.classList.add('open');
+              parent.parentElement.classList.add('open');
+            }
+          }
+        });
+
+        document.querySelectorAll('.submenu-toggle').forEach(toggle => {
+          toggle.addEventListener('click', () => {
+            toggle.classList.toggle('open');
+            toggle.querySelector('.submenu').classList.toggle('open');
+          });
+        });
+		
+document.getElementById('open_btn').addEventListener('click', function() {
+document.getElementById('sidebar').classList.toggle('open-sidebar');
+	});
+});
+	
+	const map = L.map('map').setView([-8, -35], 5);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '' }).addTo(map);
 
 // Lista de portos com suas coordenadas
@@ -130,7 +111,6 @@ const portos = {
     "Areia Branca": { lat: -4.928146, lon: -37.144775 },
     "Cabedelo": { lat: -6.952839, lon: -34.846572 },
     "Camocim": { lat: -2.910124, lon: -40.825195 },
-    "Fernando de Noronha": { lat: -3.859116, lon: -32.451381 },
     "Fortaleza": { lat: -3.703330, lon: -38.487854 },
     "Guamaré": { lat: -5.083420, lon: -36.305007 },
     "Maceió": { lat: -9.694166, lon: -35.741615 },
