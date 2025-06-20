@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8" />
-<title>Mapa Interativo</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="https://com3dn.github.io/crsm/img/favicon.svg" type="image/svg+xml">
+<meta charset="UTF-8">
+  <title>Calculadora de interceptações</title>
+<meta name="viewport" >
 <link rel="icon" href="https://com3dn.github.io/crsm/img/favicon.ico" type="image/x-icon">
 <link rel="icon" href="https://com3dn.github.io/crsm/img/favicon.png" type="image/png">
 <link rel="stylesheet" href="https://com3dn.github.io/crsm/style/sidebar_base.css"/>
@@ -400,28 +399,6 @@ function atualizarControleCamadas2() {
     document.getElementById('sidebar').classList.toggle('open-sidebar');
 });
       });
-// Detectar mudança de tamanho da tela
-function handleResize() {
-    const isMobile = window.innerWidth <= 720;
-    const sidebar = document.getElementById('sidebar');
-    
-       if (isMobile && sidebar.classList.contains('open-sidebar')) {
-        sidebar.classList.remove('open-sidebar');
-    }
-    
-    map.invalidateSize();
-}
-
-// Inicializar
-window.addEventListener('load', function() {
-    handleResize();
-    map.invalidateSize();
-});
-
-// Monitorar redimensionamento
-window.addEventListener('resize', function() {
-    handleResize();
-});
-  </script>
+</script>
 </body>
 </html>
