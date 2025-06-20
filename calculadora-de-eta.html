@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Calculadora de Tempo e Distância</title>
+  <title>Calculadora de ETA</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="img/favicon.ico" type="image/x-icon">
@@ -113,61 +113,9 @@ cursor: pointer;"
 </style>
 </head>
 <body>
-<div id="app-container">
- <nav id="sidebar">
- <div id="sidebar_content">
- <div id="user">
- <img src="img/avatar.png" id="user_avatar" alt="Avatar">
- <p id="user_infos">
- <span class="item-description">CRSM</span>
- <span class="item-description">COM3DN</span>
- </p>
- </div>
- <ul id="side_items">
- <li class="side-item"><a href="index.html"><i class="fa-solid fa-landmark"></i>
- <span class="item-description">Inicio</span></a>
- </li>
- <li class="side-item"><a href="Map.html"><i class="fa-solid fa-globe"></i>
- <span class="item-description">Mapa Interativo</span></a>
- </li>
- <li class="side-item active"><a href="calculadora.html"><i class="fa-solid fa-calculator"></i>
- <span class="item-description">Calculadora</span></a>
- </li> 
- <li class="side-item"><a href="consulta-mmsi.html"><i class="fa-solid fa-flag"></i>
- <span class="item-description">Consulta MMSI</span></a>
- </li> 
- <li class="side-item"><a href="conversor-gms.html"><i class="fa-solid fa-compass"></i>
- <span class="item-description">Conversor(GMS)</span></a>
- </li>
- <li class="side-item"><a href="conversor-decimal.html"><i class="fa-solid fa-gear"></i>
- <span class="item-description">Conversor(DEC)</span></a>
- </li>
- <li class="side-item"><a href="distancia-portos.html"><i class="fa-solid fa-house-flood-water-circle-arrow-right"></i>
- <span class="item-description">Distancia Portos</span></a>
- </li>
-		<li class="side-item"><a href="Interceptacao.html"><i class="fa-solid fa-arrows-to-circle"></i>
-      		     <span class="item-description">Interceptação</span></a>
-  		</li>
-		<li class="side-item"><a href="Cenarios.html"><i class="fa-solid fa-layer-group"></i>
-      			<span class="item-description">Carregar Cenários</span></a>
-  		</li>
-		  <li class="side-item"><a href="Mensagem.html"><i class="fa-solid fa-file-lines"></i>
-    			<span class="item-description">Gerar Mensagem</span></a>
-		</li>
- </ul>
- </div>
- 
- <div id="logout">
-            <button style="align: center;" id="logout_btn">Criado pelo 2°SG-SI Jefferson Correia</button>
-</div>
- 
- <button id="open_btn">
- <i id="open_btn_icon" class="fa-solid fa-chevron-right"></i>
- </button>
- </nav>
- 
- <div id="main-content">
- <h1>Calculadora de Tempo e Distância V.001</h1>
+<div id="app-container"><div id="sidebar-container"></div>
+<div id="main-content">
+ <h1>Calculadora de ETA</h1>
  <div style="text-align:center" class="calculator-container">
  <form class="calculator-form" onsubmit="event.preventDefault(); calcularTempo();">
  <div class="form-group">
