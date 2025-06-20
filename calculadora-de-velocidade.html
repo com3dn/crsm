@@ -158,9 +158,34 @@ cursor: pointer;"
 
 
 <script>
-document.getElementById('open_btn').addEventListener('click', function () {
-document.getElementById('sidebar').classList.toggle('open-sidebar');
+fetch('https://com3dn.github.io/crsm/scr/sidebar.html')
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById('sidebar-container').innerHTML = html;
+
+        const current = location.pathname.split('/').pop();
+        document.querySelectorAll('#side_items a').forEach(link => {
+          if (link.getAttribute('href') === current) {
+            link.parentElement.classList.add('active');
+            let parent = link.closest('.submenu');
+            if (parent) {
+              parent.classList.add('open');
+              parent.parentElement.classList.add('open');
+            }
+          }
+        });
+
+        document.querySelectorAll('.submenu-toggle').forEach(toggle => {
+          toggle.addEventListener('click', () => {
+            toggle.classList.toggle('open');
+            toggle.querySelector('.submenu').classList.toggle('open');
+          });
+        });
+		
+		  document.getElementById('open_btn').addEventListener('click', function() {
+    document.getElementById('sidebar').classList.toggle('open-sidebar');
 });
+      });
 function calcularTempo() {
   const p1 = new Date(document.getElementById("pos1").value);
   const p2 = new Date(document.getElementById("pos2").value);
@@ -221,7 +246,7 @@ function calcularTempo() {
       velocidade: velocidadeMedia
     }));
 
-    window.location.href = 'https://com3dn.github.io/crsm/calculadora.html';
+    window.location.href = 'https://com3dn.github.io/crsm/calculadora-de-eta.htmll';
   };
 }
 
