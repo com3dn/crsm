@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Calculadora de ETA</title>
+<meta name="viewport" >
+<link rel="icon" href="https://com3dn.github.io/crsm/img/favicon.ico" type="image/x-icon">
+<link rel="icon" href="https://com3dn.github.io/crsm/img/favicon.png" type="image/png">
+<link rel="stylesheet" href="https://com3dn.github.io/crsm/style/sidebar_base.css"/>
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<!-- Leaflet Control Layers Tree CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet.control.layers.tree/L.Control.Layers.Tree.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+<style>
+
+/* Estilos para a calculadora */
+.calculator-container {
+ width: 500px;
+ margin: 2px 0px;
+ padding: 10px;
+ background: white;
+ border-radius: 0 10px 10px 0;
+ box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.calculator-form {
+ display: flex;
+ flex-direction: column;
+ gap: 15px;
+}
+    input[type="file"] { margin-bottom: 10px; }
+    button { margin-right: 10px; padding: 8px 16px; }
+	.btn { padding: 8px 16px; border: none; cursor: pointer; font-size: 16px;
+    border-radius: 4px; transition: background-color 0.3s;}
+	.btn:hover {transform: scale(1.3);box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);}
+	.btn-blue {background-color: #007BFF;color: white;}
+	.btn-blue:hover {transform: scale(1.1);box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);}
+	
+    #statusMessage1 { color: red; font-weight: bold; }
+    #statusMessage2 { color: green; font-weight: bold; }
+	
+	.steps-container {
+        max-width: 90%;
+        margin-bottom: 2px;
+    }
+
+    .step {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        background-color: #fff;
+        padding: 1px;
+        border-radius: 8px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+    .step-text {font-size: 19px;color: #333;}
+</style>
+</head>
+<body>
+<div id="app-container"><div id="sidebar-container"></div>
+<div id="main-content">
+<h1>Conversor PREPS.GOV</h1>
+<h3>Passo a Passo para Obter o Arquivo TXT</h3>
+<div class="steps-container">
+    <div class="step"><div class="step-text">Clique no botão abaixo do passo a passo para acessar o site do PREPS.GOV.</div>
+        <img src="C:\Users\Jeferson\Downloads\Capturar.PNG".png " alt="Ir ao site"></div>
+    <div class="step"><div class="step-text">Faça login com suas credenciais.</div>
+        <img src="C:\Users\Jeferson\Downloads\Capturar2.PNG" alt="Login"></div>
+    <div class="step"><div class="step-text">Navegue até a aba EMBARCAÇÃO >> EXPORTAR DADOS.</div>
+        <img src="C:\Users\Jeferson\Downloads\Capturar3.PNG" alt="Exportação"></div>
+    <div class="step"><div class="step-text">Faça a pesquisa da embarcação desejada.</div>
+        <img src="C:\Users\Jeferson\Downloads\Capturar4.PNG" alt="Exportar"></div>
+    <div class="step"><div class="step-text">Selecione periodo inicial e final da movimentação.</div>
+        <img src="C:\Users\Jeferson\Downloads\Capturar5.PNG" alt="Baixar"></div>
+    <div class="step"><div class="step-text">No deimitador selecione (,)[virgula].</div>
+        <img src="C:\Users\Jeferson\Downloads\Capturar6.PNG" alt="Baixar"></div>
+    <div class="step"><div class="step-text">Clique em {EXPORTAR}.</div>
+        <img src="C:\Users\Jeferson\Downloads\Capturar7.PNG" alt="Baixar"></div>
+    <div class="step"><div class="step-text">Na página que apareceu apoós carregar clique em ""CLIQUE AQUI"" 
+	<br> Baixe o arquivo gerado (geralmente nomeado como: `dados_rastreamento_{usuario}_{datahora}.txt` [ex:.dados_rastreamento_com3dn_02_07_2025_01_48_57.txt].
+    <br><img src="C:\Users\Jeferson\Downloads\Capturar8.PNG" alt="Baixar"></div></div>
+    <div class="step"><div class="step-text"><a href="http://www.preps.gov.br/web/index.php/central_de_rastreamento/exportaDadosRastreamento" target="_blank">
+        <button class="btn-blue">Ir para o site do PREPS.GOV</button>
+    </a></div></div>
+    <div class="step"><div class="step-text">Clique no botão "Escolher arquivo" e selecione um arquivo <strong>.txt</strong> contendo os dados da embarcação.
+	<br><input type="file" id="fileInput" accept=".txt"></div></div>
+    <div class="step"><div class="step-text">Pressione o botão "Processar" para converter os dados, mantendo apenas as colunas essenciais.
+	<br><button onclick="processFile()" id="processBtn">Processar</button>
+	<br><p id="statusMessage1"></p></div></div>
+    <div class="step"><div class="step-text">Após o processamento, o botão "Baixar XLS" será habilitado. Clique nele para baixar a tabela processada no formato <strong>.xlsx</strong>.
+	<br><p id="statusMessage2"></p>
+	<button onclick="downloadXLS()" disabled id="downloadBtn" class="btn">Baixar XLS</button>
+	</div></div>
+    <div class="step"><div class="step-text">O nome do arquivo será gerado automaticamente, utilizando o nome da embarcação e a data/hora atual. ex:Neto_III_01.07.25 21.53.xlsx
+	</div></div>
+</div>
+
+<script>
+
+        let processedData = [];
+        let vesselName = "tabela_processada";
+
+function decimalToDMS(decimal, isLatitude = true) {
+    if (isNaN(decimal)) return "";
+    const absolute = Math.abs(decimal);
+    const degrees = Math.floor(absolute);
+    const minutesFloat = (absolute - degrees) * 60;
+    const minutes = Math.floor(minutesFloat);
+    const seconds = ((minutesFloat - minutes) * 60).toFixed(0);
+
+    let direction = "";
+    if (isLatitude) {
+        direction = decimal >= 0 ? "N" : "S";
+    } else {
+        direction = decimal >= 0 ? "E" : "W";
+    }
+
+    return `${degrees}° ${minutes}' ${seconds}" ${direction}`;
+}
+function formatDate(dateTimeString) {
+    const date = new Date(dateTimeString);
+    if (isNaN(date)) return "";
+    return date.toLocaleString('pt-BR'); // ex: 25/12/2024 14:30:00
+}
+        function processFile() {
+            const fileInput = document.getElementById('fileInput');
+			
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert("Selecione um arquivo TXT primeiro.");
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+			
+                const lines = e.target.result.split('\n').map(line => line.trim());
+                processedData = lines.map(line => line.split(',').map(cell => cell.trim()));
+                
+                if (processedData.length > 1 && processedData[1][3]) {
+                    vesselName = processedData[1][3].replace(/[^a-zA-Z0-9_]/g, '_');
+                }
+                
+                // Adicionar cabeçalho
+                let newData = [["Nome Embarcação", "Lat Decimal", "Long Decimal", "Lat DMS", "Long DMS", "Data Hora", "Velocidade"]];
+                
+                // Processar dados ignorando a primeira linha
+                for (let i = 1; i < processedData.length; i++) {
+                    let row = processedData[i];
+                    if (row.length >= 10 || !row[4] || !row[5]) {
+                        newData.push([
+                            row[3], row[4], row[5], decimalToDMS(parseFloat(row[4]), true),decimalToDMS(parseFloat(row[5]), false), formatDate(row[8]), row[9]
+                        ]);
+                    }
+                }
+                
+                processedData = newData;
+                document.getElementById("fileInput").disabled = true;
+                document.getElementById("processBtn").disabled = true;
+                document.getElementById("downloadBtn").disabled = false;
+				document.getElementById("downloadBtn").style.backgroundColor = "green";
+				document.getElementById("downloadBtn").style.color = "white"; // ou outra cor clara
+				document.getElementById("statusMessage1").innerText = "Procesando Arquivo...!";
+				document.getElementById("statusMessage2").innerText = "Arquivo processado com sucesso!";
+                //alert("Arquivo processado com sucesso!");
+            };
+            
+            reader.readAsText(file);
+        }
+
+        function downloadXLS() {
+		// após concluir
+			const now = new Date();
+            const formattedDate = `${String(now.getDate()).padStart(2, '0')}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getFullYear()).slice(2)} ${String(now.getHours()).padStart(2, '0')}.${String(now.getMinutes()).padStart(2, '0')}`;
+            const fileName = `${vesselName}_${formattedDate}.xlsx`;
+            
+            const ws = XLSX.utils.aoa_to_sheet(processedData);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Dados Processados");
+            XLSX.writeFile(wb, fileName);
+        }
+
+
+  
+
+fetch('https://com3dn.github.io/crsm/scr/sidebar.html')
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById('sidebar-container').innerHTML = html;
+
+        const current = location.pathname.split('/').pop();
+        document.querySelectorAll('#side_items a').forEach(link => {
+          if (link.getAttribute('href') === current) {
+            link.parentElement.classList.add('active');
+            let parent = link.closest('.submenu');
+            if (parent) {
+              parent.classList.add('open');
+              parent.parentElement.classList.add('open');
+            }
+          }
+        });
+
+        document.querySelectorAll('.submenu-toggle').forEach(toggle => {
+          toggle.addEventListener('click', () => {
+            toggle.classList.toggle('open');
+            toggle.querySelector('.submenu').classList.toggle('open');
+          });
+        });
+		
+		  document.getElementById('open_btn').addEventListener('click', function() {
+    document.getElementById('sidebar').classList.toggle('open-sidebar');
+});
+      });
+</script>
+</body>
+</html>
