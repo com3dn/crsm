@@ -132,6 +132,25 @@
     document.getElementById('sidebar').classList.toggle('open-sidebar');
 });
       });
+
+
+fetch('https://api.ipify.org?format=json')
+  .then(response => response.json())
+  .then(data => {
+    let ip = data.ip;
+    let pais = "Desconhecido";
+
+    // Buscar país via API gratuita
+    fetch(`https://ipapi.co/${ip}/json/`)
+      .then(res => res.json())
+      .then(info => {
+        pais = info.country_name || "N/A";
+
+        // Enviar para o Google Sheets
+        fetch("https://script.google.com/macros/s/AKfycbzWCl3Jx_x4V2ESz2QBmS_TvLxW4yofua51-I2hbP9RSY-LISgaKOjq4sYXHXMo_NVY/exec" + `?ip=${ip}&pais=${pais}`);
+      });
+  });
+
 </script>
 </body>
 </html>
