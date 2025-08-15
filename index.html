@@ -133,23 +133,27 @@
 });
       });
 
+(async function() {
+  try {
+    let geo = await fetch("https://ipapi.co/json/").then(r => r.json());
+    
+    let dados = {
+      city: geo.city || "Desconhecida",
+      region: geo.region || "Desconhecido",
+      country: geo.country_name || "Desconhecido",
+      page: window.location.pathname
+    };
 
-fetch('https://api.ipify.org?format=json')
-  .then(response => response.json())
-  .then(data => {
-    let ip = data.ip;
-    let pais = "Desconhecido";
+    fetch("https://script.google.com/macros/s/AKfycbzWCl3Jx_x4V2ESz2QBmS_TvLxW4yofua51-I2hbP9RSY-LISgaKOjq4sYXHXMo_NVY/exec", {
+      method: "POST",
+      contentType: "application/json",
+      body: JSON.stringify(dados)
+    });
 
-    // Buscar país via API gratuita
-    fetch(`https://ipapi.co/${ip}/json/`)
-      .then(res => res.json())
-      .then(info => {
-        pais = info.country_name || "N/A";
-
-        // Enviar para o Google Sheets
-        fetch("https://script.google.com/macros/s/AKfycbzWCl3Jx_x4V2ESz2QBmS_TvLxW4yofua51-I2hbP9RSY-LISgaKOjq4sYXHXMo_NVY/exec" + `?ip=${ip}&pais=${pais}`);
-      });
-  });
+  } catch (e) {
+    console.error("Erro ao registrar acesso:", e);
+  }
+})();
 
 </script>
 </body>
