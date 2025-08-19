@@ -144,11 +144,10 @@
       page: window.location.pathname
     };
 
-    fetch("https://script.google.com/macros/s/AKfycbzWCl3Jx_x4V2ESz2QBmS_TvLxW4yofua51-I2hbP9RSY-LISgaKOjq4sYXHXMo_NVY/exec", {
-      method: "POST",
-      contentType: "application/json",
-      body: JSON.stringify(dados)
-    });
+	fetch("https://script.google.com/macros/s/AKfycbzWCl3Jx_x4V2ESz2QBmS_TvLxW4yofua51-I2hbP9RSY-LISgaKOjq4sYXHXMo_NVY/exec", {
+	  method: "POST", headers: { "Content-Type": "application/json" },body: JSON.stringify(dados)
+	});
+
 
   } catch (e) {
     console.error("Erro ao registrar acesso:", e);
