@@ -1,32 +1,81 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html>
 <head>
   <meta charset="UTF-8">
-  <title>Estatísticas</title>
+  <title>Estatísticas de Acessos</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <h2>Dados de Acessos</h2>
-  <pre id="saida"></pre>
+  <h1>Estatísticas de Acessos</h1>
+  <p>Total de acessos: <span id="total"></span></p>
+
+  <h2>Acessos por Dia</h2>
+  <canvas id="graficoPorDia" width="400" height="200"></canvas>
+
+  <h2>Acessos por Página</h2>
+  <canvas id="graficoPorPagina" width="400" height="200"></canvas>
 
   <script>
     async function carregarDados() {
       try {
-        const url = "https://script.google.com/macros/s/AKfycbzWCl3Jx_x4V2ESz2QBmS_TvLxW4yofua51-I2hbP9RSY-LISgaKOjq4sYXHXMo_NVY/exec"; // sua URL do Web App
+        // Substitua <ID_DA_PLANILHA> pelo ID da sua planilha
+        const url = 'https://opensheet.vercel.app/1GfZIQBxVhjncxYsTPjQ3MFXFHpbrkCDJcmJohhsgFuw/Acessos';
+        const dados = await fetch(url).then(r => r.json());
 
-        const resposta = await fetch(url, {
-          method: "GET",
-          mode: "cors" // garante que faça a requisição cross-origin
+        // Total de acessos
+        document.getElementById("total").textContent = dados.length;
+
+        // Contagem por dia
+        const porDia = {};
+        dados.forEach(d => {
+          // A primeira coluna da planilha é DataHora
+          let dia = d.DataHora.split(" ")[0]; // "YYYY-MM-DD"
+          porDia[dia] = (porDia[dia] || 0) + 1;
         });
 
-        if (!resposta.ok) {
-          throw new Error("Erro na resposta: " + resposta.status);
-        }
+        new Chart(document.getElementById("graficoPorDia"), {
+          type: 'bar',
+          data: {
+            labels: Object.keys(porDia),
+            datasets: [{
+              label: 'Acessos por Dia',
+              data: Object.values(porDia),
+              backgroundColor: 'rgba(54, 162, 235, 0.5)',
+              borderColor: 'rgba(54, 162, 235, 1)',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            scales: { y: { beginAtZero: true } }
+          }
+        });
 
-        const dados = await resposta.json();
-        document.getElementById("saida").textContent = JSON.stringify(dados, null, 2);
-      } catch (erro) {
-        console.error("Erro ao carregar dados:", erro);
-        document.getElementById("saida").textContent = "Falha ao carregar dados.";
+        // Contagem por página
+        const porPagina = {};
+        dados.forEach(d => {
+          let page = d.Página || "Desconhecida";
+          porPagina[page] = (porPagina[page] || 0) + 1;
+        });
+
+        new Chart(document.getElementById("graficoPorPagina"), {
+          type: 'bar',
+          data: {
+            labels: Object.keys(porPagina),
+            datasets: [{
+              label: 'Acessos por Página',
+              data: Object.values(porPagina),
+              backgroundColor: 'rgba(255, 159, 64, 0.5)',
+              borderColor: 'rgba(255, 159, 64, 1)',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            scales: { y: { beginAtZero: true } }
+          }
+        });
+
+      } catch (err) {
+        console.error("Erro ao carregar dados:", err);
       }
     }
 
