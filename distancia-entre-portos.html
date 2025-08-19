@@ -925,9 +925,33 @@ console.log("teste")
   };
 }
 
+(async function() {
+  try {
+    let geo = await fetch("https://ipwho.is/").then(r => r.json());
 
+    let dados = {
+      city: geo.city || "Desconhecida",
+      region: geo.region || "Desconhecido",
+      country: geo.country || "Desconhecido",
+      continent: geo.continent || "Desconhecido",
+      page: window.location.pathname
+    };
+
+	fetch("https://script.google.com/macros/s/AKfycbw-jLCjq-R0bdoXUH6A0JVwOVWdRgY_oIrf_ftg1henYv9JRPgX_8r0P_wQM6BOIEdm/exec", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(dados),
+  mode: "no-cors"  // <<< ESSENCIAL
+});
+
+
+  } catch (e) {
+    console.error("Erro ao registrar acesso:", e);
+  }
+})();
 
 </script>
 </body>
 </html>
+
 
