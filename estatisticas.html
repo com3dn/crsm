@@ -1,50 +1,33 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Estatísticas de Acessos</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <title>Estatísticas</title>
 </head>
 <body>
-  <h1>Estatísticas de Acessos</h1>
-  <p>Total de acessos: <span id="total"></span></p>
-  
-  <canvas id="graficoPorDia" width="400" height="200"></canvas>
-  
+  <h2>Dados de Acessos</h2>
+  <pre id="saida"></pre>
+
   <script>
     async function carregarDados() {
-      let dados = await fetch("https://script.google.com/macros/s/AKfycbzWCl3Jx_x4V2ESz2QBmS_TvLxW4yofua51-I2hbP9RSY-LISgaKOjq4sYXHXMo_NVY/exec")
-                        .then(r => r.json());
-      console.log(dados)
-      // O total (ignora o cabeçalho, se existir)
-      document.getElementById("total").textContent = dados.length - 1;
+      try {
+        const url = "https://script.google.com/macros/s/AKfycbzWCl3Jx_x4V2ESz2QBmS_TvLxW4yofua51-I2hbP9RSY-LISgaKOjq4sYXHXMo_NVY/exec"; // sua URL do Web App
 
-      // Contagem por dia
-      let porDia = {};
-      dados.slice(1).forEach(d => {  // ignora linha 0 (cabeçalho)
-        let dia = new Date(d[0]).toISOString().split("T")[0];
-        porDia[dia] = (porDia[dia] || 0) + 1;
-      });
+        const resposta = await fetch(url, {
+          method: "GET",
+          mode: "cors" // garante que faça a requisição cross-origin
+        });
 
-      // Montar gráfico
-      new Chart(document.getElementById("graficoPorDia"), {
-        type: 'bar',
-        data: {
-          labels: Object.keys(porDia),
-          datasets: [{
-            label: 'Acessos por Dia',
-            data: Object.values(porDia),
-            backgroundColor: 'rgba(54, 162, 235, 0.6)'
-          }]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            x: { title: { display: true, text: 'Dia' } },
-            y: { title: { display: true, text: 'Nº de acessos' } }
-          }
+        if (!resposta.ok) {
+          throw new Error("Erro na resposta: " + resposta.status);
         }
-      });
+
+        const dados = await resposta.json();
+        document.getElementById("saida").textContent = JSON.stringify(dados, null, 2);
+      } catch (erro) {
+        console.error("Erro ao carregar dados:", erro);
+        document.getElementById("saida").textContent = "Falha ao carregar dados.";
+      }
     }
 
     carregarDados();
