@@ -50,12 +50,22 @@
           }
         });
 
-        // Contagem por página
-        const porPagina = {};
-        dados.forEach(d => {
-          let page = d.Página || "Desconhecida";
-          porPagina[page] = (porPagina[page] || 0) + 1;
-        });
+       // Contagem por página
+    const porPagina = {};
+      dados.forEach(d => {
+      let page = d.Página || "Desconhecida";
+
+      // Remove o "/crsm/" do início
+      page = page.replace(/^\/crsm\//, "");
+      // Remove a extensão ".html" do final
+      page = page.replace(/\.html$/, "");
+
+      page = page.replace(/-/g, " ");
+
+
+      porPagina[page] = (porPagina[page] || 0) + 1;
+    });
+
 
         new Chart(document.getElementById("graficoPorPagina"), {
           type: 'bar',
