@@ -135,12 +135,13 @@
 
 (async function() {
   try {
-    let geo = await fetch("https://ipapi.co/json/").then(r => r.json());
-    
+    let geo = await fetch("https://ipwho.is/").then(r => r.json());
+
     let dados = {
       city: geo.city || "Desconhecida",
       region: geo.region || "Desconhecido",
-      country: geo.country_name || "Desconhecido",
+      country: geo.country || "Desconhecido",
+      continent: geo.continent || "Desconhecido",
       page: window.location.pathname
     };
 
