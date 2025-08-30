@@ -58,7 +58,7 @@ h1 {background-color: var(--primary-color);
 .card-image {
       width: 100%;
       height:calc(50px + 1vw);
-      object-fit: cover;
+      object-fit: fill;
       background: #ddd;    }
 .card-title {
       padding: 0px 0px 0px;
