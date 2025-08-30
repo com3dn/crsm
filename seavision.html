@@ -483,6 +483,59 @@ function loadVideo(container, videoId) {
       frameborder="0" allow="autoplay; fullscreen" allowfullscreen>
     </iframe>`;
 }
+	fetch('https://com3dn.github.io/crsm/scr/sidebar.html')
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById('sidebar-container').innerHTML = html;
+
+        const current = location.pathname.split('/').pop();
+        document.querySelectorAll('#side_items a').forEach(link => {
+          if (link.getAttribute('href') === current) {
+            link.parentElement.classList.add('active');
+            let parent = link.closest('.submenu');
+            if (parent) {
+              parent.classList.add('open');
+              parent.parentElement.classList.add('open');
+            }
+          }
+        });
+
+        document.querySelectorAll('.submenu-toggle').forEach(toggle => {
+          toggle.addEventListener('click', () => {
+            toggle.classList.toggle('open');
+            toggle.querySelector('.submenu').classList.toggle('open');
+          });
+        });
+		
+		  document.getElementById('open_btn').addEventListener('click', function() {
+    document.getElementById('sidebar').classList.toggle('open-sidebar');
+});
+      });
+
+(async function() {
+  try {
+    let geo = await fetch("https://ipwho.is/").then(r => r.json());
+
+    let dados = {
+      city: geo.city || "Desconhecida",
+      region: geo.region || "Desconhecido",
+      country: geo.country || "Desconhecido",
+      continent: geo.continent || "Desconhecido",
+      page: window.location.pathname
+    };
+
+	fetch("https://script.google.com/macros/s/AKfycbw-jLCjq-R0bdoXUH6A0JVwOVWdRgY_oIrf_ftg1henYv9JRPgX_8r0P_wQM6BOIEdm/exec", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(dados),
+  mode: "no-cors"  // <<< ESSENCIAL
+});
+
+
+  } catch (e) {
+    console.error("Erro ao registrar acesso:", e);
+  }
+})();
 </script>
 
 </body>
