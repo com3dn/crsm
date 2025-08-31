@@ -79,96 +79,116 @@
         padding: 15px;
     }
 }
-  body {
-    font-family: Arial, sans-serif;
-    background: #f4f4f4;
-  }
-  table {
-    width: 150%;
-    border-collapse: collapse;
-    background: white;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  }
-  tr { border-bottom: 1px solid #ddd; }
-  td { vertical-align: top; padding: 15px; }
-  .video-container {
-    position: relative;
-    width: 420px;
-    height: 340px;
-    cursor: pointer;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-  }
-  .video-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-  .play-button {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 50px;
-    color: white;
-    background: rgba(0,0,0,0.6);
-    border-radius: 50%;
-    padding: 10px 20px;
-  }
-  .desc h3 { margin-top: 0; color: #333; }
-  .desc p, .desc li { color: #555; }
-  .material {
-    display: inline-block;
-	vertical-align:bottom;
-    margin-bottom: 10px;
-    padding: 6px 10px;
-    background: #0073e6;
-    color: white;
-    border-radius: 5px;
-    text-decoration: none;
-  }
-  .material:hover { background: #005bb5; }
+#app-container {
+    display: flex;
+    flex: 1;
+    height: 100vh;}
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+    }
+    #menu {
+      width: 100%;
+    }
+    #menu ul {
+      list-style: none;
+      padding: 0;
+    }
+    #menu li {
+      margin: 8px 0;
+    }
+    #menu a {
+      text-decoration: none;
+      color: blue;
+      cursor: pointer;
+    }
+    iframe {
+      width: 100%;
+    margin-top: 20px;
+      height: 315px;
+    }
+    .objetivos {
+      margin-left: 20px;
+    }
+    .objetivos li {
+      margin-left: 20px;
+    }
+    .downloads a {
+      display: inline-block;
+      margin: 8px 10px 0 0;
+      padding: 1px 15px;
+      background: #007BFF;
+      color: #fff;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+    .downloads a:hover {
+      background: #0056b3;
+    }
 </style>
 </head>
 <body>
-<div id="app-container"><div id="sidebar-container"></div>
-    
-<div id="main-content">
-<h1>📚 Adestramento SEAVISION - Operador</h1>
-Orientação para uso no celular:<br>
-Clicar no botão "apresentar em outra janela", dentro da janela do vídeo.
-<table id="videoTable"></table>
+<div id="app-container">
+<div id="sidebar-container">
+</div>
 
+<div id="main-content">
+<h1>📚 Adestramento SEAVISION</h1>
+<table><tbody>
+<tr><td>
+  <div id="menu">
+    <h3>Curso Operador</h3>
+    <ul id="lista-videos"></ul>
+    <h3>Curso Analista</h3>
+    <ul id="lista-videos2"></ul>
+  </div>
+  </td><td style="vertical-align:top;width:60%">
+  <div id="conteudo">
+    <iframe id="player" src=""></iframe>
+    <h2 id="titulo"></h2>
+    <p><b>Última atualização:</b> <span id="atualizacao"></span></p>
+    <p><b>Após a conclusão desta lição, o formando será capaz de:</b></p>
+	
+    <ul id="objetivos" class="objetivos"></ul>
+    <div class="downloads">
+	
+      <a id="download-material" href="#" target="_blank">📥 Baixar Material</a>
+      <a id="download-video" href="#" target="_blank">📥 Baixar Vídeo</a>
+    </div>
+	</div>
+	</td></tr>
+</tbody></table>
+  
+  </div>
   
 <script>
-// 🔹 Lista de vídeos
-const videos = [
+ const videos = [
 {id: "1UIna_am1jwBMzuYXoB1iEBqgOJiJsuBj",
- titulo: "01 - Introdução",
- atualizacao: "15/03/2022",
- objetivos: ["Indicar a descrição geral e as capacidades da aplicação SeaVision",
+titulo: "01 - Introdução",
+atualizacao: "15/03/2022",
+objetivos: ["Indicar a descrição geral e as capacidades da aplicação SeaVision",
 "Identificar as fontes de dados do SeaVision",
 "Identificar o desenvolvimento e o apoio do SeaVision",
 "Determinar a função da Equipa de Assistência Técnica em Campo da SeaVision (TAFT)"],
- thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
- material: "https://drive.google.com/uc?export=download&id=1KCuWeW-CWNJnNZQoR50slMiYIUidU-k7"},
-
+thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
+download_material: "https://drive.google.com/uc?export=download&id=1KCuWeW-CWNJnNZQoR50slMiYIUidU-k7",
+download_video: "https://drive.google.com/uc?export=download&id=1UIna_am1jwBMzuYXoB1iEBqgOJiJsuBj"
+},
 {id: "1JPwRmda8nqch-sG-6LU03x-ByKplSZyi",
- titulo: "02 - Gestão de contas",
- atualizacao: "01/01/2021",
- objetivos: ["Determinar os requisitos de acesso à conta",
+titulo: "02 - Gestão de contas",
+atualizacao: "01/01/2021",
+objetivos: ["Determinar os requisitos de acesso à conta",
 "Como criar uma conta SeaVision",
 "Compreender as Comunidades e os Perfis do SeaVision",
 "Como identificar que dados e objetos do SeaVision podem ser acedidos e partilhados"],
- thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
- material: "https://drive.google.com/uc?export=download&id=1QioTiZzwrNclnT_fMiQs4g7OhGKe7MD2"},
-  
+thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
+download_material: "https://drive.google.com/uc?export=download&id=1QioTiZzwrNclnT_fMiQs4g7OhGKe7MD2",
+download_video: "https://drive.google.com/uc?export=download&id=1JPwRmda8nqch-sG-6LU03x-ByKplSZyi"
+},
 {id: "1gE-Oc9g_TntU8Iz6Yi7XIlvX0PSlZ-G1",
- titulo: "03 - Conhecimento do Domínio Marítimo",
- atualizacao: "01/01/2021",
- objetivos: ["definir o domínio marítimo",
+titulo: "03 - Conhecimento do Domínio Marítimo",
+atualizacao: "01/01/2021",
+objetivos: ["definir o domínio marítimo",
 "definir o conhecimento do domínio marítimo (mda)",
 "identificar ameaças ao mda",
 "identificar possíveis partes interessadas no mda",
@@ -177,13 +197,14 @@ const videos = [
 "identificar informações sobre mda que podem ser encontradas no seavision",
 "discutir a importância da partilha de informações",
 "identificar os desafios e considerações do mda para as áreas locais dos formandos"],
- thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
- material: "https://drive.google.com/uc?export=download&id=1D4mdrQk495oLnq4IZzTbstqX8MbbudOQ"},
-	
+thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
+download_material: "https://drive.google.com/uc?export=download&id=1D4mdrQk495oLnq4IZzTbstqX8MbbudOQ",
+download_video: "https://drive.google.com/uc?export=download&id=1gE-Oc9g_TntU8Iz6Yi7XIlvX0PSlZ-G1"
+},
 {id: "1qF6DwjpdvxRe1bOBE3h_nAkXghtNuWJ2",
-    titulo: "04 - Fontes de dados",
-    atualizacao: "15/10/2022",
-    objetivos: ["identificar e definir as capacidades e as informações fornecidas pelas seguintes fontes ao seavision:",
+titulo: "04 - Fontes de dados",
+atualizacao: "15/10/2022",
+objetivos: ["identificar e definir as capacidades e as informações fornecidas pelas seguintes fontes ao seavision:",
 "sistema de identificação automática (ais)",
 "radar",
 "eletro-ótico por satélite (sat-eo)",
@@ -192,13 +213,14 @@ const videos = [
 "user_vessel_report",
 "definir o alcance e o atraso das fontes de dados",
 "definir as informações fornecidas pelos dados do registo de navios"],
- thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
- material: "https://drive.google.com/uc?export=download&id=1gKPGxz4aFgTGOV12mX2KpsQAROrgBZ69"},
-	
-	{id: "1JuBTld9R7UKHYDmdtLVUnztKaIHCJU0K",
-	 titulo: "05 - Barra de navegação do SeaVision",
-	 atualizacao: "15/03/2022",
-	 objetivos: ["descrever as opções da barra de navegação do seavision",
+thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
+download_material: "https://drive.google.com/uc?export=download&id=1gKPGxz4aFgTGOV12mX2KpsQAROrgBZ69",
+download_video: "https://drive.google.com/uc?export=download&id=1qF6DwjpdvxRe1bOBE3h_nAkXghtNuWJ2"
+},
+{id: "1JuBTld9R7UKHYDmdtLVUnztKaIHCJU0K",
+titulo: "05 - Barra de navegação do SeaVision",
+atualizacao: "15/03/2022",
+objetivos: ["descrever as opções da barra de navegação do seavision",
 "descrever o menu principal e o logótipo seavision",
 "descrever o mapa",
 "descrever o painel de controlo",
@@ -208,25 +230,27 @@ const videos = [
 "descrever as comunidades/perfis",
 "descrever a conta de utilizador",
 "descrever a ajuda e a hora (utc)"],
-	 thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
-	 material: "https://drive.google.com/uc?export=download&id=1wOuHWHT4ktXZv6TsL3Ibc1JhvFeuZoac"},
-	
-	{id: "1ExiHf6G-UAJdCBYz5xZVN_MheE5EW6AW",
-	 titulo: "06 - Demonstração do sistema de informação automática (AIS)",
-	 atualizacao: "01/07/2020",
-	 objetivos: ["conhecer os componentes de hardware de um sistema ais comercial",
+thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
+download_material: "https://drive.google.com/uc?export=download&id=1wOuHWHT4ktXZv6TsL3Ibc1JhvFeuZoac",
+download_video: "https://drive.google.com/uc?export=download&id=1JuBTld9R7UKHYDmdtLVUnztKaIHCJU0K"
+},
+{id: "1ExiHf6G-UAJdCBYz5xZVN_MheE5EW6AW",
+titulo: "06 - Demonstração do sistema de informação automática (AIS)",
+atualizacao: "01/07/2020",
+objetivos: ["conhecer os componentes de hardware de um sistema ais comercial",
 "obter experiência prática na operação de unidades ais nos seguintes tópicos:",
 "comparação dos diferentes tipos de equipamento ais",
 "transmissão e receção de dados do ais",
 "configuração das definições do ais",
 "visualização de dados do ais"],
-	 thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
-	 material: "https://drive.google.com/uc?export=download&id=114JdMi5y8R9Cd-yoUYSkOIC6Uok6t-aW"},
-	
-	{id: "1agWqLjRBOzKN-ffTJ1Yj3J2ynLn914hT",
-	titulo: "07 - Definições e Exibição do Mapa",
-	atualizacao: "15/03/2022",
-	objetivos: ["aceder às definições do mapa",
+thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
+download_material: "https://drive.google.com/uc?export=download&id=114JdMi5y8R9Cd-yoUYSkOIC6Uok6t-aW",
+download_video: "https://drive.google.com/uc?export=download&id=1ExiHf6G-UAJdCBYz5xZVN_MheE5EW6AW"
+},
+{id: "1agWqLjRBOzKN-ffTJ1Yj3J2ynLn914hT",
+titulo: "07 - Definições e Exibição do Mapa",
+atualizacao: "15/03/2022",
+objetivos: ["aceder às definições do mapa",
 "identificar e definir as definições do mapa",
 "identificar e descrever as opções de fundo do mapa",
 "identificar e utilizar o filtro rápido",
@@ -234,33 +258,36 @@ const videos = [
 "explicar as vistas de utilizador",
 "descrever o menu ir para o mapa",
 "descrever a função do logótipo do seavision"],
-	 thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
-	 material: "https://drive.google.com/uc?export=download&id=1KF6Va_4dpqwiRo0qXRtWUuGXJu-YsqeN"},
-	
-	{id: "1OViKYYUozcf0WOXI5zksYBFXBUukdyEi",
-	 titulo: "08 - Formas",
-	 atualizacao: "01/01/2021",
-	 objetivos: ["aceder ao gestor de formas",
+thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
+download_material: "https://drive.google.com/uc?export=download&id=1KF6Va_4dpqwiRo0qXRtWUuGXJu-YsqeN",
+download_video: "https://drive.google.com/uc?export=download&id=1agWqLjRBOzKN-ffTJ1Yj3J2ynLn914hT"
+},
+{id: "1OViKYYUozcf0WOXI5zksYBFXBUukdyEi",
+titulo: "08 - Formas",
+atualizacao: "01/01/2021",
+objetivos: ["aceder ao gestor de formas",
 "compreender as funcionalidades das formas",
 "personalizar uma forma",
 "partilhar uma forma"],
-	 thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
-	 material: "https://drive.google.com/uc?export=download&id=1ehFachjZzQpuk1UEGacyf8KM5I-b5DrA"},
-	
-	{id: "1spY6Tr7gFQh8c5_etmy6mx9KYnLLrrkC",
-	 titulo: "09 - Portos Comerciais",
-	 atualizacao: "01/01/2021",
-	 objetivos: ["portos de acesso",
+thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
+download_material: "https://drive.google.com/uc?export=download&id=1ehFachjZzQpuk1UEGacyf8KM5I-b5DrA",
+download_video: "https://drive.google.com/uc?export=download&id=1OViKYYUozcf0WOXI5zksYBFXBUukdyEi"
+},
+{id: "1spY6Tr7gFQh8c5_etmy6mx9KYnLLrrkC",
+titulo: "09 - Portos Comerciais",
+atualizacao: "01/01/2021",
+objetivos: ["portos de acesso",
 "explicar as funcionalidades dos portos comerciais",
 "detalhes e autoridades portuárias",
 "operadores, outras moradas e navios inspecionados"],
-	 thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
-	 material: "https://drive.google.com/uc?export=download&id=1rnVpTeO1Iu_cDTZl4RZrrYM-xPRIQsbw"},
-	
-	{id: "1rDHwJ9T3fT__pd_x_tHXuEnmJTGAMP3Q",
-	 titulo: "10 - camadas estáticas",
-	 atualizacao: "15/10/2025",
-	 objetivos: ["aceder às camadas estáticas",
+thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
+download_material: "https://drive.google.com/uc?export=download&id=1rnVpTeO1Iu_cDTZl4RZrrYM-xPRIQsbw",
+download_video: "https://drive.google.com/uc?export=download&id=1spY6Tr7gFQh8c5_etmy6mx9KYnLLrrkC"
+},
+{id: "1rDHwJ9T3fT__pd_x_tHXuEnmJTGAMP3Q",
+titulo: "10 - camadas estáticas",
+atualizacao: "15/10/2025",
+objetivos: ["aceder às camadas estáticas",
 "explicar as funcionalidades das camadas estáticas",
 "explicar as informações exibidas em camadas estáticas",
 "nome da embarcação e fronteiras do país",
@@ -273,105 +300,115 @@ const videos = [
 "historial de alterações",
 "mapa histórico",
 "idade da embarcação e navegação estimada"],
-	 thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
-	 material: "https://drive.google.com/uc?export=download&id=1hegtHfEKXhvaIqbxjTUysWSwO1RlMiij"},
-	
-	{id: "1EhxjbuoVBmQbHVEZ29NVKyGWOTQf_TuD",
-	 titulo: "11 - Ferramenta de Distância",
-	 atualizacao: "6/04/2022",
-	 objetivos: ["aceder à ferramenta de distância",
+thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
+download_material: "https://drive.google.com/uc?export=download&id=1hegtHfEKXhvaIqbxjTUysWSwO1RlMiij",
+download_video: "https://drive.google.com/uc?export=download&id=1rDHwJ9T3fT__pd_x_tHXuEnmJTGAMP3Q"
+},
+{id: "1EhxjbuoVBmQbHVEZ29NVKyGWOTQf_TuD",
+titulo: "11 - Ferramenta de Distância",
+atualizacao: "6/04/2022",
+objetivos: ["aceder à ferramenta de distância",
 "explicar as funcionalidades da ferramenta de distância",
 "criar segmentos e trajetórias",
 "editar segmentos e trajetórias",
 "compreender a diferença entre as medições de círculo máximo e de loxodromia"],thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
-	 material: "https://drive.google.com/uc?export=download&id=1toHEax5oAVwQ9vVJICClQKY1P3UQ7tH3"},
-	{id: "1g5Fe_ezwbDHNjZZHCMVz1dAVuq8xpyQM",
-	titulo: "12 - Relatórios manuais",
-	atualizacao: "15/10/2022",
-	objetivos: ["aceder ao gestor de relatórios manual",
+download_material: "https://drive.google.com/uc?export=download&id=1toHEax5oAVwQ9vVJICClQKY1P3UQ7tH3",
+download_video: "https://drive.google.com/uc?export=download&id=1EhxjbuoVBmQbHVEZ29NVKyGWOTQf_TuD"
+},
+{id: "1g5Fe_ezwbDHNjZZHCMVz1dAVuq8xpyQM",
+titulo: "12 - Relatórios manuais",
+atualizacao: "15/10/2022",
+objetivos: ["aceder ao gestor de relatórios manual",
 "explicar as funcionalidades dos relatórios manuais no seavision",
 "compreender os tipos de relatórios manuais",
 "embarcação",
 "incidente",
 "introduzir embarcações identificadas utilizando relatórios manuais",
 "adição de notas e imagens de relatórios"],
-	thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
-	material: "https://drive.google.com/uc?export=download&id=1xX9GYgVcPaVdT2nJShFJMb9vq1ZYEz-3"},
-	
-	{id: "1jGR1OhmtrqnBr-ShX9XxCXAb80E99TgX",
-	 titulo: "13 - Máquina do tempo e reprodução",
-	 atualizacao: "01/01/2021",
-	 objetivos: ["aceder às funções máquina do tempo e reprodução",
+thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
+download_material: "https://drive.google.com/uc?export=download&id=1xX9GYgVcPaVdT2nJShFJMb9vq1ZYEz-3",
+download_video: "https://drive.google.com/uc?export=download&id=1g5Fe_ezwbDHNjZZHCMVz1dAVuq8xpyQM"
+},
+{id: "1jGR1OhmtrqnBr-ShX9XxCXAb80E99TgX",
+titulo: "13 - Máquina do tempo e reprodução",
+atualizacao: "01/01/2021",
+objetivos: ["aceder às funções máquina do tempo e reprodução",
 "explicar as funcionalidades da função de máquina do tempo",
 "configurar a função de máquina do tempo",
 "explicar as funcionalidades da função de reprodução",
 "configurar a função de reprodução"],
-	 thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
-	 material: "https://drive.google.com/uc?export=download&id=1r_JgpIs6cf7tNxGl7Ub9fWAw4wVu86pE"},
-	
-	{id: "1xDmE2dPtRVzuz4Rg57WKvA36zxX-ioT0",
-	 titulo: "14 - Regras",
-	 atualizacao: "01/01/2021",
-	 objetivos: ["aceder às regras",
+thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
+download_material: "https://drive.google.com/uc?export=download&id=1r_JgpIs6cf7tNxGl7Ub9fWAw4wVu86pE",
+download_video: "https://drive.google.com/uc?export=download&id=1jGR1OhmtrqnBr-ShX9XxCXAb80E99TgX"
+},
+{id: "1xDmE2dPtRVzuz4Rg57WKvA36zxX-ioT0",
+titulo: "14 - Regras",
+atualizacao: "01/01/2021",
+objetivos: ["aceder às regras",
 "explicar as funcionalidades das regras",
 "criar uma regra",
 "configurar definições das regras",
 "gerir as opções de regras",
 "explicar as regras avaliadas como “a embarcação deve cumprir todas as condições”",
 "explicar as regras avaliadas como “a embarcação pode cumprir qualquer condição”"],thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
-	 material: "https://drive.google.com/uc?export=download&id=1v4_V-VY9myfxMkXv4VSpukT9i8dMkgaE"},
-	
-	{id: "1WYFB8FWePuun_efRcgH3J_NfbTIlg7QJ",
-	 titulo: "15 - Alertas",
-	 atualizacao: "01/01/2021",
-	 objetivos: ["alertas de acesso",
+download_material: "https://drive.google.com/uc?export=download&id=1v4_V-VY9myfxMkXv4VSpukT9i8dMkgaE",
+download_video: "https://drive.google.com/uc?export=download&id=1xDmE2dPtRVzuz4Rg57WKvA36zxX-ioT0"
+},
+{id: "1WYFB8FWePuun_efRcgH3J_NfbTIlg7QJ",
+titulo: "15 - Alertas",
+atualizacao: "01/01/2021",
+objetivos: ["alertas de acesso",
 "explicar as funcionalidades dos alertas",
 "criar um alerta",
 "configurar definições de alerta",
 "gerir opções de alerta",
 "explicar as utilizações adicionais dos resultados dos alertas"],
-	 thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
-	 material: "https://drive.google.com/uc?export=download&id=1PDaNglqdA031upsX4KBWFHHyohOzMxVP"},
-	
-	{id: "1hJrauFHdHOmZOP2ZLISl8G_EhxRAOL5X",
-	 titulo: "16 - Advertências",
-	 atualizacao: "01/01/2021",
-	 objetivos: ["aceder ao painel de advertências",
+thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
+download_material: "https://drive.google.com/uc?export=download&id=1PDaNglqdA031upsX4KBWFHHyohOzMxVP",
+download_video: "https://drive.google.com/uc?export=download&id=1WYFB8FWePuun_efRcgH3J_NfbTIlg7QJ"
+},
+{id: "1hJrauFHdHOmZOP2ZLISl8G_EhxRAOL5X",
+titulo: "16 - Advertências",
+atualizacao: "01/01/2021",
+objetivos: ["aceder ao painel de advertências",
 "compreender as funcionalidades do painel de advertências",
 "identificar as propriedades derivadas (pontuação de segurança e pontuação de proteção) da função de advertências",
 "utilizar as propriedades derivadas da função de advertências",
 "aceder aos detalhes de advertências",
 "inspecionar os detalhes de advertências"],
-    thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
-    material: "https://drive.google.com/uc?export=download&id=1qarQvz2y4ATWlYmzGULTbD33-GpDX99p"},
-	
-  {id: "1gYGrljh1tjvqKf7ruaR_LAKKgomB26wu",
-    titulo: "17 - Listas de embarcações",
-    atualizacao: "01/01/2021",
-    objetivos: ["aceder às listas de embarcações",
+thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
+download_material: "https://drive.google.com/uc?export=download&id=1qarQvz2y4ATWlYmzGULTbD33-GpDX99p",
+download_video: "https://drive.google.com/uc?export=download&id=1hJrauFHdHOmZOP2ZLISl8G_EhxRAOL5X"
+},
+{id: "1gYGrljh1tjvqKf7ruaR_LAKKgomB26wu",
+titulo: "17 - Listas de embarcações",
+atualizacao: "01/01/2021",
+objetivos: ["aceder às listas de embarcações",
 "explicar as funcionalidades das listas de embarcações",
 "criar uma lista de embarcações",
 "criar uma lista de embarcações a partir dos resultados",
 "adicionar embarcações a uma lista de embarcações existente"],
-    thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
-    material: "https://drive.google.com/uc?export=download&id=1tGenDcB40fsctLgd8P_2IxS-6eUsxno1"},
-	
-	{id: "1guHzR0bhzR6gXzL7Uvy7He9E07EdDL-w",
-    titulo: "18 - Pesquisa",
-    atualizacao: "01/01/2021",
-    objetivos: ["aceder à pesquisa",
+thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
+download_material: "https://drive.google.com/uc?export=download&id=1tGenDcB40fsctLgd8P_2IxS-6eUsxno1",
+download_video: "https://drive.google.com/uc?export=download&id=1gYGrljh1tjvqKf7ruaR_LAKKgomB26wu"
+},
+{id: "1guHzR0bhzR6gXzL7Uvy7He9E07EdDL-w",
+titulo: "18 - Pesquisa",
+atualizacao: "01/01/2021",
+objetivos: ["aceder à pesquisa",
 "explicar as funcionalidades da pesquisa",
 "criar uma pesquisa",
 "configurar definições de pesquisa",
 "gerir pesquisas guardadas",
 "explicar as utilizações adicionais dos resultados da pesquisa"],
-    thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
-    material: "https://drive.google.com/uc?export=download&id=1CM1WrfHrr65aIQ2ZPbXyY1xvmR_WDLEO"},
-  
-  {id: "1bgVycBu1sMWjOOhIr3vXUwigg1MNaPP7",
-    titulo: "19 - Chat",
-    atualizacao: "15/10/2022",
-    objetivos: ["aceder ao chat",
+thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
+download_material: "https://drive.google.com/uc?export=download&id=1CM1WrfHrr65aIQ2ZPbXyY1xvmR_WDLEO",
+download_video: "https://drive.google.com/uc?export=download&id=1guHzR0bhzR6gXzL7Uvy7He9E07EdDL-w"
+},
+{id: "1bgVycBu1sMWjOOhIr3vXUwigg1MNaPP7",
+titulo: "19 - Chat",
+atualizacao: "15/10/2022",
+objetivos: ["aceder ao chat",
 "indicar a classificação do chat",
 "definir canais de chat",
 "aceder ao separador de chat",
@@ -382,13 +419,14 @@ const videos = [
 "responder no tópico",
 "utilizar opções de tradução",
 "descrever os contextos intercomunitários"],
-    thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
-    material: "https://drive.google.com/uc?export=download&id=1PjdriHdxGkbscBXbavqf8HYweu84ADN6"},
-  
-  {id: "1S34YT1grXS6S0RLrPDciwcc16U1pchnH",
-    titulo: "20 - Filtros de mapa",
-    atualizacao: "15/10/2022",
-    objetivos: ["aceder aos filtros de mapa",
+thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
+download_material: "https://drive.google.com/uc?export=download&id=1PjdriHdxGkbscBXbavqf8HYweu84ADN6",
+download_video: "https://drive.google.com/uc?export=download&id=1bgVycBu1sMWjOOhIr3vXUwigg1MNaPP7"
+},
+{id: "1S34YT1grXS6S0RLrPDciwcc16U1pchnH",
+titulo: "20 - Filtros de mapa",
+atualizacao: "15/10/2022",
+objetivos: ["aceder aos filtros de mapa",
 "descrever o filtro tipo de embarcação",
 "descrever o filtro fontes de dados",
 "descrever o filtro alargado",
@@ -398,13 +436,14 @@ const videos = [
 "descrever o filtro do sistema de identificação automática (ais)",
 "descrever o filtro registo de navios",
 "descrever o filtro dados anómalos"],
-    thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
-    material: "https://drive.google.com/uc?export=download&id=1ruqOV4hURxVUrpI4UqHtJUIuUxd5yCuj"},
-  
-  {id: "1gTSzE8YImUot4dqf-OK94VXon62-OfKs",
-   titulo: "21 - Cartão de dados da embarcação",
-   atualizacao: "01/01/2021",
-   objetivos: ["aceder a um cartão de dados da embarcação",
+thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
+download_material: "https://drive.google.com/uc?export=download&id=1ruqOV4hURxVUrpI4UqHtJUIuUxd5yCuj",
+download_video: "https://drive.google.com/uc?export=download&id=1S34YT1grXS6S0RLrPDciwcc16U1pchnH"
+},
+{id: "1gTSzE8YImUot4dqf-OK94VXon62-OfKs",
+titulo: "21 - Cartão de dados da embarcação",
+atualizacao: "01/01/2021",
+objetivos: ["aceder a um cartão de dados da embarcação",
 "explicar as funcionalidades do cartão de dados da embarcação",
 "identificar as informações específicas da embarcação contidas no cartão de dados da embarcação",
 "dados dinâmicos da embarcação",
@@ -412,13 +451,14 @@ const videos = [
 "campos interativos",
 "dados da embarcação",
 "personalizar cartões de dados da embarcação"],
-    thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
-    material: "https://drive.google.com/uc?export=download&id=1ZAnrRXGV0NPY03f6lzKUmsO8vm28YeZO"},
-  
-  {id: "1XZCW6FAykUDrNkeidR3xxtHm4Rk8jqlb",
-    titulo: "22 - Exportar dados da embarcação",
-    atualizacao: "01/01/2021",
-    objetivos: ["explicar as funcionalidades da exportação de dados de embarcações e de relatórios pormenorizados no seavision",
+thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
+download_material: "https://drive.google.com/uc?export=download&id=1ZAnrRXGV0NPY03f6lzKUmsO8vm28YeZO",
+download_video: "https://drive.google.com/uc?export=download&id=1gTSzE8YImUot4dqf-OK94VXon62-OfKs"
+},
+{id: "1XZCW6FAykUDrNkeidR3xxtHm4Rk8jqlb",
+titulo: "22 - Exportar dados da embarcação",
+atualizacao: "01/01/2021",
+objetivos: ["explicar as funcionalidades da exportação de dados de embarcações e de relatórios pormenorizados no seavision",
 "identificar os tipos de formatos de exportação de ficheiros de embarcações",
 "identificar as localizações do mapa e do menu a partir das quais os dados da embarcação podem ser exportados",
 "exibição do mapa",
@@ -428,61 +468,101 @@ const videos = [
 "resultados da pesquisa",
 "cartão de dados da embarcação",
 "transferir relatórios de dados da embarcação"],
-    thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
-    material: "https://drive.google.com/uc?export=download&id=1GPj3iHf1gyujaE1RIHcxSqRxq41IwLB_"},
-  
-  {id: "1qIXNGgyaMOAPHOJdLqBS5kq-Lt85CgDG",
-    titulo: "23 - Fusão de dados",
-    atualizacao: "01/04/2022",
-    objetivos: ["identificar referências externas de embarcações marítimas fora do seavision:",
+thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
+download_material: "https://drive.google.com/uc?export=download&id=1GPj3iHf1gyujaE1RIHcxSqRxq41IwLB_",
+download_video: "https://drive.google.com/uc?export=download&id=1XZCW6FAykUDrNkeidR3xxtHm4Rk8jqlb"
+},
+{id: "1qIXNGgyaMOAPHOJdLqBS5kq-Lt85CgDG",
+titulo: "23 - Fusão de dados",
+atualizacao: "01/04/2022",
+objetivos: ["identificar referências externas de embarcações marítimas fora do seavision:",
 "observatório mundial da pesca",
 "organização marítima internacional (omi)",
 "tráfego marítimo",
 "determinar as aplicações dos números do sistema de identificação automática (ais) e de identificação do serviço móvel marítimo (mmsi)",
 "identificar os casos em que as fontes de dados podem ser consideradas não fidedignas (validação de dados ais)",
 "determinar a validação do trajeto da embarcação"],
-    thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
-    material: "https://drive.google.com/uc?export=download&id=11TztQ3ALZETlryPW6Hy8Ks56eF97CjD5"}
+thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
+download_material: "https://drive.google.com/uc?export=download&id=11TztQ3ALZETlryPW6Hy8Ks56eF97CjD5",
+download_video: "https://drive.google.com/uc?export=download&id=1qIXNGgyaMOAPHOJdLqBS5kq-Lt85CgDG"
+}
 ];
 
-// 🔹 Monta a tabela dinamicamente
-const table = document.getElementById("videoTable");
+    const videos2 = [
+{id: "1UIna_am1jwBMzuYXoB1iEBqgOJiJsuBj",
+titulo: "05 - Barra de navegação do SeaVision",
+atualizacao: "15/03/2022",
+objetivos: [
+"Indicar a descrição geral e as capacidades da aplicação SeaVision",
+"Identificar as fontes de dados do SeaVision",
+"Identificar o desenvolvimento e o apoio do SeaVision",
+"Determinar a função da Equipa de Assistência Técnica em Campo da SeaVision (TAFT)"],
+thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
+download_material: "https://drive.google.com/uc?export=download&id=1KCuWeW-CWNJnNZQoR50slMiYIUidU-k7",
+download_video: "https://drive.google.com/uc?export=download&id=1UIna_am1jwBMzuYXoB1iEBqgOJiJsuBj",
+download_video: "https://drive.google.com/uc?export=download&id="
+},
+{id: "1JPwRmda8nqch-sG-6LU03x-ByKplSZyi",
+titulo: "06 - Demonstração do sistema de informação automática (AIS)",
+atualizacao: "01/01/2021",
+objetivos: ["Determinar os requisitos de acesso à conta",
+"Como criar uma conta SeaVision",
+"Compreender as Comunidades e os Perfis do SeaVision",
+"Como identificar que dados e objetos do SeaVision podem ser acedidos e partilhados"],
+thumbnail: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhy3hcrFGNh-9SSpHW1wZ1IOTiOzEiKca50DIElWyfx6V2mzMuSRTA9NUVRWnbrf7mwEkD672UmWxf3bC3JkrmJgRwHNmiJs2PjiD2UhNt8jkv0SUEA96vQ6iip4LZIQj6FFSLFu3wpnSrlBImZLfTrbMb24JgoTywWL9H7QEuoIN4O8XrKlioNiD7Ts8M/s1600/logo%203dn.png",
+download_material: "https://drive.google.com/uc?export=download&id=1QioTiZzwrNclnT_fMiQs4g7OhGKe7MD2",
+download_video: "https://drive.google.com/uc?export=download&id=1JPwRmda8nqch-sG-6LU03x-ByKplSZyi"}
+];
 
-videos.forEach(v => {
-  const tr = document.createElement("tr");
 
-  // Célula do vídeo
-  const tdVideo = document.createElement("td");
-  tdVideo.innerHTML = `
-    <div class="video-container" onclick="loadVideo(this, '${v.id}')">
-      <img src="${v.thumbnail}" alt="Thumbnail ${v.titulo}">
-      <div class="play-button">▶</div>
-    </div>`;
-  tr.appendChild(tdVideo);
+    const lista = document.getElementById("lista-videos");
+    const lista2 = document.getElementById("lista-videos2");
+    const player = document.getElementById("player");
+    const titulo = document.getElementById("titulo");
+    const atualizacao = document.getElementById("atualizacao");
+    const objetivos = document.getElementById("objetivos");
+    const downloadMaterial = document.getElementById("download-material");
+    const downloadVideo = document.getElementById("download-video");
 
-  // Célula da descrição
-  const tdDesc = document.createElement("td");
-  tdDesc.classList.add("desc");
-  tdDesc.innerHTML = `
-    <h3>${v.titulo}</h3>
-    <p><b>Última atualização:</b> ${v.atualizacao}</p>
-    <p>Após a conclusão desta lição, o formando será capaz de:</p>
-    <ul>${v.objetivos.map(o => `<li>${o}</li>`).join("")}</ul>
-    <a href="${v.material}" target="_blank" style="vertical-align:bottom;" class="material">📥 Materiais de aula</a>
-  `;
-  tr.appendChild(tdDesc);
+    // Montar lista
+    videos.forEach((v, i) => {
+      let li = document.createElement("li");
+      let a = document.createElement("a");
+      a.textContent = v.titulo;
+      a.onclick = () => carregarVideo(i);
+      li.appendChild(a);
+      lista.appendChild(li);
+    });
+    // Montar lista
+    videos2.forEach((v, i) => {
+      let li = document.createElement("li");
+      let a = document.createElement("a");
+      a.textContent = v.titulo;
+      a.onclick = () => carregarVideo(i);
+      li.appendChild(a);
+      lista2.appendChild(li);
+    });
 
-  table.appendChild(tr);
-});
-
-// 🔹 Função para carregar o iframe só quando clicar
-function loadVideo(container, videoId) {
-  container.innerHTML = `
-    <iframe width="420" height="330"
-      src="https://drive.google.com/file/d/${videoId}/preview"
-      frameborder="0" allow="autoplay; fullscreen" allowfullscreen>
-    </iframe>`;
-}
+    function carregarVideo(index) {
+      const v = videos[index];
+      // carrega video (embed do google drive)
+      player.src = `https://drive.google.com/file/d/${v.id}/preview`;
+      // carrega texto
+      titulo.textContent = v.titulo;
+      atualizacao.textContent = v.atualizacao;
+      objetivos.innerHTML = "";
+      v.objetivos.forEach(o => {
+        let li = document.createElement("li");
+        li.textContent = o;
+        objetivos.appendChild(li);
+      });
+      // links de download
+      downloadMaterial.href = v.download_material;
+      downloadVideo.href = v.download_video;
+	  player.scrollIntoView({ behavior: "smooth" });
+    }
+    // carregar o primeiro por padrão
+    carregarVideo(0);
 	fetch('https://com3dn.github.io/crsm/scr/sidebar.html')
       .then(res => res.text())
       .then(html => {
