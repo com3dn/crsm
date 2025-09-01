@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Modelo de Plotagem</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="icon" href="https://com3dn.github.io/crsm/img/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="https://com3dn.github.io/crsm/img/favicon.png" type="image/png">
+	<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<!-- Leaflet Control Layers Tree CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet.control.layers.tree/L.Control.Layers.Tree.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ardhi/Leaflet.MousePosition/src/L.Control.MousePosition.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    #map { height: 95vh; }
+    .marker-box {background: #f0f8ff;
+      border-radius: 6px;
+      padding: 1px;
+      font-size: 8px;
+      border: 2px solid red;
+      cursor: move;
+      box-shadow: 1px 1px 6px rgba(0,0,0,0.3);}
+    .zoom-btn {
+      font-size: 8px;
+      margin: 1px;
+      cursor: pointer;
+      border: none;
+      background: #eee;
+      padding: 1px 2px;
+      border-radius: 4px;}
+  .controle-vermelho {
+    background-color: #ff0000;
+    border: 1px solid red;
+    padding: 2px;
+    border-radius: 6px;}
+  .controle-cinza {
+    background-color: #aaaaaa;
+    border: 1px solid gray;
+    padding: 2px;
+    border-radius: 6px;  }
+  .controle-azul {
+    background-color: #4ca6ff;
+    border: 1px solid gray;
+    padding: 2px;
+    border-radius: 6px;}
+  .leaflet-control-layers label {
+    font-size: 12px;}
+/* Remover a mensagem padrão */
+.leaflet-draw-tooltip {display: none !important;}
+/* Ou customizar o estilo da mensagem */
+.leaflet-draw-tooltip {background-color: rgba(255, 255, 255, 0.7);border: 1px solid #ccc;padding: 5px;font-size: 12px;}
+.hidden {display: none;}
+  </style>
+</head>
+<body>
+<div id="map"></div>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/ardhi/Leaflet.MousePosition/src/L.Control.MousePosition.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/leaflet-polylinedecorator@1.6.0/dist/leaflet.polylineDecorator.js"></script>
+    <!-- Inclua o CSS e JS do Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <!-- Inclua o CSS e JS do plugin Leaflet Draw -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
+    <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+<script>
+const map = L.map('map').setView([5.85, -45.15], 5);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '2°SG-SI Jefferson Correia'}).addTo(map);
+L.control.fullscreen({position: 'topleft', title:'Tela Cheia', titleCancel: 'Sair da Tela Cheia', content: 'Full'}).addTo(map);
+const embarcacoes = [];
+const markerScales = {};
+const overlays = {};
+const latlngsGrupo1 = [];
+const embarcacoes2 = [];
+const markerScales2 = {};
+const overlays2 = {};
+const latlngsGrupo2 = [];
+const embarcacoes3 = [];
+const markerScales3 = {};
+const overlays3 = {};
+const latlngsGrupo3 = [];
+
+	// Adicionar a ferramenta de medição de distância usando Leaflet Draw
+        let drawnItems = new L.FeatureGroup().addTo(map);
+        let drawControl = new L.Control.Draw({
+         edit: {featureGroup: drawnItems },
+         draw: {polyline: {metric: false, feet:false, nautic:true },
+			polygon: false,rectangle: false,marker: false,
+			circle:false,circlemarker:false}}).addTo(map);
+
+	// Função para calcular distância em milhas náuticas entre dois pontos
+function calculateDistanceInNauticalMiles(latlngs) {
+    var distanceInMeters = 0;
+    for (var i = 0; i < latlngs.length - 1; i++) {
+		distanceInMeters += latlngs[i].distanceTo(latlngs[i + 1]); }
+    // Converter metros para milhas náuticas (1 náutica = 1852 metros)
+    var distanceInNauticalMiles = distanceInMeters / 1852;
+    return distanceInNauticalMiles;};
+
+// Função para exibir a distância calculada
+map.on('draw:created', function(e) {var layer = e.layer;
+    drawnItems.addLayer(layer);
+    // Calcular a distância em milhas náuticas
+    if (layer instanceof L.Polyline) { let nauticalDistance = calculateDistanceInNauticalMiles(layer.getLatLngs());
+        layer.bindPopup("Distância: " + nauticalDistance.toFixed(1) + " MN").openPopup();}
+	 // Após o desenho, desabilitar a mensagem padrão do Leaflet Draw
+    let drawControlContainer = document.querySelector('.leaflet-draw-tooltip');
+    if (drawControlContainer) { drawControlContainer.style.display = 'none'; // Esconde a mensagem
+    }});
+	
+// Atualizar tooltip durante o desenho
+map.on('draw:drawvertex', function (e) { let latlngs = e.layers.getLayers().map(l => l.getLatLng());
+    if (latlngs.length > 1) { let dist = calculateDistanceInNauticalMiles(latlngs);
+        let tooltip = document.querySelector('.leaflet-draw-tooltip');
+        if (tooltip) {tooltip.innerHTML = "Distância: " + dist.toFixed(2) + " MN";}
+    }});
+
+// Mensagem inicial personalizada
+map.on('draw:drawstart', function () {let tooltip = document.querySelector('.leaflet-draw-tooltip');
+    if (tooltip) tooltip.innerHTML = "Clique para começar a medir";});
+	// Criar um único controle de posição do mouse
+var mouse_position = new L.Control.MousePosition({"emptyString": "NaN", "lngFirst": false, "numDigits": 6, "position": "topright", "prefix": "Posição:", "separator": " | "});
+
+// Lista de portos com suas coordenadas
+const portos = {
+    //"Aracati": { lat: -4.423261, lon: -37.764558 },
+    //"Areia Branca": { lat: -4.928146, lon: -37.144775 },
+    //"Cabedelo": { lat: -6.952839, lon: -34.846572 },
+    //"Camocim": { lat: -2.910124, lon: -40.825195 },
+    //"Fortaleza": { lat: -3.703330, lon: -38.487854 },
+    //"Guamaré": { lat: -5.083420, lon: -36.305007 },
+    //"Maceió": { lat: -9.694166, lon: -35.741615 },
+    "Natal": { lat: -5.750000, lon: -35.200000 }
+    //"Pecém": { lat: -3.528927, lon: -38.811864 },
+    //"Recife": { lat: -8.050000, lon: -34.866667 },
+    //"Suape": { lat: -8.388487, lon: -34.940471 }
+};
+
+// Função para calcular distância em Milhas Náuticas (MN)
+function calcularDistancia(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Raio da Terra em km
+    const φ1 = lat1 * Math.PI / 180;
+    const φ2 = lat2 * Math.PI / 180;
+    const Δφ = (lat2 - lat1) * Math.PI / 180;
+    const Δλ = (lon2 - lon1) * Math.PI / 180;
+
+    // Fórmula de Haversine
+    const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+        Math.cos(φ1) * Math.cos(φ2) *
+        Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    // Distância em Milhas Náuticas (MN)
+    return (R * c * 0.539957);
+}
+
+// Função para encontrar o porto mais próximo
+function portoMaisProximo(latMouse, lonMouse) {
+    let menorDistancia = Infinity;
+    let portoMaisProx = null;
+    for (const porto in portos) {
+        let { lat, lon } = portos[porto];
+        let distancia = calcularDistancia(latMouse, lonMouse, lat, lon);
+        if (distancia < menorDistancia) {
+            menorDistancia = distancia;
+            portoMaisProx = porto;} }
+        return { portoMaisProx, menorDistancia: menorDistancia.toFixed(2) };}
+
+// Converter Decimal para Graus, Minutos e Segundos (GMS)
+function decimalParaGMS(num, isLatitude) {
+    var grau = Math.floor(Math.abs(num));
+    var minuto = Math.floor((Math.abs(num) - grau) * 60);
+    var segundo = Math.round((Math.abs(num) - grau - (minuto / 60)) * 3600);
+    var direction = isLatitude ? (num >= 0 ? 'N' : 'S') : (num >= 0 ? 'E' : 'W');
+    return grau + "º " + minuto + "' " + segundo + '" ' + direction;
+}
+// Adicionar controle ao mapa
+map.addControl(mouse_position);
+// Evento para calcular distância e exibir dados
+map.on("mousemove", function(e) {
+    let { portoMaisProx, menorDistancia } = portoMaisProximo(e.latlng.lat, e.latlng.lng);
+    let decimalLat = e.latlng.lat.toFixed(4);
+    let decimalLng = e.latlng.lng.toFixed(4);
+    let gmsLat = decimalParaGMS(e.latlng.lat, true);
+    let gmsLng = decimalParaGMS(e.latlng.lng, false);
+    document.querySelector(".leaflet-control-mouseposition").innerHTML = `
+        DEC: ${decimalLat}, ${decimalLng}<br>
+        GMS: ${gmsLat}, ${gmsLng}<br>
+        ${menorDistancia} MN de ${portoMaisProx}`;});
+
+function campoFormatado(label, valor) {
+  if (!valor) return "";
+  const texto = String(valor).trim();
+  if (!texto || texto.toUpperCase() === "NÃO INFORMADO") return "";
+  return `<strong>${label}:</strong> ${texto}`;
+}
+function esperar(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function zoomMarker(idPonto, factor) {
+  const scaleMin = 0.6;
+  const scaleMax = 2;
+  markerScales[idPonto] = Math.max(scaleMin, Math.min(scaleMax, markerScales[idPonto] * factor));
+  const emb = embarcacoes.find(e => e.id === idPonto);
+  if (!emb) return;
+
+  const scale = markerScales[idPonto];
+  const icon = L.divIcon({
+  className: 'custom-marker',
+  html: `
+    <div class="marker-box" style="border-color:red; transform: scale(${scale}); transform-origin: top left; user-select: text; pointer-events: auto;">
+      <div style="display: flex; align-items: bottom; justify-content: space-between;">
+        <button style="margin-top: 0px;"  class="zoom-btn" onclick="zoomMarker('${idPonto}', 1.05)"></button>
+		<div style="flex-grow: 1; text-align: center;">${emb.plotagem ? `<div contenteditable="true" tabindex="0" style="outline: none;"><i>${emb.plotagem}</i></div>` : ""}
+        </div>
+        <button style="margin-top: 0px;" class="zoom-btn" onclick="zoomMarker('${idPonto}', 0.95)"></button>
+      </div>
+    </div>
+  `,
+  iconSize: [150, 50],
+  iconAnchor: [50, 20]
+});
+document.addEventListener("click", function (e) {
+  const target = e.target;
+  if (target.hasAttribute("contenteditable")) {
+    target.focus(); }});
+  map.eachLayer(layer => {if (layer instanceof L.Marker && layer.options?.idPonto === idPonto) {
+      layer.setIcon(icon);}});}
+
+esperar(1000).then(() => {
+fetch("https://opensheet.elk.sh/1y-sjPgHLVjGN-b3zDtlfA_dzuTkCWBzYRsh5HlxO-nQ/contato")
+  .then(res => res.json())
+  .then(dados => {
+    let primeiroLatLng = null;
+    dados.forEach((item, idx) => {
+      const lat = parseFloat(item["LAT(dec)"]);
+      const lng = parseFloat(item["LONG(dec)"]);
+      if (isNaN(lat) || isNaN(lng)) return;
+      if (!primeiroLatLng) primeiroLatLng = [lat, lng];
+      const idPonto = `${item["NOME"]}_${item["PONTOS"]}`;
+      const emb = {
+        id: idPonto,
+        nome: item["NOME"],
+        ponto: item["PONTOS"],
+        dh: item["Data-hora(ZULU)"],
+        lat: lat,
+        lng: lng,
+        lat_gsm: item["LAT(gsm)"],
+        lng_gsm: item["LONG(gsm)"],
+        rumo: item["Rumo"],
+        veloc: item["Veloc"],
+        dist: item["DistNav"],
+        circ: item["CIRC_INCERT"],
+        plotagem: item["BALÃOZINHO"]?.replace(/\n/g, "<br>")
+      };
+      embarcacoes.push(emb);
+      markerScales[idPonto] = 1;
+      const icon = L.divIcon({
+  className: 'custom-marker',
+  html: `
+    <div class="marker-box" style="border-color:red;">
+      <div style="display: flex; align-items: bottom; justify-content: space-between;">
+        <button style="margin-top: 0px;" class="zoom-btn" onclick="zoomMarker('${idPonto}', 1.05)"></button>
+        <div style="flex-grow: 1; text-align: center;">${emb.plotagem ? `<div contenteditable="true" tabindex="0" style="outline: none;"><i>${emb.plotagem}</i></div>` : ""}
+        </div>
+        <button style="margin-top: 0px;" class="zoom-btn" onclick="zoomMarker('${idPonto}', 0.95)"></button>
+      </div>
+    </div>`,
+  iconSize: [150, 50],
+  iconAnchor: [50, 20]
+});
+document.addEventListener("click", function (e) {
+  const target = e.target;
+  if (target.hasAttribute("contenteditable")) {
+    target.focus();
+  }
+});
+      const latlng = L.latLng(lat, lng);
+	  latlngsGrupo1.push(latlng);
+	  
+      const circlemaker = L.circleMarker(latlng, { radius: 3, color: 'red',fillColor: 'cyan',fillOpacity: 0.7}).addTo(map);
+      const marker = L.marker(latlng, {icon: icon,draggable: true,idPonto: idPonto}); // ← Não adiciona diretamente ao mapa
+      const linha = L.polyline([latlng, latlng], { color: 'red', weight: 0.8 }); // Também fica inativo
+
+		marker.on('drag', (e) => {const nova = e.target.getLatLng();
+		linha.setLatLngs([latlng, nova]);});
+
+const group = L.layerGroup([marker, linha]); // Agrupa os dois
+
+overlays[`<span style='color:black'><b>${emb.nome} (${emb.ponto})</b></span>`] = group;
+
+    });
+if (latlngsGrupo1.length > 1) {
+  const linhaDash = L.polyline(latlngsGrupo1, {
+    color: 'red',
+    weight: 1.2,
+    dashArray: '4 6', // ← define o padrão de traço
+    opacity: 0.7
+  }).addTo(map);
+};
+    if (primeiroLatLng) {
+      map.setView(primeiroLatLng, 5);
+    }
+const invertedOverlays = Object.entries(overlays).reverse().reduce((acc, [label, layer]) => {
+  acc[label] = layer;
+  return acc;
+}, {});
+
+// Controle 1 – Vermelho (aba 'teste')
+const controle1 = L.control.layers(null, invertedOverlays, { collapsed: true }).addTo(map);
+setTimeout(() => {const el = document.querySelector('.leaflet-control-layers'); // pega o primeiro
+  el.classList.add('controle-vermelho');}, 200); // atraso para garantir que o DOM esteja carregado
+});});
+function zoomMarker2(idPonto, factor) {
+  const scaleMin = 0.6;
+  const scaleMax = 2;
+  markerScales2[idPonto] = Math.max(scaleMin, Math.min(scaleMax, markerScales2[idPonto] * factor));
+  const emb = embarcacoes2.find(e => e.id === idPonto);
+  if (!emb) return;
+
+  const scale = markerScales2[idPonto];
+const icon = L.divIcon({
+  className: 'custom-marker',
+  html: `
+    <div class="marker-box" style="border-color:gray; transform: scale(${scale}); transform-origin: top left; user-select: text; pointer-events: auto;">
+      <div style="display: flex; align-items: bottom; justify-content: space-between;">
+        <button class="zoom-btn" onclick="zoomMarker2('${idPonto}', 1.05)"></button>
+		<div style="flex-grow: 1; text-align: center;">${emb.plotagem ? `<div contenteditable="true" tabindex="0" style="outline: none;"><i>${emb.plotagem}</i></div>` : ""}
+        </div>
+        <button class="zoom-btn" onclick="zoomMarker2('${idPonto}', 0.95)"></button>
+      </div>
+    </div>
+  `,
+  iconSize: [150, 50],
+  iconAnchor: [50, 20]
+});
+
+  map.eachLayer(layer => {
+    if (layer instanceof L.Marker && layer.options?.idPonto === idPonto) {
+      layer.setIcon(icon);
+    }
+  });
+}
+
+esperar(2000).then(() => {
+fetch("https://opensheet.elk.sh/1y-sjPgHLVjGN-b3zDtlfA_dzuTkCWBzYRsh5HlxO-nQ/patrulha")
+  .then(res => res.json())
+  .then(dados => {
+    let primeiroLatLng = null;
+    dados.forEach((item, idx) => {
+      const lat = parseFloat(item["LAT(dec)"]);
+      const lng = parseFloat(item["LONG(dec)"]);
+      if (isNaN(lat) || isNaN(lng)) return;
+
+      if (!primeiroLatLng) primeiroLatLng = [lat, lng];
+
+      const idPonto = `GRUPO2_${item["NOME"]}_${item["PONTOS"]}`;
+      const emb = {
+        id: idPonto,
+        nome: item["NOME"],
+        ponto: item["PONTOS"],
+        dh: item["Data-hora(ZULU)"],
+        lat: lat,
+        lng: lng,
+        lat_gsm: item["LAT(gsm)"],
+        lng_gsm: item["LONG(gsm)"],
+        rumo: item["Rumo"],
+        veloc: item["Veloc"],
+        dist: item["DistNav"],
+        circ: item["CIRC_INCERT"],
+        plotagem: item["BALÃOZINHO"]?.replace(/\n/g, "<br>")
+      };
+
+      embarcacoes2.push(emb);
+      markerScales2[idPonto] = 1;
+
+      const icon = L.divIcon({
+  className: 'custom-marker',
+  html: `
+    <div class="marker-box" style="border-color:gray;">
+      <div style="display: flex; align-items: bottom; justify-content: space-between;">
+        <button class="zoom-btn" onclick="zoomMarker2('${idPonto}', 1.05)"></button>
+        <div style="flex-grow: 1; text-align: center;">${emb.plotagem ? `<div contenteditable="true" tabindex="0" style="outline: none;"><i>${emb.plotagem}</i></div>` : ""}
+        </div>
+        <button class="zoom-btn" onclick="zoomMarker2('${idPonto}', 0.95)"></button>
+      </div>
+    </div>`,
+  iconSize: [150, 50],
+  iconAnchor: [50, 20]
+});
+document.addEventListener("click", function (e) {
+  const target = e.target;
+  if (target.hasAttribute("contenteditable")) {
+    target.focus();
+  }
+});
+      const latlng = L.latLng(lat, lng);
+	  latlngsGrupo2.push(latlng);
+      const circlemaker = L.circleMarker(latlng, { radius: 3, color: 'gray',fillColor: 'cyan',fillOpacity: 0.7}).addTo(map);
+      const marker = L.marker(latlng, {icon: icon,draggable: true,idPonto: idPonto}); // ← Não adiciona diretamente ao mapa
+      const linha = L.polyline([latlng, latlng], { color: 'gray', weight: 0.8 }); // Também fica inativo
+
+		marker.on('drag', (e) => { const nova = e.target.getLatLng();
+		linha.setLatLngs([latlng, nova]);});
+
+const group2 = L.layerGroup([marker, linha]); // Agrupa os dois
+
+overlays2[`<span style='color:black'><b>${emb.nome} (${emb.ponto})</b></span>`] = group2;
+
+    });
+if (latlngsGrupo2.length > 1) {
+  const linhaDash = L.polyline(latlngsGrupo2, {
+    color: 'gray',
+    weight: 1.2,
+    dashArray: '4 6', // ← define o padrão de traço
+    opacity: 0.7
+  }).addTo(map);
+};
+    if (primeiroLatLng) {
+      map.setView(primeiroLatLng, 5);
+    }
+const invertedOverlays2 = Object.entries(overlays2).reverse().reduce((acc, [label, layer]) => {
+  acc[label] = layer;
+  return acc;
+}, {});
+
+// Controle 2 – Cinza (aba 'teste2')
+const controle2 = L.control.layers(null, invertedOverlays2, { collapsed: true }).addTo(map);
+setTimeout(() => {
+  const allControls = document.querySelectorAll('.leaflet-control-layers');
+  const el = allControls[1]; // pega o segundo
+  el.classList.add('controle-cinza');
+}, 400);});});
+
+function zoomMarker3(idPonto, factor) {
+  const scaleMin = 0.6;
+  const scaleMax = 2;
+  markerScales3[idPonto] = Math.max(scaleMin, Math.min(scaleMax, markerScales3[idPonto] * factor));
+  const emb = embarcacoes3.find(e => e.id === idPonto);
+  if (!emb) return;
+
+  const scale = markerScales3[idPonto];
+const icon = L.divIcon({
+  className: 'custom-marker',
+  html: `
+    <div class="marker-box" style="border-color:blue; transform: scale(${scale}); transform-origin: top left; user-select: text; pointer-events: auto;">
+      <div style="display: flex; align-items: bottom; justify-content: space-between;">
+        <button class="zoom-btn" onclick="zoomMarker3('${idPonto}', 1.05)"></button>
+		<div style="flex-grow: 1; text-align: center;">${emb.plotagem ? `<div contenteditable="true" tabindex="0" style="outline: none;"><i>${emb.plotagem}</i></div>` : ""}
+        </div>
+        <button class="zoom-btn" onclick="zoomMarker3('${idPonto}', 0.95)"></button>
+      </div>
+    </div>
+  `,
+  iconSize: [150, 50],
+  iconAnchor: [50, 20]
+});
+
+  map.eachLayer(layer => {
+    if (layer instanceof L.Marker && layer.options?.idPonto === idPonto) {
+      layer.setIcon(icon);
+    }
+  });
+}
+
+esperar(3000).then(() => {
+fetch("https://opensheet.elk.sh/1y-sjPgHLVjGN-b3zDtlfA_dzuTkCWBzYRsh5HlxO-nQ/pma")
+  .then(res => res.json())
+  .then(dados => {
+    let primeiroLatLng = null;
+    dados.forEach((item, idx) => {
+      const lat = parseFloat(item["LAT(dec)"]);
+      const lng = parseFloat(item["LONG(dec)"]);
+      if (isNaN(lat) || isNaN(lng)) return;
+
+      if (!primeiroLatLng) primeiroLatLng = [lat, lng];
+
+      const idPonto = `GRUPO3_${item["NOME"]}_${item["PONTOS"]}`;
+      const emb = {
+        id: idPonto,
+        nome: item["NOME"],
+        ponto: item["PONTOS"],
+        dh: item["Data-hora(ZULU)"],
+        lat: lat,
+        lng: lng,
+        lat_gsm: item["LAT(gsm)"],
+        lng_gsm: item["LONG(gsm)"],
+        rumo: item["Rumo"],
+        veloc: item["Veloc"],
+        dist: item["DistNav"],
+        circ: item["CIRC_INCERT"],
+        plotagem: item["BALÃOZINHO"]?.replace(/\n/g, "<br>")
+      };
+
+      embarcacoes3.push(emb);
+      markerScales3[idPonto] = 1;
+
+      const icon = L.divIcon({
+  className: 'custom-marker',
+  html: `
+    <div class="marker-box" style="border-color:blue;">
+      <div style="display: flex; align-items: bottom; justify-content: space-between;">
+        <button class="zoom-btn" onclick="zoomMarker3('${idPonto}', 1.05)"></button>
+        <div style="flex-grow: 1; text-align: center;">${emb.plotagem ? `<div contenteditable="true" tabindex="0" style="outline: none;"><i>${emb.plotagem}</i></div>` : ""}
+        </div>
+        <button class="zoom-btn" onclick="zoomMarker3('${idPonto}', 0.95)"></button>
+      </div>
+    </div>`,
+  iconSize: [150, 50],
+  iconAnchor: [50, 20]
+});
+document.addEventListener("click", function (e) {
+  const target = e.target;
+  if (target.hasAttribute("contenteditable")) {
+    target.focus();
+  }
+});
+      const latlng = L.latLng(lat, lng);
+	  latlngsGrupo3.push(latlng);
+      const circlemaker = L.circleMarker(latlng, { radius: 3, color: 'blue',fillColor: 'cyan',fillOpacity: 0.7}).addTo(map);
+      const marker = L.marker(latlng, {icon: icon,draggable: true,idPonto: idPonto}); // ← Não adiciona diretamente ao mapa
+      const linha = L.polyline([latlng, latlng], { color: 'blue', weight: 0.8 }); // Também fica inativo
+
+		marker.on('drag', (e) => { const nova = e.target.getLatLng();
+		linha.setLatLngs([latlng, nova]);});
+
+const group3 = L.layerGroup([marker, linha]); // Agrupa os dois
+
+overlays3[`<span style='color:black'><b>${emb.nome} (${emb.ponto})</b></span>`] = group3;
+
+    });
+if (latlngsGrupo3.length > 1) {
+  const linhaDash = L.polyline(latlngsGrupo3, {
+    color: 'blue',
+    weight: 1.2,
+    dashArray: '4 6', // ← define o padrão de traço
+    opacity: 0.7
+  }).addTo(map);
+};
+    if (primeiroLatLng) {
+      map.setView(primeiroLatLng, 5);
+    }
+const invertedOverlays3 = Object.entries(overlays3).reverse().reduce((acc, [label, layer]) => {
+  acc[label] = layer;
+  return acc;
+}, {});
+
+// Controle 3 – azul (aba 'teste3')
+const controle3 = L.control.layers(null, invertedOverlays3, { collapsed: true }).addTo(map);
+setTimeout(() => {
+  const allControls = document.querySelectorAll('.leaflet-control-layers');
+  const el = allControls[2]; // pega o segundo
+  el.classList.add('controle-azul');
+}, 600);});});
+</script>
+</body>
+</html>
