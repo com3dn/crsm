@@ -1816,8 +1816,12 @@ function criarMarcadorArrastavel(latlng, texto, posicaoFixa, corFundo) {
     // Criar o marcador arrastável
     const marcador = L.marker(latlng, { icon, draggable: true }).addTo(map);
 
-    // Criar a linha conectando o marcador à sua posição fixa
-    const linhaDinamica = L.polyline([posicaoFixa, latlng], { color: 'blue' }).addTo(map);
+     // Criar a linha conectando o marcador à sua posição fixa
+    const linhaDinamica = L.polyline([posicaoFixa, latlng], { 
+        color: corFundo,   // <- mesma cor do fundo
+        weight: 2,         // espessura da linha
+        opacity: 0.8       // transparência (opcional)
+    }).addTo(map);
 
     // Atualiza a linha sempre que o marcador for movido
     marcador.on('drag', function (event) {
@@ -1955,4 +1959,5 @@ var overlays = {
     </script>
 </body>
 </html>
+
 
