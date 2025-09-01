@@ -1786,7 +1786,7 @@ var marker8 = L.circleMarker([patru_lat4, patru_long4], { "color": "red", "fill"
 	Horas de navegação:${(dist_ci_pat/velRelativa2).toFixed(1)}H `,{ maxWidth: 600, minWidth: 200 });
     linhas.push(linha1);
 
-    var linha2 = L.polyline([[alvo_latinicial2, alvo_longinicial2], [alvo_latestimada2, alvo_longestimada2]], { color: 'darkgray' })
+    var linha2 = L.polyline([[alvo_latinicial2, alvo_longinicial2], [alvo_latestimada2, alvo_longestimada2]], { color: 'darkgray', "dashArray": "4, 4"  })
 	.bindPopup(`Distância entre a posição recebida do Contato de Interesse \ne a DH mais recente do patrulha ou Dh do suspender: ${dist_ci_est} mn
 	<br>Horas navegadas:${(dist_ci_est/alvo_veloc2).toFixed(1)}H `,{ maxWidth: 600, minWidth: 200 });
     linhas.push(linha2);
@@ -1959,6 +1959,7 @@ var overlays = {
     </script>
 </body>
 </html>
+
 
 
 
