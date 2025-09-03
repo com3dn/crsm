@@ -286,7 +286,7 @@ function copiarResultados() {
     const textoParaCopiar = 
         `🗓️ *DH da posição:* ${origemElement?.textContent.replace('Data/Hora Partida:', '').trim()}\n` +
         `↔️ *Distância:* ${distanciaElement?.textContent.replace('Distância:', '').trim()}\n` +
-        `🚢 *Velocidade:* ${document.querySelector('#result-velocidade span')?.textContent.replace('Velocidade média:', '').trim()}\n` + 
+        `🚢 *Velocidade:* ${document.querySelector('#result-velocidade span')?.textContent.replace('Velocidade:', '').trim()}\n` + 
         `⏱ *Duração:* ${document.querySelector('#result-tempo span')?.textContent.replace('Tempo:', '').trim()}\n` +
         `⏰ *ETA:* ${document.querySelector('#result-eta span')?.textContent.replace('ETA:', '').trim()}\n`+
 	`📍 *LAT/LONG:*`;
@@ -369,4 +369,5 @@ fetch('https://com3dn.github.io/crsm/scr/sidebar.html')
 </script>
 </body>
 </html>
+
 
