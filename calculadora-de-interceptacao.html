@@ -373,7 +373,7 @@ input { width: 100px; padding: 5px; margin: 5px; }
 		</tbody></table>
 	<td colspan="3" style="width:100%;height:450px">Legenda: 
 	&emsp;&emsp;<span style="color: #00910f;">Δ - CI</span>
-	&emsp;&emsp;<span style="color: #cc00ff;">Δ - Estimada do CI</span>
+	&emsp;&emsp;<span style="color: #cc00ff;">Δ - Posição do CI pela hora estimada</span>
 	&emsp;&emsp;<span style="color: #4a4a4a;">Δ - Patrulha</span>
 	&emsp;&emsp;<span style="color: #680082;">Θ - Interceptação</span>
 	
@@ -1300,13 +1300,13 @@ if (patru_lat5 !== null && patru_lat5 !== "" && !isNaN(patru_lat5)) {
   	let alvo_longestimadaDMS = decimalToDMS(alvo_longestimada, false);
   
 	//APRESENTAR OS VALORES NA TABELA ABAIXO DO MAPA
-    document.getElementById("dadosCI").innerText = 'Posição do CI\n' + dhposini + '\nLat: '+ alvo_latinicialDMS + 
+    document.getElementById("dadosCI").innerText = 'Posição mais recente do CI\n' + dhposini + '\nLat: '+ alvo_latinicialDMS + 
 	',Long: ' + alvo_longinicialDMS + '\nRumo: ' + alvo_rumo.toFixed(0) + '° , Veloc: ' + alvo_veloc + ' nós';  
 	
-    document.getElementById("dadosestimada").innerText = 'Posição Estimada\n' + estimadaDATA + '\nLat: ' + alvo_latestimadaDMS + 
+    document.getElementById("dadosestimada").innerText = 'Posição do CI pela hora estimada\n' + estimadaDATA + '\nLat: ' + alvo_latestimadaDMS + 
 	',Long: ' + alvo_longestimadaDMS + '\nRumo: ' + alvo_rumo.toFixed(0) + '° , Veloc: ' + alvo_veloc + ' nós\nNavegou: ' + calcularDistancia(alvo_latinicial,alvo_longinicial,alvo_latestimada,alvo_longestimada).toFixed(0) + ' MN';
 	
-    document.getElementById("dadospatrulha").innerText = 'Posiçao do Patrulha\n' + dhpatrulha + '\nLat: ' + latpatDMS + 
+    document.getElementById("dadospatrulha").innerText = 'Posiçao atua do Patrulha\n' + dhpatrulha + '\nLat: ' + latpatDMS + 
 	',Long: ' + longpatDMS + '\nVeloc: ' + patru_veloc + ' nós' + 
 	'\nRumo para CI: ' + rumoParaAlvo.toFixed(0) + '°, Distancia: ' + calcularDistancia(alvo_latinicial,alvo_longinicial,patru_lat,patru_long).toFixed(0) + 
 	' MN\nRumo para Estimada: ' + rumoParaest.toFixed(0) + '°, Distancia: ' + calcularDistancia(alvo_latestimada,alvo_longestimada,patru_lat,patru_long).toFixed(0) + ' MN';
@@ -1351,14 +1351,14 @@ markers.push(marker1);
 
 
     var marker2 = L.circleMarker([alvo_latinicial, alvo_longinicial], {"color": "#00b359", "fill": true, "fillColor": "#00b359", "fillOpacity": 0.5, "radius": 5, "stroke": true, "weight": 3})
-	.bindPopup(`Posição do CI<br>
+	.bindPopup(`Posição mais recente do CI<br>
 	DH: ${alvo_datainicial.toLocaleString("pt-BR", {day: "2-digit",month: "2-digit",year: "numeric", hour: "2-digit", minute: "2-digit", hour12: false})}P<br>
 	Lat: ${decimalToDMS(alvo_latinicial, true)}, Long: ${decimalToDMS(alvo_longinicial, false)}
 	<br>Rumo: ${alvo_rumo.toFixed(0)}°, Veloc: ${alvo_veloc} nós`,{ maxWidth: 600, minWidth: 200 });
     markers.push(marker2);
 
     var marker3 = L.circleMarker([alvo_latestimada, alvo_longestimada], {"color": "#660066", "fill": true, "fillColor": "#660066", "fillOpacity": 0.5, "radius": 5, "stroke": true, "weight": 3})
-	.bindPopup(`Posição Estimada do CI <br>
+	.bindPopup(`Posição do CI pela hora estimada<br>
 	DH: ${estimadaDATA}P<br>
 	Lat: ${decimalToDMS(alvo_latestimada, true)}, Long: ${decimalToDMS(alvo_longestimada, false)}
 	<br>Rumo: ${alvo_rumo.toFixed(0)}°, Veloc: ${alvo_veloc} nós`,{ maxWidth: 600, minWidth: 200 });
@@ -1412,7 +1412,7 @@ const posicaoEST3 = [alvo_latestimada, alvo_longestimada];
 
 // Criar os marcadores com suas respectivas posições fixas
 const { marcador: markerPatrulha, linhaDinamica: linhaPatrulha } = criarMarcadorArrastavel([patru_lat_final, patru_long_final], 
-`Posiçao do patrulha
+`Posiçao atual do patrulha
 <br>DH: ${dhpatrulha}
 <br>Lat: ${latpatDMS}, Long: ${longpatDMS}
 <br>Rumo para o CI: ${rumoParaAlvo.toFixed(0)}°,Distancia: ${distancia} MN
@@ -1421,13 +1421,13 @@ const { marcador: markerPatrulha, linhaDinamica: linhaPatrulha } = criarMarcador
 
 
 const { marcador: markerCI, linhaDinamica: linhaCI } = criarMarcadorArrastavel([alvo_latinicial, alvo_longinicial], 
-`Posição do CI
+`Posição mais recente do CI
 <br>DH: ${dhposini}
 <br>Lat: ${alvo_latinicialDMS}, Long: ${alvo_longinicialDMS}
 <br>Rumo: ${alvo_rumo.toFixed(0)}° , Veloc: ${alvo_veloc} nós`, posicaoCI3);
 
 const { marcador: markerEST2, linhaDinamica: linhaEST } = criarMarcadorArrastavel([alvo_latestimada, alvo_longestimada], 
-`Posição estimada
+`Posição do CI pela hora estimada
 <br>DH: ${estimadaDATA}
 <br>Lat: ${alvo_latestimadaDMS}, Long: ${alvo_longestimadaDMS}
 <br>Rumo: ${alvo_rumo.toFixed(0)}°, Veloc: ${alvo_veloc} nós`, posicaoEST3);
@@ -1590,7 +1590,7 @@ const { marcador: markerEST2, linhaDinamica: linhaEST } = criarMarcadorArrastave
 		'\nDecimal'+
 		'\nLat: '+ alvo_latinicial.toFixed(4) + ',Long: ' + alvo_longinicial.toFixed(4);  
 	
-	document.getElementById("dadosestimada").innerText = 'Posição Estimada' +
+	document.getElementById("dadosestimada").innerText = 'Posição do CI pela hora estimada' +
 		'\nDH - ' + estimadaDATA +
 		'\nLat: ' + alvo_latestimadaDMS + ',Long: ' + alvo_longestimadaDMS +
 		'\nRumo: ' + alvo_rumo.toFixed(0) + '° , Veloc: ' + alvo_veloc + ' nós'+
@@ -1599,7 +1599,7 @@ const { marcador: markerEST2, linhaDinamica: linhaEST } = criarMarcadorArrastave
 		'\nLat: '+ alvo_latestimada.toFixed(4) + ',Long: ' + alvo_longestimada.toFixed(4);
 			
 	
-	document.getElementById("dadospatrulha").innerText = 'Posiçao do Patrulha' + 
+	document.getElementById("dadospatrulha").innerText = 'Posiçao atual do Patrulha' + 
 		'\nDH - ' + dhpatrulha + 
 		'\nLat: ' + latpatDMS + ',Long: ' + longpatDMS + 
 		'\nRumo: ' + rumoParaAlvofinal.toFixed(0) + '°, Veloc: ' + patru_veloc + ' nós' + 
@@ -1681,7 +1681,7 @@ const { marcador: markerEST2, linhaDinamica: linhaEST } = criarMarcadorArrastave
 		
 		
      // Criando e adicionando os marcadores separadamente
-    var marker1 = L.circleMarker([patru_lat_final2, patru_long_final2], {"color": "gray", "fill": true, "fillColor": "gray", "fillOpacity": 0.5, "radius": 8, "stroke": true, "weight": 3}).bindPopup(`Posiçao do patrulha
+    var marker1 = L.circleMarker([patru_lat_final2, patru_long_final2], {"color": "gray", "fill": true, "fillColor": "gray", "fillOpacity": 0.5, "radius": 8, "stroke": true, "weight": 3}).bindPopup(`Posiçao atual do patrulha
 <br>DH: ${dhpatrulha2}
 <br>Lat: ${latpatDMS2}, Long: ${longpatDMS2}
 <br>Rumo inicial: ${rumoParaAlvo2.toFixed(0)}
@@ -1692,7 +1692,7 @@ const { marcador: markerEST2, linhaDinamica: linhaEST } = criarMarcadorArrastave
     marker1.addTo(map);
 
     var marker2 = L.circleMarker([alvo_latinicial2, alvo_longinicial2], {"color": "green", "fill": true, "fillColor": "green", "fillOpacity": 0.5, "radius": 8, "stroke": true, "weight": 3})
-	.bindPopup(`Posição do CI
+	.bindPopup(`Posição mais recente do CI
 	<br>DH: ${dhposini2}
 	<br>Lat: ${alvo_latinicialDMS2}, Long: ${alvo_longinicialDMS2}
 	<br>Rumo: ${alvo_rumo2.toFixed(0)}° , Veloc: ${alvo_veloc2} nós`);
@@ -1700,7 +1700,7 @@ const { marcador: markerEST2, linhaDinamica: linhaEST } = criarMarcadorArrastave
     marker2.addTo(map);
 
     var marker3 = L.circleMarker([alvo_latestimada2, alvo_longestimada2], {"color": "purple", "fill": true, "fillColor": "purple", "fillOpacity": 0.5, "radius": 8, "stroke": true, "weight": 3})
-	.bindPopup(`Posição estimada
+	.bindPopup(`Posição do CI pela hora estimada
 	<br>DH: ${estimadaDATA2}
 	<br>Lat: ${alvo_latestimadaDMS2}<br>Long: ${alvo_longestimadaDMS2}
 	<br>Rumo: ${alvo_rumo2.toFixed(0)}°, Veloc: ${alvo_veloc2} nós`);
@@ -1845,7 +1845,7 @@ const distnatal = calcularDistancia(latFinal2,lonFinal2,-5.75,-35.2).toFixed(0)
 // Criar os marcadores com cores personalizadas
 const { marcador: markerPatrulha2, linhaDinamica: linhaPatrulha } = criarMarcadorArrastavel(
     [patru_lat_final2, patru_long_final2], 
-    `Posiçao do Patrulha<br>
+    `Posiçao atual do Patrulha<br>
     DH: ${dhpatrulha2}<br>
     Lat: ${latpatDMS2}, Long: ${longpatDMS2}<br>
     Rumo: ${rumoParaAlvofinal2.toFixed(0)}°, Veloc: ${patru_veloc2} nós`, 
@@ -1855,7 +1855,7 @@ const { marcador: markerPatrulha2, linhaDinamica: linhaPatrulha } = criarMarcado
 
 const { marcador: markerCI2, linhaDinamica: linhaCI } = criarMarcadorArrastavel(
     [alvo_latinicial2, alvo_longinicial2], 
-    `Posição do CI<br>DH: ${dhposini2}<br>
+    `Posição mais recente do CI<br>DH: ${dhposini2}<br>
     Lat: ${alvo_latinicialDMS2}, Long: ${alvo_longinicialDMS2}<br>
     Rumo: ${alvo_rumo2.toFixed(0)}° , Veloc: ${alvo_veloc2} nós`, 
     posicaoCI3, 
@@ -1864,7 +1864,7 @@ const { marcador: markerCI2, linhaDinamica: linhaCI } = criarMarcadorArrastavel(
 
 const { marcador: markerEST2, linhaDinamica: linhaEST } = criarMarcadorArrastavel(
     [alvo_latestimada2, alvo_longestimada2], 
-    `Posição estimada<br>
+    `Posição do CI pela hora estimada<br>
     DH: ${estimadaDATA2}<br>
     Lat: ${alvo_latestimadaDMS2},Long: ${alvo_longestimadaDMS2}<br>
     Rumo: ${alvo_rumo2.toFixed(0)}°, Veloc: ${alvo_veloc2} nós`, 
@@ -1896,9 +1896,9 @@ const { marcador: markerPMA2, linhaDinamica: linhaPMA } = criarMarcadorArrastave
 
 		
 var overlays = {
-    "<span style='color: #000000; font-size: 18px;background: #777777;border: 0px solid #000;'>Posição do Patrulha</span>": marker1,
-    "<span style='color: #000000; font-size: 18px;background: #00b32d;border: 0px solid #000;'>Posição do CI</span>": marker2,
-    "<span style='color: #ffffff; font-size: 18px;background: #660066;border: 0px solid #000;'>Posição Estimada do CI</span>": marker3,
+    "<span style='color: #000000; font-size: 18px;background: #777777;border: 0px solid #000;'>Posição atuan do Patrulha</span>": marker1,
+    "<span style='color: #000000; font-size: 18px;background: #00b32d;border: 0px solid #000;'>Posição mais recente do CI</span>": marker2,
+    "<span style='color: #ffffff; font-size: 18px;background: #660066;border: 0px solid #000;'>Posição do CI pela hora estimada</span>": marker3,
     "<span style='color: #ffffff; font-size: 18px;background: #400040;border: 0px solid #000;'>Posição PMA</span>": marker4,
     "<span style='color: #000000; font-size: 16px;background: #ff0040;border: 0px solid #000;'>Linha-Patrulha ao CI atual</span>": linha1,
     "<span style='color: #000000; font-size: 16px;background: #eeeeee;border: 0px solid #000;'>Linha-CI à Posição Estimada</span>": linha2,
@@ -1959,6 +1959,7 @@ var overlays = {
     </script>
 </body>
 </html>
+
 
 
 
