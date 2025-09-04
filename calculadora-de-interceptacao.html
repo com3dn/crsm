@@ -45,6 +45,19 @@ input { width: 100px; padding: 5px; margin: 5px; }
 .leaflet-control-layers-linhass label {font-weight: bold; color: #0066cc;}
 .camada-destaque { font-weight: bold; color: #ff0000;  background: rgba(255, 255, 255, 0.8); padding: 3px 6px; border-radius: 4px; }
 .custom-marker .marker-box {background-color: white;border: 2px solid black;padding: 5px;font-size: 12px;text-align: center; border-radius: 5px; cursor: grab; /* Mostra que pode arrastar */
+.marker-box {background: #f0f8ff;border-radius: 6px;padding: 1px;font-size: 9px;border: 2px solid red;cursor: move;box-shadow: 1px 1px 6px rgba(0,0,0,0.3);}
+.zoom-btn {font-size: 9px;margin: 1px;cursor: pointer;border: none;background: #eee;padding: 1px 2px;border-radius: 4px;}
+.controle-vermelho {background-color: #ff0000;border: 1px solid red;padding: 2px;border-radius: 6px;}
+.controle-cinza {background-color: #aaaaaa;border: 1px solid gray;padding: 2px;border-radius: 6px;  }
+.controle-azul {background-color: #4ca6ff;border: 1px solid gray;padding: 2px;border-radius: 6px;}
+.leaflet-control-layers label {font-size: 12px;}
+/* Remover a mensagem padrão */
+.leaflet-draw-tooltip {display: none !important;}
+/* Ou customizar o estilo da mensagem */
+.leaflet-draw-tooltip {background-color: rgba(255, 255, 255, 0.7);border: 1px solid #ccc;padding: 5px;font-size: 12px;}
+.hidden {display: none;}
+
+
 </style>
 </head>
 <body>
@@ -406,8 +419,7 @@ input { width: 100px; padding: 5px; margin: 5px; }
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://unpkg.com/leaflet-polylinedecorator@1.6.0/dist/leaflet.polylineDecorator.js"></script>
-    
-    <!-- Inclua o CSS e JS do Leaflet -->
+        <!-- Inclua o CSS e JS do Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     
     <!-- Inclua o CSS e JS do plugin Leaflet Draw -->
@@ -549,7 +561,7 @@ fetch('https://com3dn.github.io/crsm/scr/sidebar.html')
       
         ///<p>Rumo de Interceptação: <span id="cursoInterceptacao"></span></p>
 		let map = L.map('map').setView([-5.75, -35.2], 5);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '' }).addTo(map);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '2°SG-SI Jefferson Correia' }).addTo(map);
 		L.control.fullscreen({position: 'topleft', title:'Tela Cheia', titleCancel: 'Sair da Tela Cheia', content: 'Full'}).addTo(map);
 		
 		 // Adiciona a carta náutica do serviço WMS
@@ -567,6 +579,18 @@ fetch('https://com3dn.github.io/crsm/scr/sidebar.html')
 		//L.tileLayer.wms('http://idem.dhn.mar.mil.br/geoserver/ows?', { layers: 'carta_nautica:carta_21020', format: 'image/png', transparent: true, attribution: '&copy; CRSM COM3DN', crs: L.CRS.EPSG4326, version: '1.1.0'}).addTo(map);
 		//L.tileLayer.wms('http://idem.dhn.mar.mil.br/geoserver/ows?', { layers: 'carta_nautica:carta_21800', format: 'image/png', transparent: true, attribution: '&copy; CRSM COM3DN', crs: L.CRS.EPSG4326, version: '1.1.0'}).addTo(map);
 		
+		const embarcacoes = [];
+const markerScales = {};
+const latlngsGrupo1 = [];
+const embarcacoes2 = [];
+const markerScales2 = {};
+const overlays1 = {};
+const overlays2 = {};
+const latlngsGrupo2 = [];
+const embarcacoes3 = [];
+const markerScales3 = {};
+const overlays3 = {};
+const latlngsGrupo3 = [];
 		
 		
 		
@@ -721,16 +745,10 @@ function calcularDistancia(lat1, lon1, lat2, lon2) {
     return (R * c * 0.539957);
 }
 
-
-
-
-
-
 // Função para encontrar o porto mais próximo
 function portoMaisProximo(latMouse, lonMouse) {
     let menorDistancia = Infinity;
     let portoMaisProx = null;
-
     for (const porto in portos) {
         let { lat, lon } = portos[porto];
         let distancia = calcularDistancia(latMouse, lonMouse, lat, lon);
@@ -1107,10 +1125,7 @@ map.on("mousemove", function(e) {
    let patru_long_final = patru_long;
 
 let diffHoras = Math.abs(Math.round((((patru_datapos - alvo_datainicial) / (1000 * 60 * 60)))*100)/100); // É A DIFERENÇA EM HORAS ENTRE A ULTIMA POSIÇÃO CONHECIDA DO CI E A DO PATRULHA
-    //console.log("🧭 Ponto Inicial ➜ \n" +
-	`Data inicial do CI: ${alvo_datainicial.toLocaleString("pt-BR", {day: "2-digit",month: "2-digit",year: "numeric", hour: "2-digit", minute: "2-digit", hour12: false}) + "P"}\n`+
-	`Data inicial do patrulha: ${patru_datapos.toLocaleString("pt-BR", {day: "2-digit",month: "2-digit",year: "numeric", hour: "2-digit", minute: "2-digit", hour12: false}) + "P"}\n`+
-	`Diferença Total (h): ${diffHoras.toFixed(2)} h\n`);
+    //console.log("🧭 Ponto Inicial ➜ \n" +	`Data inicial do CI: ${alvo_datainicial.toLocaleString("pt-BR", {day: "2-digit",month: "2-digit",year: "numeric", hour: "2-digit", minute: "2-digit", hour12: false}) + "P"}\n`+	`Data inicial do patrulha: ${patru_datapos.toLocaleString("pt-BR", {day: "2-digit",month: "2-digit",year: "numeric", hour: "2-digit", minute: "2-digit", hour12: false}) + "P"}\n`+	`Diferença Total (h): ${diffHoras.toFixed(2)} h\n`);
 	
 let distanciaTotal = 0; // DISTANCIAS ACUMULADAS ENTRE OS PONTOS DO PATRULHA
 let tempoExtraHoras = 0; // TEMPO ACUMULADAOS ENTRE OS PONTOS DO PATRULHA
@@ -1125,14 +1140,7 @@ if (typeof patru_lat3 !== null && patru_lat3 !== "" && !isNaN(patru_lat3)) {
     tempp1_p2 = patru_datapos.getTime() + (tempoExtraHoras * 3600000);
 	DHp1_p2 = new Date(tempp1_p2)
 	DHp1_p2 = DHp1_p2.toLocaleString("pt-BR", {day: "2-digit",month: "2-digit",year: "numeric", hour: "2-digit", minute: "2-digit", hour12: false}) + "P";
-	//console.log(
-        "🧭 Ponto 1 ➜ 2\n" +
-        `Distância p1→p2: ${distp1_p2.toFixed(2)} MN\n` +
-        `Distância Total: ${distanciaTotal.toFixed(2)} MN\n` +
-        `Tempo Extra (h): ${tempoExtraHoras.toFixed(2)} h\n` +
-        `Diferença Total (h): ${diffHoras.toFixed(2)} h\n` +
-        `Data/Hora Chegada: ${DHp1_p2}`
-    )
+	//console.log(        "🧭 Ponto 1 ➜ 2\n" +        `Distância p1→p2: ${distp1_p2.toFixed(2)} MN\n` +        `Distância Total: ${distanciaTotal.toFixed(2)} MN\n` +        `Tempo Extra (h): ${tempoExtraHoras.toFixed(2)} h\n` +        `Diferença Total (h): ${diffHoras.toFixed(2)} h\n` +        `Data/Hora Chegada: ${DHp1_p2}`    )
     patru_lat_final = patru_lat3;
     patru_long_final = patru_long3;	}
 
@@ -1144,14 +1152,7 @@ if (patru_lat4 !== null && patru_lat4 !== "" && !isNaN(patru_lat4)) {
     tempp2_p3 = patru_datapos.getTime() + (tempoExtraHoras * 3600000);
 	DHp2_p3 = new Date(tempp2_p3)
 	DHp2_p3 = DHp2_p3.toLocaleString("pt-BR", {day: "2-digit",month: "2-digit",year: "numeric", hour: "2-digit", minute: "2-digit", hour12: false}) + "P";
-	//console.log(
-        "🧭 Ponto 2 ➜ 3\n" +
-        `Distância p2→p3: ${distp2_p3.toFixed(2)} MN\n` +
-        `Distância Total: ${distanciaTotal.toFixed(2)} MN\n` +
-        `Tempo Extra (h): ${tempoExtraHoras.toFixed(2)} h\n` +
-        `Diferença Total (h): ${diffHoras.toFixed(2)} h\n` +
-        `Data/Hora Chegada: ${DHp2_p3}`
-    )
+	//console.log(        "🧭 Ponto 2 ➜ 3\n" +        `Distância p2→p3: ${distp2_p3.toFixed(2)} MN\n` +        `Distância Total: ${distanciaTotal.toFixed(2)} MN\n` +        `Tempo Extra (h): ${tempoExtraHoras.toFixed(2)} h\n` +        `Diferença Total (h): ${diffHoras.toFixed(2)} h\n` +        `Data/Hora Chegada: ${DHp2_p3}`    )
 	
     patru_lat_final = patru_lat4;
     patru_long_final = patru_long4;}
@@ -1166,14 +1167,7 @@ if (patru_lat5 !== null && patru_lat5 !== "" && !isNaN(patru_lat5)) {
 	DHp3_p4 = DHp3_p4.toLocaleString("pt-BR", {day: "2-digit",month: "2-digit",year: "numeric", hour: "2-digit", minute: "2-digit", hour12: false}) + "P";
 	
     
-	  //console.log(
-        "🧭 Ponto 3 ➜ 4\n" +
-        `Distância p3→p4: ${distp3_p4.toFixed(2)} MN\n` +
-        `Distância Total: ${distanciaTotal.toFixed(2)} MN\n` +
-        `Tempo Extra (h): ${tempoExtraHoras.toFixed(2)} h\n` +
-        `Diferença Total (h): ${diffHoras.toFixed(2)} h\n` +
-        `Data/Hora Chegada: ${DHp3_p4}`
-    )
+	  //console.log(        "🧭 Ponto 3 ➜ 4\n" +        `Distância p3→p4: ${distp3_p4.toFixed(2)} MN\n` +        `Distância Total: ${distanciaTotal.toFixed(2)} MN\n` +      `Tempo Extra (h): ${tempoExtraHoras.toFixed(2)} h\n` +        `Diferença Total (h): ${diffHoras.toFixed(2)} h\n` +        `Data/Hora Chegada: ${DHp3_p4}`)
     patru_lat_final = patru_lat5;
     patru_long_final = patru_long5;}
 
@@ -1312,7 +1306,7 @@ if (patru_lat5 !== null && patru_lat5 !== "" && !isNaN(patru_lat5)) {
     document.getElementById("dadosestimada").innerText = 'Posição do CI pela hora estimada\n' + estimadaDATA + '\nLat: ' + alvo_latestimadaDMS + 
 	',Long: ' + alvo_longestimadaDMS + '\nRumo: ' + alvo_rumo.toFixed(0) + '° , Veloc: ' + alvo_veloc + ' nós\nNavegou: ' + calcularDistancia(alvo_latinicial,alvo_longinicial,alvo_latestimada,alvo_longestimada).toFixed(0) + ' MN';
 	
-    document.getElementById("dadospatrulha").innerText = 'Posiçao atua do Patrulha\n' + dhpatrulha + '\nLat: ' + latpatDMS + 
+    document.getElementById("dadospatrulha").innerText = 'Posição atua do Patrulha\n' + dhpatrulha + '\nLat: ' + latpatDMS + 
 	',Long: ' + longpatDMS + '\nVeloc: ' + patru_veloc + ' nós' + 
 	'\nRumo para CI: ' + rumoParaAlvo.toFixed(0) + '°, Distancia: ' + calcularDistancia(alvo_latinicial,alvo_longinicial,patru_lat,patru_long).toFixed(0) + 
 	' MN\nRumo para Estimada: ' + rumoParaest.toFixed(0) + '°, Distancia: ' + calcularDistancia(alvo_latestimada,alvo_longestimada,patru_lat,patru_long).toFixed(0) + ' MN';
@@ -1418,7 +1412,7 @@ const posicaoEST3 = [alvo_latestimada, alvo_longestimada];
 
 // Criar os marcadores com suas respectivas posições fixas
 const { marcador: markerPatrulha, linhaDinamica: linhaPatrulha } = criarMarcadorArrastavel([patru_lat_final, patru_long_final], 
-`Posiçao atual do patrulha
+`Posição atual do patrulha
 <br>DH: ${dhpatrulha}
 <br>Lat: ${latpatDMS}, Long: ${longpatDMS}
 <br>Rumo para o CI: ${rumoParaAlvo.toFixed(0)}°,Distancia: ${distancia} MN
@@ -1586,6 +1580,284 @@ const { marcador: markerEST2, linhaDinamica: linhaEST } = criarMarcadorArrastave
   dhpatrulha,dhposini,estimadaDATA,dhPMA,dist_ci_pat,dist_ci_est,dist_est_pma,dist_pat_pma,rumoParaAlvo,ci_deg,rumoParaAlvofinal ,velRelativa,
   patru_lat3,patru_long3,patru_lat4,patru_long4,patru_lat5,patru_long5);
   
+const embarcacoes = [];
+const markerScales = {};
+const latlngsGrupo1 = [];
+const embarcacoes2 = [];
+const markerScales2 = {};
+const overlays2 = {};
+const latlngsGrupo2 = [];
+const embarcacoes3 = [];
+const markerScales3 = {};
+const overlays3 = {};
+const latlngsGrupo3 = [];
+
+function esperar(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function zoomMarker(idPonto, factor) {
+  const scaleMin = 0.6;
+  const scaleMax = 2;
+  markerScales[idPonto] = Math.max(scaleMin, Math.min(scaleMax, markerScales[idPonto] * factor));
+  const emb = embarcacoes.find(e => e.id === idPonto);
+  if (!emb) return;
+
+  const scale = markerScales[idPonto];
+  const icon = L.divIcon({
+  className: 'custom-marker',
+  html: `
+    <div class="marker-box" style="border-color:#000; background-color: #87fa8f; transform: scale(${scale}); transform-origin: top left; user-select: text; pointer-events: auto;">
+      <div style="display: flex; ; align-items: bottom; justify-content: space-between;">
+        <button style="margin-top: 0px;background-color: #87fa8f;"  class="zoom-btn" onclick="zoomMarker('${idPonto}', 1.05)"></button>
+		
+		<div style="flex-grow: 1; text-align: center;">${emb.plotagem ? `<div contenteditable="true" tabindex="0" style="outline: none;"><b>Posição do CI: </b>${emb.plotagem}</div>` : ""}
+        </div>
+        <button style="margin-top: 0px; background-color: #87fa8f;" class="zoom-btn" onclick="zoomMarker('${idPonto}', 0.95)"></button>
+      </div>
+    </div>
+  `,
+  iconSize: [250, 50],
+  iconAnchor: [50, 20]
+});
+document.addEventListener("click", function (e) {
+  const target = e.target;
+  if (target.hasAttribute("contenteditable")) {
+    target.focus(); }});
+  map.eachLayer(layer => {if (layer instanceof L.Marker && layer.options?.idPonto === idPonto) {
+      layer.setIcon(icon);}});}
+
+esperar(1000).then(() => {
+fetch("https://opensheet.elk.sh/1y-sjPgHLVjGN-b3zDtlfA_dzuTkCWBzYRsh5HlxO-nQ/contato")
+  .then(res => res.json())
+  .then(dados => {
+    let primeiroLatLng = null;
+    dados.forEach((item, idx) => {
+      const lat = parseFloat(item["LAT(dec)"]);
+      const lng = parseFloat(item["LONG(dec)"]);
+      if (isNaN(lat) || isNaN(lng)) return;
+      if (!primeiroLatLng) primeiroLatLng = [lat, lng];
+      const idPonto = `${item["NOME"]}_${item["PONTOS"]}`;
+      const emb = {
+        id: idPonto,
+        nome: item["NOME"],
+        ponto: item["PONTOS"],
+        dh: item["Data-hora(ZULU)"],
+        lat: lat,
+        lng: lng,
+        lat_gsm: item["LAT(gsm)"],
+        lng_gsm: item["LONG(gsm)"],
+        rumo: item["Rumo"],
+        veloc: item["Veloc"],
+        dist: item["DistNav"],
+        circ: item["CIRC_INCERT"],
+        plotagem: item["BALÃOZINHO"]?.replace(/\n/g, "<br>")
+      };
+      embarcacoes.push(emb);
+      markerScales[idPonto] = 1;
+      const icon = L.divIcon({
+  className: 'custom-marker',
+  html: `
+    <div class="marker-box" style="border-color:#000; background-color: #87fa8f;">
+      <div style="display: flex; align-items: bottom; justify-content: space-between; background-color: #87fa8f;">
+        <button style="margin-top: 0px;background-color: #87fa8f;" class="zoom-btn" onclick="zoomMarker('${idPonto}', 1.05)"></button>
+        <div style="flex-grow: 1; text-align: center;">${emb.plotagem ? `<div contenteditable="true" tabindex="0" style="outline: none;"><b>Posição do CI: </b>${emb.plotagem}</div>` : ""}
+        </div>
+        <button style="margin-top: 0px;background-color: #87fa8f;" class="zoom-btn" onclick="zoomMarker('${idPonto}', 0.95)"></button>
+      </div>
+    </div>`,
+  iconSize: [250, 50],
+  iconAnchor: [50, 20]
+});
+document.addEventListener("click", function (e) {
+  const target = e.target;
+  if (target.hasAttribute("contenteditable")) {
+    target.focus();
+  }
+});
+      const latlng = L.latLng(lat, lng);
+	  latlngsGrupo1.push(latlng);
+	  
+      const circlemaker = L.circleMarker(latlng, { radius: 3, color: '#008c23',fillColor: '#008c23',fillOpacity: 0.7}).addTo(map);
+      const marker = L.marker(latlng, {icon: icon,draggable: true,idPonto: idPonto}); // ← Não adiciona diretamente ao mapa
+      const linha = L.polyline([latlng, latlng], { color: '#004010', weight: 0.8 }); // Também fica inativo
+
+		marker.on('drag', (e) => {const nova = e.target.getLatLng();
+		linha.setLatLngs([latlng, nova]);});
+
+const group = L.layerGroup([marker, linha]); // Agrupa os dois
+
+overlays1[`<span style='color:black'><b>${emb.nome} (${emb.ponto})</b></span>`] = group;
+
+    });
+if (latlngsGrupo1.length > 1) {
+  const linhaDash = L.polyline(latlngsGrupo1, {color: 'red',weight: 1.2,dashArray: '4 6', // ← define o padrão de traço
+  opacity: 0.7}).addTo(map);
+};
+    if (primeiroLatLng) {
+      map.setView(primeiroLatLng, 5);
+    }
+const invertedOverlays = Object.entries(overlays1).reverse().reduce((acc, [label, layer]) => {
+  acc[label] = layer;
+  return acc;
+}, {});
+
+// Controle 1 – Vermelho (aba 'teste')
+const controle1 = L.control.layers(null, invertedOverlays, { collapsed: true }).addTo(map);
+setTimeout(() => {const el = document.querySelector('.leaflet-control-layers'); // pega o primeiro
+  el.classList.add('controle-vermelho');}, 200); // atraso para garantir que o DOM esteja carregado
+});});
+function zoomMarker2(idPonto, factor) {
+  const scaleMin = 0.6;
+  const scaleMax = 2;
+  markerScales2[idPonto] = Math.max(scaleMin, Math.min(scaleMax, markerScales2[idPonto] * factor));
+  const emb = embarcacoes2.find(e => e.id === idPonto);
+  if (!emb) return;
+
+  const scale = markerScales2[idPonto];
+const icon = L.divIcon({
+  className: 'custom-marker',
+  html: `
+    <div class="marker-box" style="border-color:#000; background-color: #dcdedc; transform: scale(${scale}); transform-origin: top left; user-select: text; pointer-events: auto;">
+      <div style="display: flex; align-items: bottom; justify-content: space-between;">
+        <button class="zoom-btn" style="background-color: #dcdedc;" onclick="zoomMarker2('${idPonto}', 1.05)"></button>
+		<div style="flex-grow: 1; text-align: center;">${emb.plotagem ? `<div contenteditable="true" tabindex="0" style="outline: none;"><b>Posição do P122</b><br>${emb.plotagem}</div>` : ""}
+        </div>
+        <button class="zoom-btn" style="background-color: #dcdedc;" onclick="zoomMarker2('${idPonto}', 0.95)"></button>
+      </div>
+    </div>
+  `,
+  iconSize: [250, 50],
+  iconAnchor: [50, 20]
+});
+
+  map.eachLayer(layer => {
+    if (layer instanceof L.Marker && layer.options?.idPonto === idPonto) {
+      layer.setIcon(icon);
+    }
+  });
+}
+
+esperar(2000).then(() => {
+fetch("https://opensheet.elk.sh/1y-sjPgHLVjGN-b3zDtlfA_dzuTkCWBzYRsh5HlxO-nQ/patrulha")
+  .then(res => res.json())
+  .then(dados => {
+    let primeiroLatLng = null;
+    dados.forEach((item, idx) => {
+      const lat = parseFloat(item["LAT(dec)"]);
+      const lng = parseFloat(item["LONG(dec)"]);
+      if (isNaN(lat) || isNaN(lng)) return;
+
+      if (!primeiroLatLng) primeiroLatLng = [lat, lng];
+
+      const idPonto = `GRUPO2_${item["NOME"]}_${item["PONTOS"]}`;
+      const emb = {
+        id: idPonto,
+        nome: item["NOME"],
+        ponto: item["PONTOS"],
+        dh: item["Data-hora(ZULU)"],
+        lat: lat,
+        lng: lng,
+        lat_gsm: item["LAT(gsm)"],
+        lng_gsm: item["LONG(gsm)"],
+        rumo: item["Rumo"],
+        veloc: item["Veloc"],
+        dist: item["DistNav"],
+        circ: item["CIRC_INCERT"],
+        plotagem: item["BALÃOZINHO"]?.replace(/\n/g, "<br>")
+      };
+
+      embarcacoes2.push(emb);
+      markerScales2[idPonto] = 1;
+
+      const icon = L.divIcon({
+  className: 'custom-marker',
+  html: `
+    <div class="marker-box" style="border-color:#000; background-color: #dcdedc;">
+      <div style="display: flex; align-items: bottom;  background-color: #dcdedc; justify-content: space-between;">
+        <button class="zoom-btn" style="background-color: #dcdedc;" onclick="zoomMarker2('${idPonto}', 1.05)"></button>
+        <div style="flex-grow: 1; text-align: center;">${emb.plotagem ? `<div contenteditable="true" tabindex="0" style="outline: none;"><b>Posição do P122</b><br>${emb.plotagem}</div>` : ""}
+        </div>
+        <button class="zoom-btn" style=" background-color: #dcdedc;"onclick="zoomMarker2('${idPonto}', 0.95)"></button>
+      </div>
+    </div>`,
+  iconSize: [250, 50],
+  iconAnchor: [50, 20]
+});
+document.addEventListener("click", function (e) {
+  const target = e.target;
+  if (target.hasAttribute("contenteditable")) {
+    target.focus();
+  }
+});
+      const latlng = L.latLng(lat, lng);
+	  latlngsGrupo2.push(latlng);
+      const circlemaker = L.circleMarker(latlng, { radius: 3, color: '#444444',fillColor: '#444444',fillOpacity: 0.7}).addTo(map);
+      const marker = L.marker(latlng, {icon: icon,draggable: true,idPonto: idPonto}); // ← Não adiciona diretamente ao mapa
+      const linha = L.polyline([latlng, latlng], { color: '#444444', weight: 0.8 }); // Também fica inativo
+
+		marker.on('drag', (e) => { const nova = e.target.getLatLng();
+		linha.setLatLngs([latlng, nova]);});
+
+const group2 = L.layerGroup([marker, linha]); // Agrupa os dois
+
+overlays2[`<span style='color:black'><b>${emb.nome} (${emb.ponto})</b></span>`] = group2;
+
+    });
+if (latlngsGrupo2.length > 1) {
+  const linhaDash = L.polyline(latlngsGrupo2, {
+    color: '#444444',
+    weight: 1.2,
+    dashArray: '4 6', // ← define o padrão de traço
+    opacity: 0.7
+  }).addTo(map);
+};
+    if (primeiroLatLng) {
+      map.setView(primeiroLatLng, 5);
+    }
+const invertedOverlays2 = Object.entries(overlays2).reverse().reduce((acc, [label, layer]) => {
+  acc[label] = layer;
+  return acc;
+}, {});
+
+// Controle 2 – Cinza (aba 'teste2')
+const controle2 = L.control.layers(null, invertedOverlays2, { collapsed: true }).addTo(map);
+setTimeout(() => {
+  const allControls = document.querySelectorAll('.leaflet-control-layers');
+  const el = allControls[1]; // pega o segundo
+  el.classList.add('controle-cinza');
+}, 400);});});
+
+function zoomMarker3(idPonto, factor) {
+  const scaleMin = 0.6;
+  const scaleMax = 2;
+  markerScales3[idPonto] = Math.max(scaleMin, Math.min(scaleMax, markerScales3[idPonto] * factor));
+  const emb = embarcacoes3.find(e => e.id === idPonto);
+  if (!emb) return;
+
+  const scale = markerScales3[idPonto];
+const icon = L.divIcon({
+  className: 'custom-marker',
+  html: `
+    <div class="marker-box" style="border-color:#000; background-color: #ffb81f; transform: scale(${scale}); transform-origin: top left; user-select: text; pointer-events: auto;">
+      <div style="display: flex; align-items: bottom; justify-content: space-between;">
+        <button class="zoom-btn" style="margin-top: 0px;background-color: #ffb81f;" onclick="zoomMarker3('${idPonto}', 1.05)"></button>
+		<div style="flex-grow: 1; text-align: center;">${emb.plotagem ? `<div contenteditable="true" tabindex="0" style="outline: none;"><b>Dados estimados da Interceptação</b><br>${emb.plotagem}</div>` : ""}
+        </div>
+        <button class="zoom-btn" style="margin-top: 0px;background-color: #ffb81f;" onclick="zoomMarker3('${idPonto}', 0.95)"></button>
+      </div>
+    </div>
+  `,
+  iconSize: [250, 50],
+  iconAnchor: [50, 20]
+});
+
+  map.eachLayer(layer => {
+    if (layer instanceof L.Marker && layer.options?.idPonto === idPonto) {
+      layer.setIcon(icon);
+    }
+  });
+}
 
   
 	//APRESENTAR OS VALORES NA TABELA ABAIXO DO MAPA
@@ -1605,7 +1877,7 @@ const { marcador: markerEST2, linhaDinamica: linhaEST } = criarMarcadorArrastave
 		'\nLat: '+ alvo_latestimada.toFixed(4) + ',Long: ' + alvo_longestimada.toFixed(4);
 			
 	
-	document.getElementById("dadospatrulha").innerText = 'Posiçao atual do Patrulha' + 
+	document.getElementById("dadospatrulha").innerText = 'Posição atual do Patrulha' + 
 		'\nDH - ' + dhpatrulha + 
 		'\nLat: ' + latpatDMS + ',Long: ' + longpatDMS + 
 		'\nRumo: ' + rumoParaAlvofinal.toFixed(0) + '°, Veloc: ' + patru_veloc + ' nós' + 
@@ -1687,7 +1959,7 @@ const { marcador: markerEST2, linhaDinamica: linhaEST } = criarMarcadorArrastave
 		
 		
      // Criando e adicionando os marcadores separadamente
-    var marker1 = L.circleMarker([patru_lat_final2, patru_long_final2], {"color": "gray", "fill": true, "fillColor": "gray", "fillOpacity": 0.5, "radius": 8, "stroke": true, "weight": 3}).bindPopup(`Posiçao atual do patrulha
+    var marker1 = L.circleMarker([patru_lat_final2, patru_long_final2], {"color": "gray", "fill": true, "fillColor": "gray", "fillOpacity": 0.5, "radius": 3, "stroke": true, "weight": 3}).bindPopup(`Posição atual do patrulha
 <br>DH: ${dhpatrulha2}
 <br>Lat: ${latpatDMS2}, Long: ${longpatDMS2}
 <br>Rumo inicial: ${rumoParaAlvo2.toFixed(0)}
@@ -1697,7 +1969,7 @@ const { marcador: markerEST2, linhaDinamica: linhaEST } = criarMarcadorArrastave
     markers.push(marker1);
     marker1.addTo(map);
 
-    var marker2 = L.circleMarker([alvo_latinicial2, alvo_longinicial2], {"color": "green", "fill": true, "fillColor": "green", "fillOpacity": 0.5, "radius": 8, "stroke": true, "weight": 3})
+    var marker2 = L.circleMarker([alvo_latinicial2, alvo_longinicial2], {"color": "green", "fill": true, "fillColor": "green", "fillOpacity": 0.5, "radius": 3, "stroke": true, "weight": 3})
 	.bindPopup(`Posição mais recente do CI
 	<br>DH: ${dhposini2}
 	<br>Lat: ${alvo_latinicialDMS2}, Long: ${alvo_longinicialDMS2}
@@ -1705,7 +1977,7 @@ const { marcador: markerEST2, linhaDinamica: linhaEST } = criarMarcadorArrastave
     markers.push(marker2);
     marker2.addTo(map);
 
-    var marker3 = L.circleMarker([alvo_latestimada2, alvo_longestimada2], {"color": "purple", "fill": true, "fillColor": "purple", "fillOpacity": 0.5, "radius": 8, "stroke": true, "weight": 3})
+    var marker3 = L.circleMarker([alvo_latestimada2, alvo_longestimada2], {"color": "purple", "fill": true, "fillColor": "purple", "fillOpacity": 0.5, "radius": 3, "stroke": true, "weight": 3})
 	.bindPopup(`Posição do CI pela hora estimada
 	<br>DH: ${estimadaDATA2}
 	<br>Lat: ${alvo_latestimadaDMS2}<br>Long: ${alvo_longestimadaDMS2}
@@ -1713,7 +1985,7 @@ const { marcador: markerEST2, linhaDinamica: linhaEST } = criarMarcadorArrastave
     markers.push(marker3);
     marker3.addTo(map);
 
-    var marker4 = L.circleMarker([latFinal2, lonFinal2], { "color": "orange", "fill": true, "fillColor": "orange", "fillOpacity": 0.5, "radius": 8, "stroke": true, "weight": 3
+    var marker4 = L.circleMarker([latFinal2, lonFinal2], { "color": "orange", "fill": true, "fillColor": "orange", "fillOpacity": 0.5, "radius": 3, "stroke": true, "weight": 3
     }).bindPopup(`INTERCEPTAÇÃO<br>DH: ${dhPMA2}
 	<br>Lat: ${latFinalDMS2}, Lon: ${lonFinalDMS2}`);
     markers.push(marker4);
@@ -1814,7 +2086,7 @@ var marker8 = L.circleMarker([patru_lat4, patru_long4], { "color": "red", "fill"
 function criarMarcadorArrastavel(latlng, texto, posicaoFixa, corFundo) {
     const icon = L.divIcon({
         className: 'custom-marker',
-        html: `<div class="marker-box" style="background-color: ${corFundo}">${texto}</div>`,
+        html: `<div class="marker-box" contenteditable="true" style="background-color: ${corFundo}">${texto}</div>`,
         iconSize: [300, 30],
         iconAnchor: [30, 15]
     });
@@ -1851,7 +2123,7 @@ const distnatal = calcularDistancia(latFinal2,lonFinal2,-5.75,-35.2).toFixed(0)
 // Criar os marcadores com cores personalizadas
 const { marcador: markerPatrulha2, linhaDinamica: linhaPatrulha } = criarMarcadorArrastavel(
     [patru_lat_final2, patru_long_final2], 
-    `Posiçao atual do Patrulha<br>
+    `Posição atual do Patrulha<br>
     DH: ${dhpatrulha2}<br>
     Lat: ${latpatDMS2}, Long: ${longpatDMS2}<br>
     Rumo: ${rumoParaAlvofinal2.toFixed(0)}°, Veloc: ${patru_veloc2} nós`, 
