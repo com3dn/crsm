@@ -50,7 +50,7 @@ input { width: 100px; padding: 5px; margin: 5px; }
 <body>
 <div id="app-container"><div id="sidebar-container"></div>
 <div id="main-content">
-<h1>Cálculadora de interceptação V.009</h1>
+<h1>Cálculadora de interceptação V.010</h1>
   <div class="converter-container">
 <table border="2" style="width:100%;border-radius: 5px;" ><tbody>
 <tr border="2"><td style="vertical-align:top;text-align: left">
@@ -61,8 +61,8 @@ input { width: 100px; padding: 5px; margin: 5px; }
 	Neste campo escreva a DATA-HORA no fuso P(PAPA) da posição mais recente fornecida ou obtida do contato de interesse no formato dia-mes-ano hh:mm (ex: 30/02/2025 11:13)[24h]</div>
 	
 	<br>
-	<strong>Posição inicial/Posição mais Recente</strong><br>
-	<span style="color: #00910f;">Escolha o formato das coordenadas</span>
+	<strong>Posição mais Recente do CI</strong><br>
+	<span style="color: #00910f;">Escolha o formato das coordenadas decimal ou grau,minuto,segundo(GMS)</span>
 <!-- SELETOR DECIMAL PARA GMS-->
 	<br>
 	<input type="radio" style="width:30px" name="coordType" value="decimal" checked> 
@@ -88,15 +88,21 @@ input { width: 100px; padding: 5px; margin: 5px; }
 	<div class="form-group">
 		<table border="0" style="width: 100%;display: flex;vertical-align: top; text-align: center;   flex-direction: column;"><tbody>
 		
-        <tr><td>Latitude: </td><td><input style="width: 60px;" type="number" min="0" max="90" id="latGraus" placeholder="Graus">°
-        <input style="width: 60px;" type="number" min="0" max="60"id="latMinutos" placeholder="Minutos">'
-        <input style="width: 60px;" type="number" min="0" max="60"id="latSegundos" placeholder="Segundos">"
-        <select id="latHemisferio"> <option style="width: 50px;" value="S">S</option> <option style="width: 50px;" value="N">N</option> </select></td></tr>
+        <tr><td>Latitude: </td><td><input style="width: 80px;" type="number" min="0" max="90" id="latGraus" placeholder="Graus">°
+        <input style="width: 80px;" type="number" min="0" max="60"id="latMinutos" placeholder="Minutos">'
+        <input style="width: 80px;" type="number" min="0" max="60"id="latSegundos" placeholder="Segundos">"
+        <select id="latHemisferio"> 
+			<option style="width: 60px;" value="S">S</option>
+			<option style="width: 60px;" value="N">N</option>
+		</select></td></tr>
         
-		<tr><td>longitude: </td><td><input style="width: 60px;" type="number" min="0" max="180" id="longGraus" placeholder="Graus">°
-        <input style="width: 60px;" type="number" min="0" max="60" id="longMinutos" placeholder="Minutos">'
-        <input style="width: 60px;" type="number" min="0" max="60" id="longSegundos" placeholder="Segundos">"
-        <select id="longHemisferio"> <option style="width: 50px;" value="W">W</option> <option style="width: 50px;" value="E">E</option> </select></td></tr>
+		<tr><td>longitude: </td><td><input style="width: 80px;" type="number" min="0" max="180" id="longGraus" placeholder="Graus">°
+        <input style="width: 80px;" type="number" min="0" max="60" id="longMinutos" placeholder="Minutos">'
+        <input style="width: 80px;" type="number" min="0" max="60" id="longSegundos" placeholder="Segundos">"
+        <select id="longHemisferio"> 
+			<option style="width: 60px;" value="W">W</option> 
+			<option style="width: 60px;" value="E">E</option> 
+		</select></td></tr>
     
 	<!-- EXIBIÇÃO DOS VALORES CONVERTIDOS -->
         <tr><td colspan="2">Conversão: Lat: <span id="latDecimal"></span> , Long: <span id="longDecimal"></span></td></tr>
@@ -104,10 +110,10 @@ input { width: 100px; padding: 5px; margin: 5px; }
         </div>
 		</div>
 		
-		Rumo do alvo (°) <input type="number" min="0" max="359" id="rumoAlvo" value="">
+		Rumo do CI (°) <input type="number" min="0" max="359" id="rumoAlvo" value="">
 	<i class="fas fa-question-circle" style="cursor: pointer;" id="info-icon"></i>
 	<div id="tooltip-4" style="display: none;background: rgba(0,0,0,0.7); color: white;border-radius: 5px; font-size: 14px; max-width: 700px;z-index: 9999;">        Informe o rumo do alvo em graus (ex:0, 121, 48)</div>
-	<span style="padding-left:45px">Velocidade do alvo (nós) <input type="number" id="velAlvo" min="0" step="0.1" value="">
+	<span style="padding-left:45px">Velocidade do CI (nós) <input type="number" id="velAlvo" min="0" step="0.1" value="">
 	<i class="fas fa-question-circle" style="cursor: pointer;" id="info-icon"></i>
 	<div id="tooltip-5" style="display: none;background: rgba(0,0,0,0.7); color: white;border-radius: 5px; font-size: 14px; max-width: 700px;z-index: 9999;">        Informe a velocidade do alvo em nós (1 nó = 1.852 km/h) (ex:5)</div>
 </tr></td>	
@@ -123,9 +129,9 @@ input { width: 100px; padding: 5px; margin: 5px; }
 	<div id="tooltip-6" style="display: none;background: rgba(0,0,0,0.7); color: white;border-radius: 5px; font-size: 14px; max-width: 700px;z-index: 9999;">Neste campo escreva a DATA-HORA no fuso "PAPA" da posição mais recente ou a DATA-HORA do suspender no formato dia-mes-ano hh:mm (ex: 30/02/2025 11:13)[24h] </div>
 	
 	<br>
-	<strong>Posição inicial/Posição mais Recente</strong><br>
+	<strong>Posição do porto ou Posição mais Recente</strong><br>
 	
-	<span style="color: #00910f;">Escolha o formato das coordenadas</span>
+	<span style="color: #00910f;">Escolha o formato das coordenadas decimal ou grau,minuto,segundo(GMS)</span>
 	<!-- SELETOR DECIMAL PARA GMS-->
 	<div>
 	<input type="radio" style="width:30px"name="coordType2" value="decimal2" checked> 
@@ -151,20 +157,20 @@ input { width: 100px; padding: 5px; margin: 5px; }
   <table border="0" style="width: 100%;display: flex;vertical-align: top;  flex-direction: column;"><tbody>
 
         <tr><td>Latitude</td><td>
-		<input style="width: 60px;" type="number" min="0" max="90" id="latGraus2" value="5"placeholder="Graus">°
-        <input style="width: 60px;" type="number" min="0" max="60" id="latMinutos2" value="45"placeholder="Minutos">'
-        <input style="width: 60px;" type="number" min="0" max="60" id="latSegundos2" value="0" placeholder="Segundos">"
+		<input style="width: 80px;" type="number" min="0" max="90" id="latGraus2" value="5"placeholder="Graus">°
+        <input style="width: 80px;" type="number" min="0" max="60" id="latMinutos2" value="45"placeholder="Minutos">'
+        <input style="width: 80px;" type="number" min="0" max="60" id="latSegundos2" value="0" placeholder="Segundos">"
         <select id="latHemisferio2">
-            <option style="width: 50px;" value="N">N</option>
-            <option style="width: 50px;" value="S">S</option>
+            <option style="width: 60px;" value="N">N</option>
+            <option style="width: 60px;" value="S">S</option>
         </select></td></tr>
         <tr><td>longitude</td><td>
-		<input style="width: 60px;" type="number" min="0" max="180" value="35" id="longGraus2" placeholder="Graus">°
-        <input style="width: 60px;" type="number" min="0" max="60" value="12" id="longMinutos2" placeholder="Minutos">'
-        <input style="width: 60px;" type="number" min="0" max="60" value="0" id="longSegundos2" placeholder="Segundos">"
+		<input style="width: 80px;" type="number" min="0" max="180" value="35" id="longGraus2" placeholder="Graus">°
+        <input style="width: 80px;" type="number" min="0" max="60" value="12" id="longMinutos2" placeholder="Minutos">'
+        <input style="width: 80px;" type="number" min="0" max="60" value="0" id="longSegundos2" placeholder="Segundos">"
         <select id="longHemisferio2">
-            <option style="width: 50px;" value="W">W</option>
-            <option style="width: 50px;" value="E">E</option>
+            <option style="width: 60px;" value="W">W</option>
+            <option style="width: 60px;" value="E">E</option>
         </select></td></tr>
     
 	<!-- EXIBIÇÃO DOS VALORES CONVERTIDOS -->
@@ -186,7 +192,7 @@ input { width: 100px; padding: 5px; margin: 5px; }
 <!-- PRIMEIRO PONTO ADICIONAL-->
 	<button id="toggleButton">add ponto +</button>
 		<div id="coordBlock" style="display: none;">
-			<span style="color: #00910f;">Escolha o formato das coordenadas</span>
+			<span style="color: #00910f;">Escolha o formato das coordenadas decimal ou grau,minuto,segundo(GMS)</span>
 			<!-- SELETOR DECIMAL PARA GMS-->
 			<div>
 				<input type="radio" style="width:30px" name="coordType3" value="decimal3" checked> 
@@ -215,18 +221,18 @@ input { width: 100px; padding: 5px; margin: 5px; }
 				<table border="0" style="width: 100%;display: flex;vertical-align: flex-direction: column;">
 					<tbody>
 						<tr><td>Latitude</td><td>
-							<input style="width: 60px;" type="number" min="0" max="90" id="latGraus3" value="" placeholder="Graus">°
-							<input style="width: 60px;" type="number" min="0" max="60" id="latMinutos3" value="" placeholder="Minutos">'
-							<input style="width: 60px;" type="number" min="0" max="60" id="latSegundos3" value="" placeholder="Segundos">"
+							<input style="width: 80px;" type="number" min="0" max="90" id="latGraus3" value="" placeholder="Graus">°
+							<input style="width: 80px;" type="number" min="0" max="60" id="latMinutos3" value="" placeholder="Minutos">'
+							<input style="width: 80px;" type="number" min="0" max="60" id="latSegundos3" value="" placeholder="Segundos">"
 							<select id="latHemisferio3">
 								<option value="N">N</option>
 								<option value="S">S</option>
 							</select>
 						</td></tr>
 						<tr><td>Longitude</td><td>
-							<input style="width: 60px;" type="number" min="0" max="180" value="" id="longGraus3" placeholder="Graus">°
-							<input style="width: 60px;" type="number" min="0" max="60" value="" id="longMinutos3" placeholder="Minutos">'
-							<input style="width: 60px;" type="number" min="0" max="60" value="" id="longSegundos3" placeholder="Segundos">"
+							<input style="width: 80px;" type="number" min="0" max="180" value="" id="longGraus3" placeholder="Graus">°
+							<input style="width: 80px;" type="number" min="0" max="60" value="" id="longMinutos3" placeholder="Minutos">'
+							<input style="width: 80px;" type="number" min="0" max="60" value="" id="longSegundos3" placeholder="Segundos">"
 							<select id="longHemisferio3">
 								<option value="W">W</option>
 								<option value="E">E</option>
@@ -241,7 +247,7 @@ input { width: 100px; padding: 5px; margin: 5px; }
 <!-- SEGUNDO PONTO ADICIONAL-->
 	<button id="toggleButton2">add ponto +</button>
 		<div id="coordBlock2" style="display: none;">
-			<span style="color: #00910f;">Escolha o formato das coordenadas</span>
+			<span style="color: #00910f;">Escolha o formato das coordenadas decimal ou grau,minuto,segundo(GMS)</span>
 			<!-- SELETOR DECIMAL PARA GMS-->
 			<div>
 				<input type="radio" style="width:30px" name="coordType4" value="decimal4" checked> 
@@ -270,18 +276,18 @@ input { width: 100px; padding: 5px; margin: 5px; }
 				<table border="0" style="width: 100%;display: flex;vertical-align: top; flex-direction: column;">
 					<tbody>
 						<tr><td>Latitude</td><td>
-							<input style="width: 60px;" type="number" min="0" max="90" id="latGraus4" value="" placeholder="Graus">°
-							<input style="width: 60px;" type="number" min="0" max="60" id="latMinutos4" value="" placeholder="Minutos">'
-							<input style="width: 60px;" type="number" min="0" max="60" id="latSegundos4" value="" placeholder="Segundos">"
+							<input style="width: 80px;" type="number" min="0" max="90" id="latGraus4" value="" placeholder="Graus">°
+							<input style="width: 80px;" type="number" min="0" max="60" id="latMinutos4" value="" placeholder="Minutos">'
+							<input style="width: 80px;" type="number" min="0" max="60" id="latSegundos4" value="" placeholder="Segundos">"
 							<select id="latHemisferio4">
 								<option value="N">N</option>
 								<option value="S">S</option>
 							</select>
 						</td></tr>
 						<tr><td>Longitude</td><td>
-							<input style="width: 60px;" type="number" min="0" max="180" value="" id="longGraus4" placeholder="Graus">°
-							<input style="width: 60px;" type="number" min="0" max="60" value="" id="longMinutos4" placeholder="Minutos">'
-							<input style="width: 60px;" type="number" min="0" max="60" value="" id="longSegundos4" placeholder="Segundos">"
+							<input style="width: 80px;" type="number" min="0" max="180" value="" id="longGraus4" placeholder="Graus">°
+							<input style="width: 80px;" type="number" min="0" max="60" value="" id="longMinutos4" placeholder="Minutos">'
+							<input style="width: 80px;" type="number" min="0" max="60" value="" id="longSegundos4" placeholder="Segundos">"
 							<select id="longHemisferio4">
 								<option value="W">W</option>
 								<option value="E">E</option>
@@ -294,7 +300,7 @@ input { width: 100px; padding: 5px; margin: 5px; }
 <!-- TERCEIRO PONTO ADICIONAL-->
 	<button id="toggleButton3">add ponto +</button>
 		<div id="coordBlock3" style="display: none;">
-			<span style="color: #00910f;">Escolha o formato das coordenadas</span>
+			<span style="color: #00910f;">Escolha o formato das coordenadas decimal ou grau,minuto,segundo(GMS)</span>
 			<!-- SELETOR DECIMAL PARA GMS-->
 			<div>
 				<input type="radio" style="width:30px" name="coordType5" value="decimal5" checked> 
@@ -323,18 +329,18 @@ input { width: 100px; padding: 5px; margin: 5px; }
 				<table border="0" style="width: 100%;display: flex;vertical-align: flex-direction: column;">
 					<tbody>
 						<tr><td>Latitude</td><td>
-							<input style="width: 60px;" type="number" min="0" max="90" id="latGraus5" value="" placeholder="Graus">°
-							<input style="width: 60px;" type="number" min="0" max="60" id="latMinutos5" value="" placeholder="Minutos">'
-							<input style="width: 60px;" type="number" min="0" max="60" id="latSegundos5" value="" placeholder="Segundos">"
+							<input style="width: 80px;" type="number" min="0" max="90" id="latGraus5" value="" placeholder="Graus">°
+							<input style="width: 80px;" type="number" min="0" max="60" id="latMinutos5" value="" placeholder="Minutos">'
+							<input style="width: 80px;" type="number" min="0" max="60" id="latSegundos5" value="" placeholder="Segundos">"
 							<select id="latHemisferio5">
 								<option value="N">N</option>
 								<option value="S">S</option>
 							</select>
 						</td></tr>
 						<tr><td>Longitude</td><td>
-							<input style="width: 60px;" type="number" min="0" max="180" value="" id="longGraus5" placeholder="Graus">°
-							<input style="width: 60px;" type="number" min="0" max="60" value="" id="longMinutos5" placeholder="Minutos">'
-							<input style="width: 60px;" type="number" min="0" max="60" value="" id="longSegundos5" placeholder="Segundos">"
+							<input style="width: 80px;" type="number" min="0" max="180" value="" id="longGraus5" placeholder="Graus">°
+							<input style="width: 80px;" type="number" min="0" max="60" value="" id="longMinutos5" placeholder="Minutos">'
+							<input style="width: 80px;" type="number" min="0" max="60" value="" id="longSegundos5" placeholder="Segundos">"
 							<select id="longHemisferio5">
 								<option value="W">W</option>
 								<option value="E">E</option>
@@ -1101,7 +1107,7 @@ map.on("mousemove", function(e) {
    let patru_long_final = patru_long;
 
 let diffHoras = Math.abs(Math.round((((patru_datapos - alvo_datainicial) / (1000 * 60 * 60)))*100)/100); // É A DIFERENÇA EM HORAS ENTRE A ULTIMA POSIÇÃO CONHECIDA DO CI E A DO PATRULHA
-    console.log("🧭 Ponto Inicial ➜ \n" +
+    //console.log("🧭 Ponto Inicial ➜ \n" +
 	`Data inicial do CI: ${alvo_datainicial.toLocaleString("pt-BR", {day: "2-digit",month: "2-digit",year: "numeric", hour: "2-digit", minute: "2-digit", hour12: false}) + "P"}\n`+
 	`Data inicial do patrulha: ${patru_datapos.toLocaleString("pt-BR", {day: "2-digit",month: "2-digit",year: "numeric", hour: "2-digit", minute: "2-digit", hour12: false}) + "P"}\n`+
 	`Diferença Total (h): ${diffHoras.toFixed(2)} h\n`);
@@ -1119,7 +1125,7 @@ if (typeof patru_lat3 !== null && patru_lat3 !== "" && !isNaN(patru_lat3)) {
     tempp1_p2 = patru_datapos.getTime() + (tempoExtraHoras * 3600000);
 	DHp1_p2 = new Date(tempp1_p2)
 	DHp1_p2 = DHp1_p2.toLocaleString("pt-BR", {day: "2-digit",month: "2-digit",year: "numeric", hour: "2-digit", minute: "2-digit", hour12: false}) + "P";
-	console.log(
+	//console.log(
         "🧭 Ponto 1 ➜ 2\n" +
         `Distância p1→p2: ${distp1_p2.toFixed(2)} MN\n` +
         `Distância Total: ${distanciaTotal.toFixed(2)} MN\n` +
@@ -1138,7 +1144,7 @@ if (patru_lat4 !== null && patru_lat4 !== "" && !isNaN(patru_lat4)) {
     tempp2_p3 = patru_datapos.getTime() + (tempoExtraHoras * 3600000);
 	DHp2_p3 = new Date(tempp2_p3)
 	DHp2_p3 = DHp2_p3.toLocaleString("pt-BR", {day: "2-digit",month: "2-digit",year: "numeric", hour: "2-digit", minute: "2-digit", hour12: false}) + "P";
-	console.log(
+	//console.log(
         "🧭 Ponto 2 ➜ 3\n" +
         `Distância p2→p3: ${distp2_p3.toFixed(2)} MN\n` +
         `Distância Total: ${distanciaTotal.toFixed(2)} MN\n` +
@@ -1160,7 +1166,7 @@ if (patru_lat5 !== null && patru_lat5 !== "" && !isNaN(patru_lat5)) {
 	DHp3_p4 = DHp3_p4.toLocaleString("pt-BR", {day: "2-digit",month: "2-digit",year: "numeric", hour: "2-digit", minute: "2-digit", hour12: false}) + "P";
 	
     
-	  console.log(
+	  //console.log(
         "🧭 Ponto 3 ➜ 4\n" +
         `Distância p3→p4: ${distp3_p4.toFixed(2)} MN\n` +
         `Distância Total: ${distanciaTotal.toFixed(2)} MN\n` +
@@ -1182,7 +1188,7 @@ if (patru_lat5 !== null && patru_lat5 !== "" && !isNaN(patru_lat5)) {
   let y = Math.cos((patru_lat_final * Math.PI / 180)) * Math.sin((alvo_latinicial * Math.PI / 180)) - Math.sin((patru_lat_final * Math.PI / 180))*Math.cos((alvo_latinicial * Math.PI / 180))*Math.cos(((alvo_longinicial * Math.PI / 180) - (patru_long_final * Math.PI / 180)));
   let rumoParaAlvo =  (Math.atan2(x,y) * 180/Math.PI+360)%360;
   //let distancia = 60 * (180/Math.PI) * Math.acos(Math.sin(alvo_latinicial * (Math.PI/180)) * Math.sin(patru_lat_final * (Math.PI/180)) + Math.cos(alvo_latinicial * (Math.PI/180)) * Math.cos(patru_lat_final * (Math.PI/180)) * Math.cos((alvo_longinicial - patru_long) * (Math.PI/180)));
-  //console.log("distancia1: " + distancia)
+  ////console.log("distancia1: " + distancia)
   let distancia = calcularDistancia(alvo_latinicial,alvo_longinicial,patru_lat_final,patru_long_final).toFixed(0);
   let relative_angle = (alvo_rumo - rumoParaAlvo) * Math.PI / 180;
   let sin_ci = (alvo_veloc * Math.sin(relative_angle)) / patru_veloc;
@@ -1231,16 +1237,16 @@ if (patru_lat5 !== null && patru_lat5 !== "" && !isNaN(patru_lat5)) {
 		estimadaDATA= new Date(tempESTIMADA)
 		estimadaDATA = estimadaDATA.toLocaleString("pt-BR", {day: "2-digit",month: "2-digit",year: "numeric", hour: "2-digit", minute: "2-digit", hour12: false}) + "P";
 		
-		console.log("dist_est: " + dist_est)
-		console.log("relative_est_speed: " + relative_est_speed)
-		console.log("diffHoras: " + diffHoras)
-		console.log("T: " + T)
-		console.log("tempPMA: " + tempPMA)
-		console.log("Patrposatu: " + Patrposatu)
-		console.log("tempESTIMADA: " + tempESTIMADA)
-		console.log("pmaData: " + pmaData)
-		console.log("PatrposatuData: " + PatrposatuData)
-		console.log("estimadaDATA: " + estimadaDATA)
+		//console.log("dist_est: " + dist_est)
+		//console.log("relative_est_speed: " + relative_est_speed)
+		//console.log("diffHoras: " + diffHoras)
+		//console.log("T: " + T)
+		//console.log("tempPMA: " + tempPMA)
+		//console.log("Patrposatu: " + Patrposatu)
+		//console.log("tempESTIMADA: " + tempESTIMADA)
+		//console.log("pmaData: " + pmaData)
+		//console.log("PatrposatuData: " + PatrposatuData)
+		//console.log("estimadaDATA: " + estimadaDATA)
   		tempoInterceptacao = `${Math.floor(T)}h ${Math.floor((T % 1) * 60)}m`;
   		
 		alcanceFinal = (alvo_veloc * T).toFixed(1);
@@ -1281,7 +1287,7 @@ if (patru_lat5 !== null && patru_lat5 !== "" && !isNaN(patru_lat5)) {
 		estimadaDATA= new Date(tempESTIMADA)
 		estimadaDATA = estimadaDATA.toLocaleString("pt-BR", {day: "2-digit",month: "2-digit",year: "numeric", hour: "2-digit", minute: "2-digit", hour12: false}) + "P";
 		
-		console.log("estimadaDATA: " + estimadaDATA)
+		//console.log("estimadaDATA: " + estimadaDATA)
 	
 	
 	//JUNÇÃO DOS DADOS
@@ -1584,7 +1590,7 @@ const { marcador: markerEST2, linhaDinamica: linhaEST } = criarMarcadorArrastave
   
 	//APRESENTAR OS VALORES NA TABELA ABAIXO DO MAPA
 	document.getElementById("dadosCI").innerText = 'Dados do CI' +
-		'\nDH - '+ dhposini +
+		'\n\nDH - '+ dhposini +
 		'\nLat: '+ alvo_latinicialDMS + ',Long: ' + alvo_longinicialDMS + 
 		'\nRumo: ' + alvo_rumo.toFixed(0) + '° , Veloc: ' + alvo_veloc + ' nós.\n\n'+
 		'\nDecimal'+
@@ -1608,17 +1614,17 @@ const { marcador: markerEST2, linhaDinamica: linhaEST } = criarMarcadorArrastave
 		'\nLat: '+ patru_lat.toFixed(4) + ',Long: ' + patru_long.toFixed(4);
 	
 	        document.getElementById("dadosPMA").innerText = 'Posição da Interceptação'+
-		'\nETA: ' + dhPMA + 
+		'\n\nETA: ' + dhPMA + 
 		'\nPOS:Lat: ' + latFinalDMS + '\n    Long: ' + lonFinalDMS +
 		'\n'+ calcularDistancia(latFinal,lonFinal,-5.75,-35.2).toFixed(0) + 'MN de Natal'+
-		'\nDados CTT:Rumo:'+ rumoParaAlvofinal.toFixed(0) + '°, Veloc: ' + patru_veloc + ' nós' + 
-		'\nDados p122:Rumo:' + alvo_rumo.toFixed(0) + '° , Veloc: ' + alvo_veloc + ' nós\n\n'+
+		'\nDados CTT:Rumo:' + alvo_rumo.toFixed(0) + '° , Veloc: ' + alvo_veloc + ' nós' + 
+		'\nDados p122:Rumo:'+ rumoParaAlvofinal.toFixed(0) + '°, Veloc: ' + patru_veloc + ' nós\n\n'+
 		'\nDecimal'+
 		'\nLat: '+ latFinal.toFixed(4) + ',Long: ' + lonFinal.toFixed(4);
   
-  console.log("pos2: ",patru_lat3,patru_long3)
-  console.log("pos3: ",patru_lat4,patru_long4)
-  console.log("pos4: ",patru_lat5,patru_long5)
+  //console.log("pos2: ",patru_lat3,patru_long3)
+  //console.log("pos3: ",patru_lat4,patru_long4)
+  //console.log("pos4: ",patru_lat5,patru_long5)
         }
 
   function atualizarMapa(patru_lat, patru_long,patru_lat_final2, patru_long_final2 ,patru_veloc2, alvo_latinicial2, alvo_longinicial2, alvo_veloc2,
@@ -1922,6 +1928,10 @@ var overlays = {
 }
 
 
+
+
+	
+
     // Verificando se o controle de camadas já existe e removendo-o antes de adicionar um novo
     if (window.layerControl) {
         map.removeControl(window.layerControl);
@@ -1959,6 +1969,7 @@ var overlays = {
     </script>
 </body>
 </html>
+
 
 
 
