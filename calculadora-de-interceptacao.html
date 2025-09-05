@@ -391,11 +391,11 @@ input { width: 100px; padding: 5px; margin: 5px; }
 		<td style="vertical-align:top;padding: 2px;font-size: 14px"><p><span id="dadosPMA"></span></p></td></tr>
 		</tbody></table>
 	<td colspan="3" style="width:100%;height:450px">Legenda: 
-	&emsp;&emsp;<span style="color: #00910f;">Δ - CI</span>
-	&emsp;&emsp;<span style="color: #cc00ff;">Δ - Posição do CI pela hora estimada</span>
-	&emsp;&emsp;<span style="color: #4a4a4a;">Δ - Patrulha</span>
-	&emsp;&emsp;<span style="color: #680082;">Θ - Interceptação</span>
-	
+	&emsp;&emsp;<span style="color: #00664c;">Δ - Posição do CI</span>
+	&emsp;&emsp;<span style="color: #d24cff;">Δ - Posição estimada do CI</span>
+	&emsp;&emsp;<span style="color: #444444;">Δ - Posição do Patrulha</span>
+	&emsp;&emsp;<span style="color: #ff8000;">Θ - Posição da Interceptação</span>
+
 	
 	
 	<br><div id="map"></div>
@@ -2119,14 +2119,19 @@ const posicaoPatrulha3 = [patru_lat_final2, patru_long_final2];
 const posicaoCI3 = [alvo_latinicial2, alvo_longinicial2];
 const posicaoEST3 = [alvo_latestimada2, alvo_longestimada2];
 const posicaoPMA3 = [latFinal2, lonFinal2];
-const distnatal = calcularDistancia(latFinal2,lonFinal2,-5.75,-35.2).toFixed(0)
+const distnatal0 = calcularDistancia(patru_lat_final2, patru_long_final2,alvo_latinicial2, alvo_longinicial2).toFixed(0)
+const distnatal1 = calcularDistancia(patru_lat_final2, patru_long_final2,-5.75,-35.2).toFixed(0)
+const distnatal2 = calcularDistancia(alvo_latinicial2, alvo_longinicial2,-5.75,-35.2).toFixed(0)
+const distnatal3 = calcularDistancia(alvo_latestimada2, alvo_longestimada2,-5.75,-35.2).toFixed(0)
+const distnatal4 = calcularDistancia(latFinal2,lonFinal2,-5.75,-35.2).toFixed(0)
 // Criar os marcadores com cores personalizadas
 const { marcador: markerPatrulha2, linhaDinamica: linhaPatrulha } = criarMarcadorArrastavel(
     [patru_lat_final2, patru_long_final2], 
-    `Posição atual do Patrulha<br>
+    `Posição Mais recente do Patrulha<br>
     DH: ${dhpatrulha2}<br>
     Lat: ${latpatDMS2}, Long: ${longpatDMS2}<br>
-    Rumo: ${rumoParaAlvofinal2.toFixed(0)}°, Veloc: ${patru_veloc2} nós`, 
+    Rumo: ${rumoParaAlvofinal2.toFixed(0)}°, Veloc: ${patru_veloc2} nós<br>
+    ${distnatal1} MN de Natal <br>${distnatal0} MN do CI`, 
     posicaoPatrulha3, 
     '#dcdedc'
 );
@@ -2135,17 +2140,19 @@ const { marcador: markerCI2, linhaDinamica: linhaCI } = criarMarcadorArrastavel(
     [alvo_latinicial2, alvo_longinicial2], 
     `Posição mais recente do CI<br>DH: ${dhposini2}<br>
     Lat: ${alvo_latinicialDMS2}, Long: ${alvo_longinicialDMS2}<br>
-    Rumo: ${alvo_rumo2.toFixed(0)}° , Veloc: ${alvo_veloc2} nós`, 
+    Rumo: ${alvo_rumo2.toFixed(0)}° , Veloc: ${alvo_veloc2} nós<br>
+    ${distnatal2} MN de Natal <br>`, 
     posicaoCI3, 
     '#87fa8f'
 );
 
 const { marcador: markerEST2, linhaDinamica: linhaEST } = criarMarcadorArrastavel(
     [alvo_latestimada2, alvo_longestimada2], 
-    `Posição do CI pela hora estimada<br>
+    `Posição estimada do CI<br>
     DH: ${estimadaDATA2}<br>
     Lat: ${alvo_latestimadaDMS2},Long: ${alvo_longestimadaDMS2}<br>
-    Rumo: ${alvo_rumo2.toFixed(0)}°, Veloc: ${alvo_veloc2} nós`, 
+    Rumo: ${alvo_rumo2.toFixed(0)}°, Veloc: ${alvo_veloc2} nós<br>
+    ${distnatal3} MN de Natal <br>`, 
     posicaoEST3, 
     '#edc0fa'
 );
@@ -2155,7 +2162,7 @@ const { marcador: markerPMA2, linhaDinamica: linhaPMA } = criarMarcadorArrastave
     `<b>Posição da Interceptação</b><br>
     DH:${dhPMA2}<br>
     Lat: ${latFinalDMS2},Long: ${lonFinalDMS2}<br>
-    ${distnatal} de Natal <br>
+    ${distnatal4} MN de Natal <br>
     Dados do CI: Rumo: ${alvo_rumo2.toFixed(0)}° , Veloc: ${alvo_veloc2} nós<br>
     Dados do Pat: Rumo: ${rumoParaAlvofinal2.toFixed(0)}°, Veloc: ${patru_veloc2} nós`, 
     posicaoPMA3, 
@@ -2174,28 +2181,29 @@ const { marcador: markerPMA2, linhaDinamica: linhaPMA } = criarMarcadorArrastave
 
 		
 var overlays = {
-    "<span style='color: #000000; font-size: 18px;background: #777777;border: 0px solid #000;'>Posição atuan do Patrulha</span>": marker1,
+    "<span style='color: #000000; font-size: 18px;background: #dcdedc;border: 0px solid #000;'>Posição mais recente do Patrulha</span>": marker1,
     "<span style='color: #000000; font-size: 18px;background: #00b32d;border: 0px solid #000;'>Posição mais recente do CI</span>": marker2,
-    "<span style='color: #ffffff; font-size: 18px;background: #660066;border: 0px solid #000;'>Posição do CI pela hora estimada</span>": marker3,
-    "<span style='color: #ffffff; font-size: 18px;background: #400040;border: 0px solid #000;'>Posição PMA</span>": marker4,
-    "<span style='color: #000000; font-size: 16px;background: #ff0040;border: 0px solid #000;'>Linha-Patrulha ao CI atual</span>": linha1,
-    "<span style='color: #000000; font-size: 16px;background: #eeeeee;border: 0px solid #000;'>Linha-CI à Posição Estimada</span>": linha2,
-    "<span style='color: #000000; font-size: 16px;background: #d900d9;border: 0px solid #000;'>Linha-Estimativa ao PMA</span>": linha3,
-    "<span style='color: #ffffff; font-size: 16px;background: #000000;border: 0px solid #000;'>Linha-Patrulha ao PMA</span>": linha4,
-    "<span style='color: #000000; font-size: 14px;'>12MN</span>": json1,
+    "<span style='color: #000000; font-size: 18px;background: #d900d9;border: 0px solid #000;'>Posição estimada do CI</span>": marker3,
+    "<span style='color: #000000; font-size: 18px;background: #ffb81f;border: 0px solid #000;'>Posição da Interceptação </span>": marker4,
+    "<span style='color: #000000; font-size: 16px;background: #ff0040;border: 0px solid #000;'>Linha do Patrulha ao CI</span>": linha1,
+    "<span style='color: #000000; font-size: 16px;background: #eeeeee;border: 0px solid #000;'>Linha do CI à Posição Estimada</span>": linha2,
+    "<span style='color: #000000; font-size: 16px;background: #d900d9;border: 0px solid #000;'>Linha da Posição Estimativa à Interceptação</span>": linha3,
+    "<span style='color: #ffffff; font-size: 16px;background: #000000;border: 0px solid #000;'>Linha do Patrulha à Interceptação</span>": linha4,
+    "<span style='color: #000000; font-size: 18px;background: #dcdedc;border: 0px solid #000;'>Balão do Patrulha</span>": markerPatrulha2,
+    "<span style='color: #000000; font-size: 16px;background: #dcdedc;border: 0px solid #000;'>Linha do Balão do Patrulha</span>": linhaPatrulha,
+	"<span style='color: #000000; font-size: 18px;background: #87fa8f;border: 0px solid #000;'>Balão do CI</span>": markerCI2,
+    "<span style='color: #000000; font-size: 16px;background: #87fa8f;border: 0px solid #000;'>Linha do Balão do CI</span>": linhaCI,
+	"<span style='color: #000000; font-size: 18px;background: #edc0fa;border: 0px solid #000;'>Balão da Estimada</span>": markerEST2,
+    "<span style='color: #000000; font-size: 16px;background: #edc0fa;border: 0px solid #000;'>Linha do Balão da Estimada</span>": linhaEST,
+    "<span style='color: #000000; font-size: 18px;background: #ffb81f;border: 0px solid #000;'>Balão da Interceptação</span>": markerPMA2,
+    "<span style='color: #000000; font-size: 16px;background: #ffb81f;border: 0px solid #000;'>Linha do Balão da Interceptação</span>": linhaPMA,
+	"<span style='color: #000000; font-size: 14px;'>12MN</span>": json1,
     "<span style='color: #000000; font-size: 14px;'>ZEE</span>": json2,
     "<span style='color: #000000; font-size: 14px;'>SAR COM1DN</span>": json3,
     "<span style='color: #000000; font-size: 14px;'>SAR COM2DN</span>": json4,
     "<span style='color: #000000; font-size: 14px;'>SAR COM3DN</span>": json5,
-    "<span style='color: #000000; font-size: 14px;'>SAR COM4DN</span>": json6,
-	"<span style='color: #000000; font-size: 18px;background: #777777;border: 0px solid #000;'>balao patrulha</span>": markerPatrulha2,
-    "<span style='color: #000000; font-size: 16px;background: #777777;border: 0px solid #000;'>Linha-balao patrulha</span>": linhaPatrulha,
-	"<span style='color: #000000; font-size: 18px;background: #00b32d;border: 0px solid #000;'>balao ci</span>": markerCI2,
-    "<span style='color: #000000; font-size: 16px;background: #00b32d;border: 0px solid #000;'>Linha-balao ci</span>": linhaCI,
-	"<span style='color: #ffffff; font-size: 18px;background: #660066;border: 0px solid #000;'>balao est</span>": markerEST2,
-    "<span style='color: #ffffff; font-size: 16px;background: #660066;border: 0px solid #000;'>Linha-balao est</span>": linhaEST,
-    "<span style='color: #ffffff; font-size: 18px;background: #400040;border: 0px solid #000;'>balao pma</span>": markerPMA2,
-    "<span style='color: #ffffff; font-size: 16px;background: #400040;border: 0px solid #000;'>Linha-balao pma</span>": linhaPMA
+    "<span style='color: #000000; font-size: 14px;'>SAR COM4DN</span>": json6
+	
 
 }
 
