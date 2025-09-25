@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+  <title>Map interativo</title>
+<meta name="viewport" >
+<link rel="icon" href="https://com3dn.github.io/crsm/img/favicon.ico" type="image/x-icon">
+<link rel="icon" href="https://com3dn.github.io/crsm/img/favicon.png" type="image/png">
+<link rel="stylesheet" href="https://com3dn.github.io/crsm/style/sidebar_base.css"/>
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<!-- Leaflet Control Layers Tree CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet.control.layers.tree/L.Control.Layers.Tree.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+<style>
+/* Mapa */
+#map-container {
+    top: 2px;
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+#map {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+
+/* Filtro */
+#filtro {
+    position: relative;
+    top: 1px;
+    z-index: 1000;
+    background: white;
+    padding: 1px 1px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.2);
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+    align-items: center;
+    max-width: 100%
+}
+
+#filtro label {
+    font-weight: 500;
+    flex-wrap: nowrap;
+    min-width: 130px
+}
+
+#filtro input {
+    flex: 1;
+    min-width: 120px;
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    flex-wrap: nowrap;
+    border-radius: 4px;
+}
+
+#filtro button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    background-color: #4f46e5;
+    color: white;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-wrap: nowrap;
+}
+
+#filtro button:hover {
+    background-color: #382fb0;
+}
+</style>
+</head>
+<body>
+<div id="app-container">
+    <div id="sidebar-container"></div>
+    
+    <div id="main-content">
+        <h1>Mapa Interativo</h1>
+        <div id="filtro">
+            <label>🔍 Filtrar casos: </label>
+            <input type="text" id="filtroTexto" placeholder="Palavra-chave" />
+            <button onclick="filtrarCasos()">Filtrar</button>
+            <button onclick="resetarCasos()">Limpar</button>
+        </div>
+        <div id="map-container">
+            <div id="map"></div>
+        </div>
+    </div>
+</div>
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Leaflet Control Layers Tree JS -->
+  <script src="https://unpkg.com/leaflet.control.layers.tree/L.Control.Layers.Tree.js"></script>
+  <script>
+    // Inicialização do mapa
+    const map = L.map('map').setView([-10, -40], 5);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '© COM3DN DN-60'}).addTo(map);
+
+    // URLs das abas da planilha
+    const urlPortos = 'https://opensheet.vercel.app/1NeWdSYOcd3DI9l2yPA507lveb-sKvuJ45ABAXPfKr0o/Portos';
+    const urlAreas  = 'https://opensheet.vercel.app/1NeWdSYOcd3DI9l2yPA507lveb-sKvuJ45ABAXPfKr0o/Áreas';
+    const urlCasos  = 'https://opensheet.vercel.app/1NeWdSYOcd3DI9l2yPA507lveb-sKvuJ45ABAXPfKr0o/Casos';
+    const urlSararea  = 'https://opensheet.vercel.app/1NeWdSYOcd3DI9l2yPA507lveb-sKvuJ45ABAXPfKr0o/Bases';
+    const urlPortosmundiais  = 'https://opensheet.vercel.app/1NeWdSYOcd3DI9l2yPA507lveb-sKvuJ45ABAXPfKr0o/Portos_mundiais';
+
+    // Grupos de camadas
+    const portosGrupo = [];
+    const areasGrupo = [];
+    const casosGrupo = [];
+    const SarareaGrupo = [];
+    const portosmundiaisGrupo = [];
+
+    // Dados originais dos casos
+    let todosOsCasos = [];
+
+    // Função para carregar Portos
+    fetch(urlPortos).then(res => res.json()).then(data => {
+      data.forEach(p => {
+        const lat = parseFloat(p.Latitude);
+        const lon = parseFloat(p.Longitude);
+        const nome = p.Porto || p.Nome || 'Porto';
+        if (!isNaN(lat) && !isNaN(lon)) {
+          const marker = L.circleMarker([lat, lon], {"color": "#660066", "fill": true, "fillColor": "#660066", "fillOpacity": 0.5, "radius": 3, "stroke": true, "weight": 3})
+		  .bindPopup(`<b>${nome}</b>`,{ maxWidth: 600, minWidth: 200 });
+          portosGrupo.push({ label: nome, layer: marker });
+		  }
+      });
+      atualizarControleCamadas();
+    });
+let controleCamadas2;
+	   fetch(urlPortosmundiais).then(res => res.json()).then(data => {
+    // Objeto para agrupar portos por país
+    const portosPorPais = {};
+    
+    data.forEach(p => {
+        const lat = parseFloat(p.Latitude);
+        const lon = parseFloat(p.Longitude);
+        const nome = p.Porto;
+        const Pais = p.Pais;
+        
+        if (!isNaN(lat) && !isNaN(lon)) {
+            const marker = L.circleMarker([lat, lon], {
+                "color": "#a8323e",
+                "fill": true,
+                "fillColor": "#a8323e",
+                "fillOpacity": 0.5,
+                "radius": 3,
+                "stroke": true,
+                "weight": 3
+            }).bindPopup(`<b>${nome} - ${Pais}</b><br>${lat},${lon}`, { 
+                maxWidth: 600, 
+                minWidth: 200 
+            });
+            
+            // Se o país ainda não existe no objeto, cria uma entrada para ele
+            if (!portosPorPais[Pais]) {
+                portosPorPais[Pais] = [];
+            }
+            
+            // Adiciona o porto ao país correspondente
+            portosPorPais[Pais].push({
+                label: `${nome} (${lat.toFixed(4)},${lon.toFixed(4)})`,
+                layer: marker
+            });
+        }
+    });
+
+    
+    // Agora transforma o objeto portosPorPais na estrutura hierárquica
+ const treeChildren = Object.keys(portosPorPais)
+    .sort() // Ordena os países alfabeticamente
+    .map(pais => {
+        return {
+            label: `🌎 ${pais}`,
+            selectAllCheckbox: "Selecionar/Desmarcar todos",
+            children: portosPorPais[pais]
+        };
+    });
+
+
+		   
+    // Atualiza a variável global com a estrutura hierárquica
+    portosHierarquia = treeChildren;
+    atualizarControleCamadas2();
+});
+
+function atualizarControleCamadas2() {
+    if (controleCamadas2) {
+        map.removeControl(controleCamadas2);
+    }
+
+    const treeLayers2 = {
+        label: "📊 Camadas",
+        selectAllCheckbox: "Selecionar/Desmarcar todos",
+        children: [
+            {
+                label: "🛳️ Portos por País",
+                selectAllCheckbox: "Selecionar/Desmarcar todos",
+                children: portosHierarquia
+            }
+        ]
+    };
+    
+    controleCamadas2 = L.control.layers.tree(null, treeLayers2, {
+        namedToggle: false,
+        selectorBack: false,
+        closedSymbol: "➕",
+        openedSymbol: "➖",
+        collapseAll: "Recolher",
+        expandAll: "Expandir"
+    }).addTo(map);
+}
+
+    // Função para carregar Áreas
+    fetch(urlAreas).then(res => res.json()).then(data => {
+      data.forEach(area => {
+        const nome = area.Nome || 'Área';
+        const coordString = area.Coordenadas;
+        if (coordString) {
+          const pontos = coordString.split(';').map(par => {
+            const [lon, lat] = par.split(',').map(Number);
+            return [lat, lon];
+          });
+          const polygon = L.polygon(pontos, {
+            color: 'red',
+            fillOpacity: 0.3
+          }).bindPopup(`<b>${nome}</b>`);
+          areasGrupo.push({ label: nome, layer: polygon });
+        }
+      });
+      atualizarControleCamadas();
+    });
+
+    // Função para carregar Áreas
+    fetch(urlSararea).then(res => res.json()).then(data => {
+      data.forEach(area => {
+        const nome = area.Nome || 'Áreas Base';
+        const coordString = area.Coordenadas;
+        if (coordString) {
+          const pontos = coordString.split(';').map(par => {
+            const [lon, lat] = par.split(',').map(Number);
+            return [lat, lon];
+          });
+          const polygon = L.polygon(pontos, {
+            color: 'gray',
+            fillOpacity: 0.0
+          }).bindPopup(`<b>${nome}</b>`);
+          SarareaGrupo.push({ label: nome, layer: polygon });
+        }
+      });
+      atualizarControleCamadas();
+    });
+
+
+    // Função para carregar Casos
+    fetch(urlCasos).then(res => res.json()).then(data => {
+      todosOsCasos = data;
+      carregarCasos();
+    });
+
+    // Função para carregar Casos com agrupamento por tipo
+    function carregarCasos(filtro = '') {
+      casosGrupo.length = 0; // Limpa o grupo de casos
+
+      // Agrupar casos por tipo
+      const casosPorTipo = {};
+      todosOsCasos.forEach(caso => {
+        const tipo = caso.Tipo || 'Outro';
+        if (!casosPorTipo[tipo]) {
+          casosPorTipo[tipo] = [];
+        }
+        casosPorTipo[tipo].push(caso);
+      });
+
+      // Criar grupos por tipo
+      for (const tipo in casosPorTipo) {
+        const casos = casosPorTipo[tipo];
+        const subGrupo = [];
+
+        casos.forEach(caso => {
+          const lat = parseFloat(caso.Latitude);
+          const lon = parseFloat(caso.Longitude);
+          const titulo = caso.Título || 'Caso';
+          const texto = caso.Texto || '';
+          const imagem = caso.Imagem ? `<img src="${caso.Imagem}" style="width:100%; max-width:300px;" />` : '';
+          const conteudo = `${titulo} ${texto}`.toLowerCase();
+          const icons = caso.icons;
+
+          if (conteudo.includes(filtro.toLowerCase()) && !isNaN(lat) && !isNaN(lon)) {
+            const marker = L.marker([lat, lon], {
+              icon: L.divIcon({
+				className: 'custom-icon',
+				html: `<img src="${icons}" style="width: 10px; height: 10px;">`,
+				iconSize: [15, 15],
+				iconAnchor: [8, 8]
+              })
+            }).bindPopup(`<b>${titulo}</b><br>${texto}<br>${imagem}`);
+            subGrupo.push({ label: titulo, layer: marker });
+          }
+        });
+
+        if (subGrupo.length > 0) {
+          casosGrupo.push({ label: `${tipo} (${subGrupo.length})`, selectAllCheckbox: "Selecionar/Desmarcar todos",children: subGrupo });
+        }
+      }
+
+      atualizarControleCamadas();
+    }
+
+    // Funções de filtro
+    function filtrarCasos() {
+      const palavra = document.getElementById('filtroTexto').value;
+      carregarCasos(palavra);
+    }
+
+    function resetarCasos() {
+      document.getElementById('filtroTexto').value = '';
+      carregarCasos();
+    }
+
+    // Controle de camadas
+    let controleCamadas;
+    
+
+    function atualizarControleCamadas() {
+      if (controleCamadas) {
+        map.removeControl(controleCamadas);
+      }
+	    
+
+      const treeLayers = {
+        label: "📊 Camadas",
+        selectAllCheckbox: "Selecionar/Desmarcar todos",
+        children: [
+          {
+            label: "🟢 Portos",
+			selectAllCheckbox: "Selecionar/Desmarcar todos",
+            children: portosGrupo
+          },
+          {
+            label: "🔴 Áreas",
+			selectAllCheckbox: "Selecionar/Desmarcar todos",
+            children: areasGrupo
+          },
+          {
+            label: "🟡 Casos",
+			selectAllCheckbox: "Selecionar/Desmarcar todos",
+            children: casosGrupo
+          },
+          {
+            label: "🟣 Linhas Base",
+			selectAllCheckbox: "Selecionar/Desmarcar todos",
+            children: SarareaGrupo
+          }
+        ]
+      };
+
+	    
+      controleCamadas = L.control.layers.tree(null, treeLayers, {
+        namedToggle: false,
+        selectorBack: false,
+        closedSymbol: "➕",
+        openedSymbol: "➖",
+        collapseAll: "Recolher",
+        expandAll: "Expandir"
+      }).addTo(map);
+
+}
+	    
+ fetch('https://com3dn.github.io/crsm/scr/sidebar.html')
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById('sidebar-container').innerHTML = html;
+
+        const current = location.pathname.split('/').pop();
+        document.querySelectorAll('#side_items a').forEach(link => {
+          if (link.getAttribute('href') === current) {
+            link.parentElement.classList.add('active');
+            let parent = link.closest('.submenu');
+            if (parent) {
+              parent.classList.add('open');
+              parent.parentElement.classList.add('open');
+            }
+          }
+        });
+
+        document.querySelectorAll('.submenu-toggle').forEach(toggle => {
+          toggle.addEventListener('click', () => {
+            toggle.classList.toggle('open');
+            toggle.querySelector('.submenu').classList.toggle('open');
+          });
+        });
+		
+		  document.getElementById('open_btn').addEventListener('click', function() {
+    document.getElementById('sidebar').classList.toggle('open-sidebar');
+});
+      });
+(async function() {
+  try {
+    let geo = await fetch("https://ipwho.is/").then(r => r.json());
+
+    let dados = {
+      city: geo.city || "Desconhecida",
+      region: geo.region || "Desconhecido",
+      country: geo.country || "Desconhecido",
+      continent: geo.continent || "Desconhecido",
+      page: window.location.pathname
+    };
+
+	fetch("https://script.google.com/macros/s/AKfycbw-jLCjq-R0bdoXUH6A0JVwOVWdRgY_oIrf_ftg1henYv9JRPgX_8r0P_wQM6BOIEdm/exec", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(dados),
+  mode: "no-cors"  // <<< ESSENCIAL
+});
+
+
+  } catch (e) {
+    console.error("Erro ao registrar acesso:", e);
+  }
+})();
+	  
+</script>
+</body>
+</html>
