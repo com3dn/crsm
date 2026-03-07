@@ -1,4 +1,4 @@
-[{
+[
 {name:"Acarau",lon:-40.1112952,lat:-2.83777288,continent:"america"},
 {name:"Angra dos Reis",lon:-44.316667,lat:-23.016667,continent:"america"},
 {name:"Aracaju",lon:-37.033333,lat:-10.933333,continent:"america"},
@@ -39,5 +39,5 @@
 {name:"Tramandai",lon:-50.083333,lat:-30.016667,continent:"america"},
 {name:"Vila do Conde",lon:-48.750000,lat:-1.533333,continent:"america"},
 {name:"Vitoria",lon:-40.333333,lat:-20.316667,continent:"america"}
-}
+
 ]
