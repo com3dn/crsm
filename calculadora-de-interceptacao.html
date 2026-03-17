@@ -174,8 +174,8 @@ input { width: 100px; padding: 5px; margin: 5px; }
         <input style="width: 80px;" type="number" min="0" max="60" id="latMinutos2" value="45"placeholder="Minutos">'
         <input style="width: 80px;" type="number" min="0" max="60" id="latSegundos2" value="0" placeholder="Segundos">"
         <select id="latHemisferio2">
-            <option style="width: 60px;" value="N">N</option>
             <option style="width: 60px;" value="S">S</option>
+            <option style="width: 60px;" value="N">N</option>
         </select></td></tr>
         <tr><td>longitude</td><td>
 		<input style="width: 80px;" type="number" min="0" max="180" value="35" id="longGraus2" placeholder="Graus">°
@@ -394,7 +394,7 @@ input { width: 100px; padding: 5px; margin: 5px; }
 	&emsp;&emsp;<span style="color: #00664c;">Δ - Posição do CI</span>
 	&emsp;&emsp;<span style="color: #d24cff;">Δ - Posição estimada do CI</span>
 	&emsp;&emsp;<span style="color: #444444;">Δ - Posição do Patrulha</span>
-	&emsp;&emsp;<span style="color: #ff8000;">Θ - Posição da Interceptação</span>
+	&emsp;&emsp;<span style="color: #ff8000;">Θ - ETA da Interceptação</span>
 
 	
 	
@@ -1885,7 +1885,7 @@ const icon = L.divIcon({
 		'\nDecimal'+
 		'\nLat: '+ patru_lat.toFixed(4) + ',Long: ' + patru_long.toFixed(4);
 	
-	        document.getElementById("dadosPMA").innerText = 'Posição da Interceptação'+
+	        document.getElementById("dadosPMA").innerText = 'ETA da Interceptação'+
 		'\n\nETA: ' + dhPMA + 
 		'\nPOS:Lat: ' + latFinalDMS + '\n    Long: ' + lonFinalDMS +
 		'\n'+ calcularDistancia(latFinal,lonFinal,-5.75,-35.2).toFixed(0) + 'MN de Natal'+
@@ -2000,7 +2000,7 @@ const icon = L.divIcon({
 
 if (patru_lat3 !== null && patru_lat3 !== "" && !isNaN(patru_lat3)) {
      var linha6 = L.polyline([[patru_lat3, patru_long3], [patru_lat, patru_long]], { color: 'black',})
-    .bindPopup(`Distância entre a posição do patrulha a posição da INTERCEPTAÇÃO: ${dist_pat_pma} mn
+    .bindPopup(`Distância entre a posição do patrulha ao ETA da INTERCEPTAÇÃO: ${dist_pat_pma} mn
     <br>Horas de navegação:${(dist_pat_pma/patru_veloc2).toFixed(1)}H
     <br>Velocidade Relativa de bordagem: ${velRelativa2} nós`,{ maxWidth: 600, minWidth: 200 });;
     linhas.push(linha6);
@@ -2014,7 +2014,7 @@ if (patru_lat3 !== null && patru_lat3 !== "" && !isNaN(patru_lat3)) {
 
 if (patru_lat4 !== null && patru_lat4 !== "" && !isNaN(patru_lat4)) {
 	var linha7 = L.polyline([[patru_lat3, patru_long3], [patru_lat4, patru_long4]], { color: 'black',})
-	.bindPopup(`Distância entre a posição do patrulha a posição da INTERCEPTAÇÃO: ${dist_pat_pma} mn
+	.bindPopup(`Distância entre a posição do patrulha ao ETA da INTERCEPTAÇÃO: ${dist_pat_pma} mn
 	<br>Horas de navegação:${(dist_pat_pma/patru_veloc2).toFixed(1)}H
 	<br>Velocidade Relativa de bordagem: ${velRelativa2} nós`,{ maxWidth: 600, minWidth: 200 });;
     linhas.push(linha7);
@@ -2029,7 +2029,7 @@ var marker7 = L.circleMarker([patru_lat3, patru_long3], { "color": "red", "fill"
 
 if (patru_lat5 !== null && patru_lat5 !== "" && !isNaN(patru_lat5)) {
 	var linha8 = L.polyline([[patru_lat5, patru_long5], [patru_lat4, patru_long4]], { color: 'black',})
-	.bindPopup(`Distância entre a posição do patrulha a posição da INTERCEPTAÇÃO: ${dist_pat_pma} mn
+	.bindPopup(`Distância entre a posição do patrulha ao ETA da INTERCEPTAÇÃO: ${dist_pat_pma} mn
 	<br>Horas de navegação:${(dist_pat_pma/patru_veloc2).toFixed(1)}H
 	<br>Velocidade Relativa de bordagem: ${velRelativa2} nós`,{ maxWidth: 600, minWidth: 200 });;
     linhas.push(linha8);
@@ -2070,12 +2070,12 @@ var marker8 = L.circleMarker([patru_lat4, patru_long4], { "color": "red", "fill"
     linhas.push(linha2);
 
     var linha3 = L.polyline([[alvo_latestimada2, alvo_longestimada2], [latFinal2, lonFinal2]], { color: 'purple', "dashArray": "4, 4"  })
-	.bindPopup(`Distância entre a estimada do CI a posição da INTERCEPTAÇÃO: ${dist_est_pma} mn
+	.bindPopup(`Distância entre a estimada do CI ao ETA da INTERCEPTAÇÃO: ${dist_est_pma} mn
 	<br>Horas de navegação:${(dist_est_pma/alvo_veloc2).toFixed(1)}H `,{ maxWidth: 600, minWidth: 200 });
     linhas.push(linha3);
 
     var linha4 = L.polyline([[patru_lat_final2, patru_long_final2], [latFinal2, lonFinal2]], { color: 'black', "dashArray": "4, 4"  })
-	.bindPopup(`Distância entre a posição do patrulha a posição da INTERCEPTAÇÃO: ${dist_pat_pma} mn
+	.bindPopup(`Distância entre a posição do patrulha ao ETA da INTERCEPTAÇÃO: ${dist_pat_pma} mn
 	<br>Horas de navegação:${(dist_pat_pma/patru_veloc2).toFixed(1)}H
 	<br>Velocidade Relativa de bordagem: ${velRelativa2} nós`,{ maxWidth: 600, minWidth: 200 });;
     linhas.push(linha4);
@@ -2159,7 +2159,7 @@ const { marcador: markerEST2, linhaDinamica: linhaEST } = criarMarcadorArrastave
 
 const { marcador: markerPMA2, linhaDinamica: linhaPMA } = criarMarcadorArrastavel(
     [latFinal2, lonFinal2], 
-    `<b>Posição da Interceptação</b><br>
+    `<b>ETA da Interceptação</b><br>
     DH:${dhPMA2}<br>
     Lat: ${latFinalDMS2},Long: ${lonFinalDMS2}<br>
     ${distnatal4} MN de Natal <br>
@@ -2184,7 +2184,7 @@ var overlays = {
     "<span style='color: #000000; font-size: 18px;background: #dcdedc;border: 0px solid #000;'>Posição mais recente do Patrulha</span>": marker1,
     "<span style='color: #000000; font-size: 18px;background: #00b32d;border: 0px solid #000;'>Posição mais recente do CI</span>": marker2,
     "<span style='color: #000000; font-size: 18px;background: #d900d9;border: 0px solid #000;'>Posição estimada do CI</span>": marker3,
-    "<span style='color: #000000; font-size: 18px;background: #ffb81f;border: 0px solid #000;'>Posição da Interceptação </span>": marker4,
+    "<span style='color: #000000; font-size: 18px;background: #ffb81f;border: 0px solid #000;'>ETA da Interceptação </span>": marker4,
     "<span style='color: #000000; font-size: 16px;background: #ff0040;border: 0px solid #000;'>Linha do Patrulha ao CI</span>": linha1,
     "<span style='color: #000000; font-size: 16px;background: #eeeeee;border: 0px solid #000;'>Linha do CI à Posição Estimada</span>": linha2,
     "<span style='color: #000000; font-size: 16px;background: #d900d9;border: 0px solid #000;'>Linha da Posição Estimativa à Interceptação</span>": linha3,
