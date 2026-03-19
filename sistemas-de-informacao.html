@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Conversor de GMS para Decimal</title>
+<meta name="viewport" >
+<link rel="icon" href="https://com3dn.github.io/crsm/img/favicon.ico" type="image/x-icon">
+<link rel="icon" href="https://com3dn.github.io/crsm/img/favicon.png" type="image/png">
+<link rel="stylesheet" href="https://com3dn.github.io/crsm/style/sidebar_base.css"/>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Leaflet Control Layers Tree CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.control.layers.tree/L.Control.Layers.Tree.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+<style>
+* Estilos para a calculadora */
+
+
+.calculator-container h1 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.calculator-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #333;
+}
+
+.form-group input {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.form-group input:focus {
+    outline: none;
+    
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+}
+
+#resultado {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    border-left: 4px solid var(--primary-color);
+    font-size: 16px;
+    white-space: pre-line;
+}
+.converter-container {
+    width: 100%;
+    margin: 2px 0px;
+    padding: 10px;
+    border-radius: 0 10px 10px 0;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+table{width:100%;border-collapse:collapse;margin-top:10px;border:1px solid #000000;}
+td{border:1px solid #000000;}
+
+h2{margin-top:40px;color:#9fd3ff;}
+.btn{background:#1e90ff;margin:20px;border-radius:4px;color:white;text-decoration:none;}
+.btn:hover{background:#2da2ff;}
+
+/* categorias */
+.inteligencia{border-left:6px solid #e74c3c;}
+.gov{border-left:6px solid #27ae60;}
+.govb{border-left:6px solid #34ebe5;}
+.militar{border-left:6px solid #e67e22;}
+.ais{border-left:6px solid #3498db;}
+.comercial{border-left:6px solid #f1c40f;}
+.comunidade{border-left:6px solid #9b59b6;}
+.satelite{border-left:6px solid #1abc9c;}
+.mb{border-left:6px solid #005baa;}
+
+
+.legenda{margin-top:30px;padding:15px;border-radius:6px;}
+
+.leg{display:inline-block;width:14px;height:14px;margin-right:8px;border-radius:3px;}
+
+</style>
+</head>
+<body>
+<div id="app-container">
+<div id="sidebar-container"></div>
+    
+<div id="main-content">
+  <h1>Sistemas de Informação e Inteligência Marítima</h1>
+  <div class="converter-container">
+    
+
+<p>
+A utilização de múltiplas plataformas de monitoramento marítimo permite a validação cruzada de dados operacionais
+como posição, identidade e histórico de embarcações. A comparação entre diferentes sistemas aumenta a confiabilidade
+das informações utilizadas em atividades de análise marítima, monitoramento de tráfego e investigação de eventos no mar.
+</p>
+
+
+<h2 class="inteligencia2">Sistemas de Inteligência Marítima (SOMENTE COMPAAZ)</h2>
+<p>Plataformas especializadas utilizadas para análise de risco, inteligência marítima e identificação de possíveis ameaças no ambiente marítimo. Esses sistemas integram diferentes fontes de dados, como registros de embarcações, histórico operacional, dados satelitais e informações comerciais, permitindo análises avançadas e apoio à tomada de decisão em atividades de segurança e monitoramento marítimo.</p>
+
+<table>
+<tr><th>Nome</th><th>Descrição</th><th>Link</th></tr>
+
+<tr class="inteligencia">
+<td><b>MIRS</b></td>
+<td>(MIRS – Maritime Intelligence Risk Suite) Plataforma avançada de inteligência marítima utilizada para análise de risco de embarcações, histórico operacional, sanções internacionais e vínculos comerciais no transporte marítimo.</td>
+<td><a class="btn" href="https://maritime.ihs.com" target="_blank">Acessar</a></td>
+</tr>
+
+<tr class="inteligencia">
+<td><b>CAMTES</b></td>
+<td>(CAMTES - Computer Assisted Maritime Threat Evaluation System) Sistema de avaliação assistida de ameaças marítimas que integra múltiplas fontes de dados para apoiar análises de risco, identificação de embarcações e tomada de decisão em operações de segurança marítima.</td>
+<td><a class="btn" href="https://camtes.net" target="_blank">Acessar</a></td>
+</tr>
+
+<tr class="inteligencia">
+<td><b>SKYLIGHT</b></td>
+<td>Plataforma de inteligência baseada em inteligência artificial voltada à detecção de pesca ilegal, não declarada e não regulamentada (INDNR), utilizando análise de dados satelitais e padrões de comportamento de embarcações.</td>
+<td><a class="btn" href="https://sc-production.skylight.earth" target="_blank">Acessar</a></td>
+</tr>
+</table>
+
+
+<h2 class="2gov">Sistemas Governamentais Internacionais</h2>
+<p>Plataformas mantidas por organizações internacionais ou governos estrangeiros destinadas ao compartilhamento de informações relacionadas à segurança da navegação, inspeções portuárias, certificações e monitoramento global de embarcações. Esses sistemas são amplamente utilizados por autoridades marítimas, administrações portuárias e organismos reguladores ao redor do mundo.</p>
+
+<table>
+<tr><th>Nome</th><th>Descrição</th><th>Link</th></tr>
+
+<tr class="gov">
+<td><b>GISIS – IMO</b></td>
+<td>(GISIS - Global Integrated Shipping Information System) Sistema global da Organização Marítima Internacional que centraliza informações sobre segurança marítima, inspeções, incidentes e cumprimento de convenções internacionais de responsabilidade da IMO (Organização Marítima Internacional).</td>
+<td><a class="btn" href="https://gisis.imo.org" target="_blank">Acessar</a></td>
+</tr>
+
+<tr class="gov">
+<td><b>Equasis</b></td>
+<td>(EQUASIS - Electronic Quality Shipping Information System) Base de dados internacional mantida por autoridades marítimas que reúne histórico de inspeções portuárias, certificações e informações técnicas de navios mercantes.</td>
+<td><a class="btn" href="https://www.equasis.org" target="_blank">Acessar</a></td>
+</tr>
+
+<tr class="gov">
+<td><b>SeaVision</b></td>
+<td>Sistema de consciência do domínio marítimo desenvolvido pelo governo dos Estados Unidos para monitoramento global de embarcações e análise de tráfego marítimo.</td>
+<td><a class="btn" href="https://seavision.volpe.dot.gov" target="_blank">Acessar</a></td>
+</tr>
+</table>
+
+
+<h2>Sistemas Governamentais Brasileiros</h2>
+<p>Sistemas mantidos por órgãos governamentais brasileiros para gestão administrativa, registro e monitoramento de embarcações e operações portuárias em águas sob jurisdição nacional. Essas plataformas auxiliam no controle das atividades marítimas, na fiscalização e na organização das informações relacionadas ao
+tráfego marítimo e à frota registrada no país.</p>
+
+<table>
+<tr><th>Nome</th><th>Descrição</th><th>Link</th></tr>
+
+<tr class="govb">
+<td><b>Porto Sem Papel</b></td>
+<td>Sistema brasileiro que integra informações administrativas das escalas portuárias e permite consulta a dados de embarcações, DUV e operações portuárias.</td><td><a class="btn" href="https://concentrador.portosempapel.gov.br" target="_blank">Acessar</a></td>
+</tr>
+
+<tr class="govb">
+<td><b>PREPS</b></td>
+<td>Programa brasileiro de rastreamento por satélite de embarcações pesqueiras destinado ao monitoramento da atividade da frota pesqueira nacional.</td>
+<td><a class="btn" href="https://newpreps.com.br" target="_blank">Acessar</a></td>
+</tr>
+</table>
+
+
+
+
+<h2>Sistemas Institucionais da Marinha do Brasil</h2>
+<p>Sistemas operacionais utilizados internamente pela Marinha do Brasil para apoio à consciência situacional marítima, análise operacional e monitoramento de meios navais. O acesso a essas plataformas é restrito a redes institucionais.</p>
+
+<table>
+<tr><th>Nome</th><th>Descrição</th><th>Link</th></tr>
+<tr class="mb">
+<td><b>SISGEMB</b></td>
+<td>(SISGEMB - Sistema de Gerenciamento de Embarcações) Sistema da Diretoria de Portos e Costas que reúne registros e dados cadastrais de embarcações registradas no Brasil.</td>
+<td><a class="btn" href="https://www.sistemas.dpc.mb/SISGEMB" target="_blank">Acessar</a></td>
+<tr class="mb">
+<td><b>SCUA</b></td>
+<td>(SCUA – Sistema de Consciência Situacional Unificada Ampliada.) Sistema utilizado pela Marinha do Brasil para acompanhamento e gestão da consciência situacional marítima, com foco no monitoramento de meios navais e informações operacionais.
+</td>
+<td><a class="btn" href="https://10.5.128.43/scua/login" target="_blank">Acessar</a></td>
+</tr>
+</table>
+
+
+<h2>Sistemas Globais de Monitoramento Marítimo</h2>
+<p>Plataformas amplamente utilizadas pela comunidade marítima internacional para monitoramento de embarcações por meio de dados AIS terrestres e satelitais. Esses sistemas permitem visualizar posições em tempo real, rotas, portos de escala e informações operacionais de navios em escala global.</p>
+<table>
+<tr><th>Nome</th><th>Descrição</th><th>Link</th></tr>
+
+<tr class="ais">
+<td><b>MarineTraffic</b></td>
+<td>Uma das maiores plataformas de rastreamento marítimo do mundo baseada em dados AIS terrestres e satelitais.</td>
+<td><a class="btn" href="https://www.marinetraffic.com" target="_blank">Acessar</a></td>
+</tr>
+
+<tr class="ais">
+<td><b>VesselFinder</b></td>
+<td>Serviço global de monitoramento de embarcações com visualização de posição, histórico de rotas e dados operacionais.</td>
+<td><a class="btn" href="https://www.vesselfinder.com" target="_blank">Acessar</a></td>
+</tr>
+
+<tr class="ais">
+<td><b>VesselTracker</b></td>
+<td>Plataforma profissional de inteligência logística marítima e rastreamento de tráfego global.</td>
+<td><a class="btn" href="https://www.vesseltracker.com" target="_blank">Acessar</a></td>
+</tr>
+<tr class="ais">
+<td><b>Global Fishing Watch</b></td>
+<td>Plataforma global que utiliza big data e dados AIS para monitorar atividades pesqueiras e identificar possíveis casos de pesca ilegal.</td>
+<td><a class="btn" href="https://globalfishingwatch.org" target="_blank">Acessar</a></td>
+</tr>
+</table>
+
+
+<h2>Plataformas AIS Complementares</h2>
+<p>Serviços adicionais de rastreamento marítimo baseados em dados AIS agregados de diversas redes terrestres e satelitais. Essas plataformas funcionam como fontes complementares de consulta e permitem a validação cruzada de informações sobre posições e movimentos de embarcações.</p>
+<table>
+<tr><th>Nome</th><th>Descrição</th><th>Link</th></tr>
+
+<tr class="comercial">
+<td><b>MyShipTracking</b></td>
+<td>Plataforma gratuita de rastreamento AIS com visualização global de embarcações.</td>
+<td><a class="btn" href="https://www.myshiptracking.com" target="_blank">Acessar</a></td>
+</tr>
+
+<tr class="comercial">
+<td><b>ShipTraffic</b></td>
+<td>Serviço online de monitoramento de tráfego marítimo com informações de posição e dados básicos de navios.</td>
+<td><a class="btn" href="https://www.shiptraffic.net" target="_blank">Acessar</a></td>
+</tr>
+
+<tr class="comercial">
+<td><b>ShipXplorer</b></td>
+<td>Plataforma de rastreamento global baseada em dados AIS agregados.</td>
+<td><a class="btn" href="https://www.shipxplorer.com" target="_blank">Acessar</a></td>
+</tr>
+
+<tr class="comercial">
+<td><b>ShippingExplorer</b></td>
+<td>Software e plataforma web para visualização de tráfego marítimo em tempo real.</td>
+<td><a class="btn" href="https://www.shippingexplorer.net" target="_blank">Acessar</a></td>
+</tr>
+
+<tr class="comercial">
+<td><b>MarineVesselTraffic</b></td>
+<td>Plataforma de monitoramento marítimo que apresenta dados AIS globais e informações básicas de embarcações.</td>
+<td><a class="btn" href="https://www.marinevesseltraffic.com" target="_blank">Acessar</a></td>
+</tr>
+
+<tr class="comercial">
+<td><b>Shipfinder</b></td>
+<td>Sistema online de rastreamento de navios que apresenta posições AIS em mapa interativo.</td>
+<td><a class="btn" href="https://www.shipfinder.com" target="_blank">Acessar</a></td>
+</tr>
+<tr class="comercial">
+<td><b>CruiseMapper</b></td>
+<td>Plataforma especializada no rastreamento e informações de navios de cruzeiro.</td>
+<td><a class="btn" href="https://www.cruisemapper.com" target="_blank">Acessar</a></td>
+</tr>
+<tr class="comercial">
+<td><b>Maritime Database</b></td>
+<td>Banco de dados com informações técnicas e registros históricos de embarcações.</td>
+<td><a class="btn" href="https://maritime-database.com/vessel.php" target="_blank">Acessar</a></td>
+</tr>
+
+<tr class="comercial">
+<td><b>ShipInfo</b></td>
+<td>Base online com registros técnicos e históricos de navios.</td>
+<td><a class="btn" href="https://shipinfo.net" target="_blank">Acessar</a></td>
+</tr>
+
+</table>
+
+
+<h2>Comunicações Satelitais</h2>
+<p>Serviços e diretórios relacionados a sistemas de comunicação via satélite utilizados por embarcações para transmissão de dados e voz em alto-mar. Essas plataformas permitem identificar equipamentos de comunicação instalados em navios e suas respectivas redes satelitais.</p>
+<table>
+<tr><th>Nome</th><th>Descrição</th><th>Link</th></tr>
+
+<tr class="satelite">
+<td><b>Inmarsat Ships Directory</b></td>
+<td>Diretório global de embarcações equipadas com terminais satelitais Inmarsat para comunicação marítima.</td>
+<td><a class="btn" href="https://www.inmarsat.com/customer-service/ships-directory/" target="_blank">Acessar</a></td>
+</tr>
+
+</table>
+
+
+<h2>Comunidade e Registros Visuais</h2>
+<p>Plataformas colaborativas dedicadas ao registro visual de embarcações, reunindo fotografias, histórico e contribuições de entusiastas e observadores marítimos ao redor do mundo.</p>
+<table>
+<tr><th>Nome</th><th>Descrição</th><th>Link</th></tr>
+
+<tr class="comunidade">
+<td><b>Shipspotting</b></td>
+<td>Comunidade internacional dedicada ao compartilhamento de fotografias e registros visuais de embarcações.</td>
+<td><a class="btn" href="https://www.shipspotting.com" target="_blank">Acessar</a></td>
+</tr>
+
+<tr class="comunidade">
+<td><b>Fleetphoto</b></td>
+<td>Base colaborativa com fotografias e histórico visual de navios.</td>
+<td><a class="btn" href="https://fleetphoto.ru" target="_blank">Acessar</a></td>
+</tr>
+
+</table>
+
+
+<div class="legenda">
+
+<h3>Legenda de Categorias</h3>
+
+<p><span class="leg" style="background:#e74c3c"></span> Sistemas de Inteligência Marítima (Compaaz)</p>
+<p><span class="leg" style="background:#27ae60"></span> Sistemas Governamentais Internacionais</p>
+<p><span class="leg" style="background:#34ebe5"></span> Sistemas Governamentais Brasileiro</p>
+<p><span class="leg" style="background:#005baa"></span> Sistemas Institucionais da Marinha do Brasil</p>
+<p><span class="leg" style="background:#3498db"></span> Sistemas Globais de Monitoramento Marítimo</p>
+<p><span class="leg" style="background:#f1c40f"></span> Plataformas AIS Complementares</p>
+<p><span class="leg" style="background:#1abc9c"></span> Comunicações Satelitais</p>
+<p><span class="leg" style="background:#9b59b6"></span> Comunidade e Registros Visuais</p>
+
+</div>
+  </div>
+</div>
+</div>
+<script>
+fetch('https://com3dn.github.io/crsm/scr/sidebar.html')
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById('sidebar-container').innerHTML = html;
+
+        const current = location.pathname.split('/').pop();
+        document.querySelectorAll('#side_items a').forEach(link => {
+          if (link.getAttribute('href') === current) {
+            link.parentElement.classList.add('active');
+            let parent = link.closest('.submenu');
+            if (parent) {
+              parent.classList.add('open');
+              parent.parentElement.classList.add('open');
+            }
+          }
+        });
+
+        document.querySelectorAll('.submenu-toggle').forEach(toggle => {
+          toggle.addEventListener('click', () => {
+            toggle.classList.toggle('open');
+            toggle.querySelector('.submenu').classList.toggle('open');
+          });
+        });
+		
+		  document.getElementById('open_btn').addEventListener('click', function() {
+    document.getElementById('sidebar').classList.toggle('open-sidebar');
+});
+      });
+	(async function() {
+  try {
+    let geo = await fetch("https://ipwho.is/").then(r => r.json());
+
+    let dados = {
+      city: geo.city || "Desconhecida",
+      region: geo.region || "Desconhecido",
+      country: geo.country || "Desconhecido",
+      continent: geo.continent || "Desconhecido",
+      page: window.location.pathname
+    };
+	
+	console.log(dados)
+
+	fetch("https://script.google.com/macros/s/AKfycbw-jLCjq-R0bdoXUH6A0JVwOVWdRgY_oIrf_ftg1henYv9JRPgX_8r0P_wQM6BOIEdm/exec", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(dados),
+  mode: "no-cors"  // <<< ESSENCIAL
+});
+
+
+  } catch (e) {
+    console.error("Erro ao registrar acesso:", e);
+  }
+})();
+</script>
+</body>
+</html>
+
